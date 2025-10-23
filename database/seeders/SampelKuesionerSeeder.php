@@ -103,5 +103,179 @@ class SampelKuesionerSeeder extends Seeder
                 'wajib_diisi' => true,
             ]);
         }
+
+        $kuesioner4 = Kuesioner::create([
+            'judul' => 'Survei Kepuasan Layanan Administrasi',
+            'deskripsi' => 'Penilaian terhadap pelayanan administrasi fakultas seperti surat-menyurat dan layanan keuangan.',
+            'icon' => 'fas fa-file-alt',
+            'target_responden' => 'mahasiswa',
+            'status_aktif' => true,
+            'tanggal_mulai' => now(),
+            'tanggal_selesai' => now()->addMonth(),
+            'dibuat_oleh' => 1,
+        ]);
+
+        $pertanyaanadm = [
+            ['text' => 'Proses pengurusan surat berjalan cepat dan efisien', 'category' => 'Prosedur'],
+            ['text' => 'Petugas administrasi bersikap ramah dan membantu', 'category' => 'Pelayanan'],
+            ['text' => 'Jam pelayanan administrasi sesuai dengan kebutuhan mahasiswa', 'category' => 'Ketersediaan'],
+            ['text' => 'Informasi mengenai prosedur administrasi mudah diakses', 'category' => 'Transparansi'],
+        ];
+
+        foreach ($pertanyaanadm as $index => $pertanyaan) {
+            Pertanyaan::create([
+                'kuesioner_id' => $kuesioner4->id,
+                'teks_pertanyaan' => $pertanyaan['text'],
+                'jenis_pertanyaan' => 'likert',
+                'kategori' => $pertanyaan['category'],
+                'urutan' => $index + 1,
+                'wajib_diisi' => true,
+            ]);
+        }
+
+        $kuesioner5 = Kuesioner::create([
+            'judul' => 'Survei Kepuasan Fasilitas Kampus',
+            'deskripsi' => 'Evaluasi terhadap kebersihan, kenyamanan, dan keamanan fasilitas di lingkungan kampus.',
+            'icon' => 'fas fa-building',
+            'target_responden' => 'mahasiswa',
+            'status_aktif' => true,
+            'tanggal_mulai' => now(),
+            'tanggal_selesai' => now()->addMonth(),
+            'dibuat_oleh' => 1,
+        ]);
+
+        $pertanyaankampus = [
+            ['text' => 'Ruang kelas dan toilet selalu bersih dan terawat', 'category' => 'Kebersihan'],
+            ['text' => 'Area parkir cukup luas dan aman', 'category' => 'Keamanan'],
+            ['text' => 'Sarana olahraga dan ruang terbuka memadai', 'category' => 'Fasilitas Umum'],
+            ['text' => 'Kantin menyediakan makanan dengan harga dan kualitas baik', 'category' => 'Layanan Penunjang'],
+        ];
+
+        foreach ($pertanyaankampus as $index => $pertanyaan) {
+            Pertanyaan::create([
+                'kuesioner_id' => $kuesioner5->id,
+                'teks_pertanyaan' => $pertanyaan['text'],
+                'jenis_pertanyaan' => 'likert',
+                'kategori' => $pertanyaan['category'],
+                'urutan' => $index + 1,
+                'wajib_diisi' => true,
+            ]);
+        }
+
+        $kuesioner6 = Kuesioner::create([
+            'judul' => 'Survei Kepuasan Layanan Teknologi Informasi',
+            'deskripsi' => 'Penilaian terhadap layanan IT seperti sistem akademik dan jaringan internet.',
+            'icon' => 'fas fa-wifi',
+            'target_responden' => 'mahasiswa',
+            'status_aktif' => true,
+            'tanggal_mulai' => now(),
+            'tanggal_selesai' => now()->addMonth(),
+            'dibuat_oleh' => 1,
+        ]);
+
+        $pertanyaanit = [
+            ['text' => 'Sistem akademik online mudah digunakan', 'category' => 'Aksesibilitas'],
+            ['text' => 'Jaringan internet kampus stabil dan cepat', 'category' => 'Infrastruktur'],
+            ['text' => 'Layanan helpdesk IT responsif terhadap masalah pengguna', 'category' => 'Layanan Pengguna'],
+            ['text' => 'Data pribadi mahasiswa dijaga dengan baik', 'category' => 'Keamanan Data'],
+        ];
+
+        foreach ($pertanyaanit as $index => $pertanyaan) {
+            Pertanyaan::create([
+                'kuesioner_id' => $kuesioner6->id,
+                'teks_pertanyaan' => $pertanyaan['text'],
+                'jenis_pertanyaan' => 'likert',
+                'kategori' => $pertanyaan['category'],
+                'urutan' => $index + 1,
+                'wajib_diisi' => true,
+            ]);
+        }
+
+        $kuesioner7 = Kuesioner::create([
+            'judul' => 'Survei Kepuasan Mahasiswa Baru',
+            'deskripsi' => 'Evaluasi pengalaman mahasiswa baru selama masa orientasi dan awal perkuliahan.',
+            'icon' => 'fas fa-user-graduate',
+            'target_responden' => 'mahasiswa',
+            'status_aktif' => true,
+            'tanggal_mulai' => now(),
+            'tanggal_selesai' => now()->addMonth(),
+            'dibuat_oleh' => 1,
+        ]);
+
+        $pertanyaanmaba = [
+            ['text' => 'Kegiatan orientasi memberikan informasi yang bermanfaat', 'category' => 'Orientasi'],
+            ['text' => 'Dosen dan senior bersikap ramah terhadap mahasiswa baru', 'category' => 'Sosialisasi'],
+            ['text' => 'Fasilitas kampus mudah diakses oleh mahasiswa baru', 'category' => 'Aksesibilitas'],
+            ['text' => 'Informasi akademik mudah dipahami sejak awal perkuliahan', 'category' => 'Informasi'],
+        ];
+
+        foreach ($pertanyaanmaba as $index => $pertanyaan) {
+            Pertanyaan::create([
+                'kuesioner_id' => $kuesioner7->id,
+                'teks_pertanyaan' => $pertanyaan['text'],
+                'jenis_pertanyaan' => 'likert',
+                'kategori' => $pertanyaan['category'],
+                'urutan' => $index + 1,
+                'wajib_diisi' => true,
+            ]);
+        }
+
+        $kuesioner8 = Kuesioner::create([
+            'judul' => 'Survei Kepuasan Alumni',
+            'deskripsi' => 'Evaluasi pengalaman alumni terkait pembelajaran dan kesiapan kerja.',
+            'icon' => 'fas fa-user-tie',
+            'target_responden' => 'alumni',
+            'status_aktif' => true,
+            'tanggal_mulai' => now(),
+            'tanggal_selesai' => now()->addMonth(),
+            'dibuat_oleh' => 1,
+        ]);
+
+        $pertanyaanalumni = [
+            ['text' => 'Kurikulum perkuliahan relevan dengan kebutuhan dunia kerja', 'category' => 'Relevansi'],
+            ['text' => 'Keterampilan yang diajarkan berguna di tempat kerja', 'category' => 'Kompetensi'],
+            ['text' => 'Hubungan dengan fakultas tetap terjaga setelah lulus', 'category' => 'Relasi Alumni'],
+            ['text' => 'Fakultas memfasilitasi kegiatan alumni dengan baik', 'category' => 'Kegiatan Alumni'],
+        ];
+
+        foreach ($pertanyaanalumni as $index => $pertanyaan) {
+            Pertanyaan::create([
+                'kuesioner_id' => $kuesioner8->id,
+                'teks_pertanyaan' => $pertanyaan['text'],
+                'jenis_pertanyaan' => 'likert',
+                'kategori' => $pertanyaan['category'],
+                'urutan' => $index + 1,
+                'wajib_diisi' => true,
+            ]);
+        }
+
+        $kuesioner9 = Kuesioner::create([
+            'judul' => 'Survei Kepuasan Tenaga Kependidikan',
+            'deskripsi' => 'Penilaian terhadap fasilitas dan dukungan yang diterima tenaga kependidikan.',
+            'icon' => 'fas fa-users-cog',
+            'target_responden' => 'mahasiswa',
+            'status_aktif' => true,
+            'tanggal_mulai' => now(),
+            'tanggal_selesai' => now()->addMonth(),
+            'dibuat_oleh' => 1,
+        ]);
+
+        $pertanyaantendik = [
+            ['text' => 'Fakultas menyediakan pelatihan untuk meningkatkan kompetensi staf', 'category' => 'Pengembangan'],
+            ['text' => 'Lingkungan kerja kondusif dan mendukung kinerja', 'category' => 'Lingkungan Kerja'],
+            ['text' => 'Fasilitas kerja mencukupi untuk menjalankan tugas', 'category' => 'Fasilitas'],
+            ['text' => 'Komunikasi antar staf dan pimpinan berjalan baik', 'category' => 'Komunikasi Internal'],
+        ];
+
+        foreach ($pertanyaantendik as $index => $pertanyaan) {
+            Pertanyaan::create([
+                'kuesioner_id' => $kuesioner9->id,
+                'teks_pertanyaan' => $pertanyaan['text'],
+                'jenis_pertanyaan' => 'likert',
+                'kategori' => $pertanyaan['category'],
+                'urutan' => $index + 1,
+                'wajib_diisi' => true,
+            ]);
+        }
     }
 }

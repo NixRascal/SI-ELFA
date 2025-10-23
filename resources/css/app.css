@@ -9,3 +9,27 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+@theme {
+  --color-deep-sapphire-50: #eef5ff;
+  --color-deep-sapphire-100: #d8e7ff;
+  --color-deep-sapphire-200: #bad6ff;
+  --color-deep-sapphire-300: #8abcff;
+  --color-deep-sapphire-400: #5399ff;
+  --color-deep-sapphire-500: #2b70ff;
+  --color-deep-sapphire-600: #144efc;
+  --color-deep-sapphire-700: #0d38e8;
+  --color-deep-sapphire-800: #112ebc;
+  --color-deep-sapphire-900: #152d93;
+  --color-deep-sapphire-950: #15236a;
+}
+
+.landing-pattern {
+  /* use rgba to simulate opacity without affecting child elements */
+  background-color: rgba(255,255,255,0.2);
+  background: radial-gradient(circle, transparent 5%, #ffffff 20%, #ffffff 80%, transparent 80%, transparent),
+              radial-gradient(circle, transparent 5%, #ffffff 20%, #ffffff 80%, transparent 80%, transparent) 12px 12px,
+              linear-gradient(#8abcff 1px, transparent 1px) 0 -0.6px,
+              linear-gradient(90deg, #8abcff 1px, #ffffff 1px) -0.6px 0;
+  background-size: 30px 30px, 30px 30px, 15px 15px, 15px 15px;
+}
