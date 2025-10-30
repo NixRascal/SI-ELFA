@@ -267,6 +267,78 @@ class SampelKuesionerSeeder extends Seeder
             ['text' => 'Komunikasi antar staf dan pimpinan berjalan baik', 'category' => 'Komunikasi Internal'],
         ];
 
+        $kuesioner10 = Kuesioner::create([
+            'judul' => 'Evaluasi Pembelajaran Hybrid',
+            'deskripsi' => 'Survei untuk mengevaluasi efektivitas pembelajaran hybrid (online dan offline).',
+            'icon' => 'fas fa-laptop-house',
+            'target_responden' => 'mahasiswa',
+            'status_aktif' => true,
+            'tanggal_mulai' => now(),
+            'tanggal_selesai' => now()->addMonth(),
+            'dibuat_oleh' => 1,
+        ]);
+
+        // Likert scale questions
+        $pertanyaanHybrid1 = [
+            [
+                'teks_pertanyaan' => 'Pembelajaran hybrid membantu pemahaman materi kuliah',
+                'kategori' => 'Efektivitas Pembelajaran',
+                'jenis_pertanyaan' => 'likert',
+                'urutan' => 1,
+            ],
+            [
+                'teks_pertanyaan' => 'Platform e-learning mudah digunakan',
+                'kategori' => 'Teknologi',
+                'jenis_pertanyaan' => 'likert',
+                'urutan' => 2,
+            ],
+        ];
+
+        // Multiple choice questions
+        $pertanyaanHybrid2 = [
+            [
+                'teks_pertanyaan' => 'Platform e-learning yang paling sering Anda gunakan?',
+                'kategori' => 'Teknologi',
+                'jenis_pertanyaan' => 'pilihan_ganda',
+                'opsi_jawaban' => json_encode(['Moodle', 'Google Classroom', 'Microsoft Teams', 'Zoom']),
+                'urutan' => 3,
+            ],
+            [
+                'teks_pertanyaan' => 'Berapa jam rata-rata yang Anda habiskan untuk belajar online per hari?',
+                'kategori' => 'Waktu Belajar',
+                'jenis_pertanyaan' => 'pilihan_ganda',
+                'opsi_jawaban' => json_encode(['< 1 jam', '1-2 jam', '2-4 jam', '> 4 jam']),
+                'urutan' => 4,
+            ],
+        ];
+
+        // Text input questions
+        $pertanyaanHybrid3 = [
+            [
+                'teks_pertanyaan' => 'Apa saran Anda untuk meningkatkan kualitas pembelajaran hybrid?',
+                'kategori' => 'Saran',
+                'jenis_pertanyaan' => 'isian',
+                'urutan' => 5,
+            ],
+            [
+                'teks_pertanyaan' => 'Sebutkan kendala utama yang Anda hadapi selama pembelajaran hybrid',
+                'kategori' => 'Kendala',
+                'jenis_pertanyaan' => 'isian',
+                'urutan' => 6,
+            ],
+        ];
+
+        // Combine all questions
+        $semuaPertanyaan = array_merge($pertanyaanHybrid1, $pertanyaanHybrid2, $pertanyaanHybrid3);
+
+        // Create questions
+        foreach ($semuaPertanyaan as $pertanyaan) {
+            Pertanyaan::create(array_merge(
+                $pertanyaan,
+                ['kuesioner_id' => $kuesioner10->id, 'wajib_diisi' => true]
+            ));
+        }
+
         foreach ($pertanyaantendik as $index => $pertanyaan) {
             Pertanyaan::create([
                 'kuesioner_id' => $kuesioner9->id,

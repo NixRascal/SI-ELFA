@@ -1,12 +1,5 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Survei Selesai — {{ $kuesioner->judul }}</title>
-    @vite(['resources/css/app.css','resources/js/app.js'])
-</head>
-<body class="bg-gray-50">
+@extends('layouts.app')
+@section('content')
     <div class="min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
         <div class="max-w-md w-full space-y-8 bg-white p-8 rounded-xl shadow-sm border border-gray-200">
             {{-- Icon Sukses --}}
@@ -33,5 +26,5 @@
             </div>
         </div>
     </div>
-</body>
-</html>
+    @include('layouts.footer')
+@endsection

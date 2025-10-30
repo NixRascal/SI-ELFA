@@ -1,58 +1,52 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
-    <title>SIELFA</title>
-</head>
-
-<body>
-    <section class="h-screen flex items-center justify-center landing-pattern">
-        <div class="container mx-auto px-15">
-            <div class="flex flex-col-reverse md:flex-row items-center justify-between gap-8 h-[75vh]">
-                <!-- Left: Text content (aligned center vertically) -->
-                <div class="md:w-1/2 w-full flex items-center">
-                    <div class="max-w-lg md:text-left text-center">
-                        <h1 class="text-8xl font-bold text-deep-sapphire-950">SI-ELFA</h1>
-                        <h2 class="text-6xl font-semibold mt-2 text-deep-sapphire-700">Sistem Informasi Evaluasi
-                            Fakultas</h2>
-                        <h1 class="mt-4 text-1xl font-medium text-deep-sapphire-950">SI-ELFA adalah platform yang
-                            dirancang untuk memfasilitasi evaluasi dan peningkatan kualitas di lingkungan fakultas.</h1>
-                        <a href="#" id="scrollToSurvey"
-                            class="mt-6 inline-block px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300">Isi
-                            Survei</a>
+@extends('layouts.app')
+@section('content')
+    <div class="bg-gray-50 py-1">
+        <div class="relative isolate px-6 pt-14 lg:px-8">
+            <div aria-hidden="true"
+                class="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80">
+                <div style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"
+                    class="relative left-[calc(50%-11rem)] aspect-1155/678 w-144.5 -translate-x-1/2 rotate-30 bg-linear-to-tr from-[#19328f] to-[#19328f] opacity-20 sm:left-[calc(50%-30rem)] sm:w-288.75">
+                </div>
+            </div>
+            <div class="mx-auto max-w-3xl pt-20 pb-32 sm:pt-48 sm:pb-40">
+                <div class="flex justify-center mb-10">
+                    <img src="{{ asset('images/unib-logo.webp') }}" alt="" class="h-40 w-auto" />
+                </div>
+                <div class="text-center">
+                    <h1 class="text-5xl font-semibold tracking-tight text-balance text-blue-950 sm:text-7xl">Selamat datang di</h1>
+                    <p class="text-5xl font-semibold tracking-tight text-balance text-blue-800 sm:text-6xl mt-4">SI-ELFA</p>
+                    <p class="mt-8 text-lg font-medium text-pretty text-gray-500 sm:text-xl/8">SI-ELFA adalah platform yang
+                        dirancang untuk memfasilitasi evaluasi dan peningkatan kualitas di lingkungan fakultas.
+                    </p>
+                    <div class="survey-selection mt-10">
+                        <a href="#" id="scrollToSurvey" class="start-button">
+                            <i data-lucide="home" class="me-2"></i>
+                            Klik Disini Untuk Memulai
+                        </a>
                     </div>
                 </div>
-
-                <!-- Right: Logo (centered vertically and horizontally in its column) -->
-                <div class="md:w-1/2 w-full flex items-center justify-center">
-                    <div class="flex-shrink-0">
-                        <img src="{{ asset('images/unib-logo.webp') }}" alt="Logo UNIB"
-                            class="w-75 h-75 object-contain">
-                    </div>
+            </div>
+            <div aria-hidden="true"
+                class="absolute inset-x-0 top-[calc(100%-13rem)] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[calc(100%-30rem)]">
+                <div style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"
+                    class="relative left-[calc(50%+3rem)] aspect-1155/678 w-144.5 -translate-x-1/2 bg-linear-to-tr from-[#19328f] to-[#599cff] opacity-20 sm:left-[calc(50%+36rem)] sm:w-288.75">
                 </div>
-
             </div>
         </div>
-    </section>
+    </div>
 
     <!-- Active surveys section -->
     <section class="bg-gray-50 py-12">
         <section id="survey-section" class="bg-gray-50 py-12">
             <div class="container mx-auto px-6">
                 <div class="max-w-4xl mx-auto text-center mb-8">
-                    <h3 class="text-2xl font-semibold text-gray-800">Survey Aktif</h3>
+                    <h3 class="text-4xl font-semibold text-gray-800">Survey Aktif</h3>
                     <p class="text-gray-600 mt-2">Berikut adalah survei yang sedang aktif. Klik "Isi Survei" untuk
                         memulai.</p>
                 </div>
                 <form method="GET" action="{{ url('/') }}" class="mt-4 mb-8 max-w-xl mx-auto">
-                    <label for="cariSurvei">Cari Survei</label>
                     <div class="flex item-center gap-2">
-                        <input type="text" id="cariSurvei" name="cariSurvei" placeholder="Cari judul..."
+                        <input type="text" id="cariSurvei" name="cariSurvei" placeholder="Cari judul ..."
                             value="{{ request('cariSurvei') }}"
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
                         <button type="submit"
@@ -97,8 +91,8 @@
                                 <small class="text-gray-500">
                                     Batas waktu: {{ \Carbon\Carbon::parse($item->tanggal_selesai)->format('d M Y') }}
                                 </small>
-                                <a href="{{ route('survei.profil.tampil', $item->id) }}"
-                                    class="ml-4 inline-block px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                                <a href="{{ route('survei.profil', $item->id) }}"
+                                    class="ml-4 inline-block px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 isi-button transition duration-300">
                                     Isi Survei
                                 </a>
                             </div>
@@ -111,10 +105,8 @@
                         {{ $kuesioner->links('pagination.custom') }}
                     </div>
                 @endif
-
             </div>
         </section>
     </section>
-</body>
-
-</html>
+    @include('layouts.footer')
+@endsection

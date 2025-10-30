@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Jawaban extends Model
 {
@@ -10,6 +11,7 @@ class Jawaban extends Model
 
     protected $fillable = [
         'responden_id',
+        'kuesioner_id',
         'pertanyaan_id',
         'isi_jawaban',
         'nilai_likert',
@@ -19,14 +21,27 @@ class Jawaban extends Model
         'nilai_likert' => 'integer',
     ];
 
-    public function pertanyaan()
+    /**
+     * Get the question that owns this answer.
+     */
+    public function pertanyaan(): BelongsTo
     {
         return $this->belongsTo(Pertanyaan::class, 'pertanyaan_id');
     }
 
-    public function responden()
+    /**
+     * Get the respondent that owns this answer.
+     */
+    public function responden(): BelongsTo
     {
         return $this->belongsTo(Responden::class, 'responden_id');
     }
-    
+
+    /**
+     * Get the questionnaire that owns this answer.
+     */
+    public function kuesioner(): BelongsTo
+    {
+        return $this->belongsTo(Kuesioner::class, 'kuesioner_id');
+    }
 }

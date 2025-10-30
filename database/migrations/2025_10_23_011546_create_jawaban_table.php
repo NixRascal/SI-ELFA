@@ -14,12 +14,18 @@ return new class extends Migration
         Schema::create('jawaban', function (Blueprint $table) {
             $table->id();
             $table->foreignId('responden_id')->constrained('responden')->onDelete('cascade');
+            $table->foreignId('kuesioner_id')->constrained('kuesioner')->onDelete('cascade');
             $table->foreignId('pertanyaan_id')->constrained('pertanyaan')->onDelete('cascade');
             $table->text('isi_jawaban');
             $table->integer('nilai_likert')->nullable();
             $table->timestamps();
 
-            $table->index(['responden_id', 'pertanyaan_id']);
+            // Index untuk performa query
+            $table->index(['responden_id', 'kuesioner_id']);
+            
+            // UNIQUE CONSTRAINT: Satu responden hanya bisa menjawab satu pertanyaan satu kali
+            // Mencegah duplicate jawaban untuk pertanyaan yang sama
+            $table->unique(['responden_id', 'pertanyaan_id'], 'unique_jawaban_per_pertanyaan');
         });
     }
 

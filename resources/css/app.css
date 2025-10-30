@@ -25,11 +25,46 @@
 }
 
 .landing-pattern {
-  /* use rgba to simulate opacity without affecting child elements */
-  background-color: rgba(255,255,255,0.2);
-  background: radial-gradient(circle, transparent 5%, #ffffff 20%, #ffffff 80%, transparent 80%, transparent),
-              radial-gradient(circle, transparent 5%, #ffffff 20%, #ffffff 80%, transparent 80%, transparent) 12px 12px,
-              linear-gradient(#8abcff 1px, transparent 1px) 0 -0.6px,
-              linear-gradient(90deg, #8abcff 1px, #ffffff 1px) -0.6px 0;
-  background-size: 30px 30px, 30px 30px, 15px 15px, 15px 15px;
+  background: #EEF5FF;
+  background: radial-gradient(circle, rgba(238, 245, 255, 1) 0%, rgba(51, 118, 254, 1) 53%, rgba(25, 50, 143, 1) 100%);
+}
+
+.survey-selection {
+    margin-bottom: 3rem;
+}
+
+.start-button {
+    background: #3b82f6;
+    color: white;
+    padding: 15px 40px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+    text-transform: none;
+    letter-spacing: 0.5px;
+}
+
+.start-button:hover {
+    background: #2563eb;
+    color: white;
+    text-decoration: none;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+.start-button:active {
+    transform: translateY(-1px);
+}
+
+.isi-button:hover {
+    background: #2563eb;
+    color: white;
+    text-decoration: none;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
 }
