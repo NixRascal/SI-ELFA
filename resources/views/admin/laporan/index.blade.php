@@ -45,8 +45,8 @@
                     <p class="text-sm font-medium text-gray-600">Total Pertanyaan</p>
                     <p class="mt-2 text-3xl font-bold text-gray-900">{{ $totalPertanyaan }}</p>
                 </div>
-                <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
-                    <i class="fas fa-question-circle text-purple-600 text-xl"></i>
+                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-question-circle text-blue-600 text-xl"></i>
                 </div>
             </div>
         </div>
@@ -75,25 +75,25 @@
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider whitespace-nowrap">
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 tracking-wider whitespace-nowrap">
                                 Kuesioner
                             </th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider whitespace-nowrap">
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 tracking-wider whitespace-nowrap">
                                 Target
                             </th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider whitespace-nowrap">
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 tracking-wider whitespace-nowrap">
                                 Status
                             </th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider whitespace-nowrap">
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 tracking-wider whitespace-nowrap">
                                 Responden
                             </th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider whitespace-nowrap">
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 tracking-wider whitespace-nowrap">
                                 Pertanyaan
                             </th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider whitespace-nowrap">
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 tracking-wider whitespace-nowrap">
                                 Periode
                             </th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider whitespace-nowrap">
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 tracking-wider whitespace-nowrap">
                                 Aksi
                             </th>
                         </tr>
@@ -150,18 +150,22 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm">
                                     <div class="flex items-center space-x-2">
-                                        <button type="button" class="text-blue-600 hover:text-blue-800" title="Lihat Detail">
+                                        <a href="{{ route('dashboard.laporan.show', $item->id) }}" 
+                                            class="text-blue-600 hover:text-blue-800" title="Lihat Detail">
                                             <i class="fas fa-eye"></i>
-                                        </button>
-                                        <button type="button" class="text-green-600 hover:text-green-800" title="Lihat Hasil">
+                                        </a>
+                                        <a href="{{ route('dashboard.laporan.hasil', $item->id) }}" 
+                                            class="text-green-600 hover:text-green-800" title="Lihat Hasil">
                                             <i class="fas fa-chart-bar"></i>
-                                        </button>
-                                        <button type="button" class="text-purple-600 hover:text-purple-800" title="Export">
+                                        </a>
+                                        <a href="{{ route('dashboard.laporan.export', $item->id) }}" 
+                                            class="text-blue-600 hover:text-blue-800" title="Export CSV">
                                             <i class="fas fa-download"></i>
-                                        </button>
-                                        <button type="button" class="text-gray-600 hover:text-gray-800" title="Print">
+                                        </a>
+                                        <a href="{{ route('dashboard.laporan.print', $item->id) }}" 
+                                            target="_blank" class="text-gray-600 hover:text-gray-800" title="Print">
                                             <i class="fas fa-print"></i>
-                                        </button>
+                                        </a>
                                     </div>
                                 </td>
                             </tr>
@@ -218,9 +222,10 @@
                             </div>
                         </div>
                         <div class="mt-3 pt-3 border-t border-gray-200">
-                            <button type="button" class="w-full text-xs text-blue-600 hover:text-blue-800 font-medium">
+                            <a href="{{ route('dashboard.laporan.hasil', $item->id) }}" 
+                                class="w-full inline-block text-center text-xs text-blue-600 hover:text-blue-800 font-medium">
                                 <i class="fas fa-chart-line mr-1"></i> Lihat Detail
-                            </button>
+                            </a>
                         </div>
                     </div>
                 @empty

@@ -2,6 +2,43 @@
 
 @section('content')
 <div class="px-4 sm:px-6 lg:px-8">
+    <!-- Success/Error Messages -->
+    @if(session('success'))
+        <div class="mb-6 rounded-lg bg-green-50 border border-green-200 p-4">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-check-circle text-green-600"></i>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm font-medium text-green-800">{{ session('success') }}</p>
+                </div>
+                <div class="ml-auto pl-3">
+                    <button onclick="this.parentElement.parentElement.parentElement.remove()" class="inline-flex text-green-400 hover:text-green-500">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    @if(session('error'))
+        <div class="mb-6 rounded-lg bg-red-50 border border-red-200 p-4">
+            <div class="flex">
+                <div class="flex-shrink-0">
+                    <i class="fas fa-exclamation-circle text-red-600"></i>
+                </div>
+                <div class="ml-3">
+                    <p class="text-sm font-medium text-red-800">{{ session('error') }}</p>
+                </div>
+                <div class="ml-auto pl-3">
+                    <button onclick="this.parentElement.parentElement.parentElement.remove()" class="inline-flex text-red-400 hover:text-red-500">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    @endif
+
     <!-- Header -->
     <div class="sm:flex sm:items-center">
         <div class="sm:flex-auto">
@@ -9,11 +46,7 @@
             <p class="mt-2 text-sm text-gray-700">Daftar semua kuesioner yang telah dibuat</p>
         </div>
         <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none space-x-3">
-            <button type="button" class="inline-flex items-center rounded-md bg-white px-4 py-2.5 text-sm font-medium text-gray-700 border border-gray-300 hover:bg-gray-50">
-                <i class="fas fa-upload mr-2"></i>
-                Import
-            </button>
-            <a href="{{ route('dashboard.kuesioner.create') }}" class="inline-flex items-center rounded-md bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700">
+            <a href="{{ route('dashboard.kuesioner.create') }}" class="inline-flex items-center rounded-md bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 cursor-pointer">
                 <i class="fas fa-plus mr-2"></i>
                 Buat Kuesioner Baru
             </a>
@@ -63,7 +96,7 @@
 
             <!-- Filter Button -->
             <div class="sm:col-span-1 flex items-end">
-                <button type="submit" class="w-full rounded-md bg-blue-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-700 shadow-sm">
+                <button type="submit" class="w-full rounded-md bg-blue-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-blue-700 shadow-sm cursor-pointer">
                     <i class="fas fa-filter mr-2"></i>
                     Filter
                 </button>
@@ -97,8 +130,8 @@
                                 <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
                                     Dibuat
                                 </th>
-                                <th scope="col" class="relative py-3.5 pl-3 pr-4 sm:pr-6">
-                                    <span class="sr-only">Aksi</span>
+                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                    Aksi
                                 </th>
                             </tr>
                         </thead>
@@ -108,8 +141,8 @@
                                     <td class="whitespace-nowrap py-4 pl-4 pr-3 sm:pl-6">
                                         <div class="flex items-center">
                                             <div class="h-10 w-10 flex-shrink-0">
-                                                <div class="h-10 w-10 rounded-lg bg-indigo-100 flex items-center justify-center">
-                                                    <i class="{{ $item->icon }} text-indigo-600"></i>
+                                                <div class="h-10 w-10 rounded-lg bg-blue-100 flex items-center justify-center">
+                                                    <i class="{{ $item->icon }} text-blue-600"></i>
                                                 </div>
                                             </div>
                                             <div class="ml-4">
@@ -155,16 +188,23 @@
                                     </td>
                                     <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
                                         <div class="flex items-center justify-end space-x-2">
-                                            <button type="button" class="text-gray-400 hover:text-gray-600" title="Lihat">
+                                            <a href="{{ route('dashboard.kuesioner.show', $item) }}" class="text-gray-400 hover:text-gray-600 cursor-pointer" title="Lihat Detail">
                                                 <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button type="button" class="text-blue-400 hover:text-blue-600" title="Edit">
+                                            </a>
+                                            <a href="{{ route('dashboard.kuesioner.edit', $item) }}" class="text-blue-400 hover:text-blue-600 cursor-pointer" title="Edit">
                                                 <i class="fas fa-edit"></i>
-                                            </button>
-                                            <button type="button" class="text-green-400 hover:text-green-600" title="Hasil">
-                                                <i class="fas fa-chart-bar"></i>
-                                            </button>
-                                            <button type="button" class="text-red-400 hover:text-red-600" title="Hapus">
+                                            </a>
+                                            
+                                            <!-- Toggle Status -->
+                                            <form action="{{ route('dashboard.kuesioner.toggle-status', $item) }}" method="POST" class="inline">
+                                                @csrf
+                                                <button type="submit" class="{{ $item->status_aktif ? 'text-yellow-400 hover:text-yellow-600' : 'text-green-400 hover:text-green-600' }} cursor-pointer" title="{{ $item->status_aktif ? 'Nonaktifkan' : 'Aktifkan' }}">
+                                                    <i class="fas fa-{{ $item->status_aktif ? 'toggle-on' : 'toggle-off' }}"></i>
+                                                </button>
+                                            </form>
+
+                                            <!-- Delete -->
+                                            <button type="button" onclick="confirmDelete({{ $item->id }}, '{{ $item->judul }}')" class="text-red-400 hover:text-red-600 cursor-pointer" title="Hapus">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </div>
@@ -193,4 +233,59 @@
         </div>
     </div>
 </div>
+
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="hidden fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity z-50">
+    <div class="fixed inset-0 z-50 overflow-y-auto">
+        <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+            <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+                <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                            <i class="fas fa-exclamation-triangle text-red-600"></i>
+                        </div>
+                        <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                            <h3 class="text-base font-semibold leading-6 text-gray-900">Hapus Kuesioner</h3>
+                            <div class="mt-2">
+                                <p class="text-sm text-gray-500">Apakah Anda yakin ingin menghapus kuesioner "<span id="deleteTitle"></span>"?</p>
+                                <p class="text-sm text-red-600 mt-2"><i class="fas fa-info-circle mr-1"></i> Tindakan ini tidak dapat dibatalkan!</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
+                    <form id="deleteForm" method="POST" class="inline">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="inline-flex w-full justify-center rounded-md bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-700 sm:ml-3 sm:w-auto cursor-pointer">
+                            <i class="fas fa-trash mr-2"></i> Hapus
+                        </button>
+                    </form>
+                    <button type="button" onclick="closeDeleteModal()" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto cursor-pointer">
+                        Batal
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function confirmDelete(id, title) {
+    document.getElementById('deleteTitle').textContent = title;
+    document.getElementById('deleteForm').action = `/dashboard/kuesioner/${id}`;
+    document.getElementById('deleteModal').classList.remove('hidden');
+}
+
+function closeDeleteModal() {
+    document.getElementById('deleteModal').classList.add('hidden');
+}
+
+// Close modal on ESC key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeDeleteModal();
+    }
+});
+</script>
 @endsection

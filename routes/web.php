@@ -6,6 +6,7 @@ use App\Http\Controllers\SurveyController;
 use App\Http\Controllers\QuestionnaireController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\AdminManagementController;
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -67,9 +68,26 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
     Route::get('/kuesioner', [QuestionnaireController::class, 'manage'])->name('kuesioner.index');
     Route::get('/kuesioner/buat', [QuestionnaireController::class, 'create'])->name('kuesioner.create');
     Route::post('/kuesioner', [QuestionnaireController::class, 'store'])->name('kuesioner.store');
+    Route::get('/kuesioner/{kuesioner}', [QuestionnaireController::class, 'show'])->name('kuesioner.show');
+    Route::get('/kuesioner/{kuesioner}/edit', [QuestionnaireController::class, 'edit'])->name('kuesioner.edit');
+    Route::put('/kuesioner/{kuesioner}', [QuestionnaireController::class, 'update'])->name('kuesioner.update');
+    Route::delete('/kuesioner/{kuesioner}', [QuestionnaireController::class, 'destroy'])->name('kuesioner.destroy');
+    Route::post('/kuesioner/{kuesioner}/duplicate', [QuestionnaireController::class, 'duplicate'])->name('kuesioner.duplicate');
+    Route::post('/kuesioner/{kuesioner}/toggle-status', [QuestionnaireController::class, 'toggleStatus'])->name('kuesioner.toggle-status');
+    Route::get('/kuesioner/{kuesioner}/export', [QuestionnaireController::class, 'export'])->name('kuesioner.export');
     
     // Laporan
     Route::get('/laporan', [ReportController::class, 'index'])->name('laporan.index');
+    Route::get('/laporan/{id}', [ReportController::class, 'show'])->name('laporan.show');
+    Route::get('/laporan/{id}/hasil', [ReportController::class, 'hasil'])->name('laporan.hasil');
+    Route::get('/laporan/{id}/export', [ReportController::class, 'export'])->name('laporan.export');
+    Route::get('/laporan/{id}/print', [ReportController::class, 'print'])->name('laporan.print');
+    Route::post('/laporan/{id}/ai-analysis', [ReportController::class, 'aiAnalysis'])->name('laporan.ai-analysis');
+    
+    // Profile
+    Route::get('/profil', [ProfileController::class, 'index'])->name('profile.index');
+    Route::put('/profil', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profil/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
     
     // Admin Management
     Route::resource('admin', AdminManagementController::class)->except(['show']);

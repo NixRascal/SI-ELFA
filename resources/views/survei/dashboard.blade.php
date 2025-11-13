@@ -1,14 +1,14 @@
 @extends('layouts.app')
 @section('content')
-    <div class="bg-gray-50 py-1">
-        <div class="relative isolate px-6 pt-14 lg:px-8">
+    <div class="bg-gray-50">
+        <div class="relative isolate px-6 lg:px-8 min-h-screen flex items-center">
             <div aria-hidden="true"
                 class="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80">
                 <div style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"
                     class="relative left-[calc(50%-11rem)] aspect-1155/678 w-144.5 -translate-x-1/2 rotate-30 bg-linear-to-tr from-[#19328f] to-[#19328f] opacity-20 sm:left-[calc(50%-30rem)] sm:w-288.75">
                 </div>
             </div>
-            <div class="mx-auto max-w-3xl pt-20 pb-32 sm:pt-48 sm:pb-40">
+            <div class="mx-auto max-w-3xl w-full py-20">
                 <div class="flex justify-center mb-10">
                     <img src="{{ asset('images/unib-logo.webp') }}" alt="" class="h-40 w-auto" />
                 </div>
@@ -40,61 +40,84 @@
         <section id="survey-section" class="bg-gray-50 py-12">
             <div class="container mx-auto px-6">
                 <div class="max-w-4xl mx-auto text-center mb-8">
-                    <h3 class="text-4xl font-semibold text-gray-800">Survey Aktif</h3>
+                    <h3 class="text-4xl font-semibold text-gray-800">Survei Aktif</h3>
                     <p class="text-gray-600 mt-2">Berikut adalah survei yang sedang aktif. Klik "Isi Survei" untuk
                         memulai.</p>
                 </div>
-                <form method="GET" action="{{ url('/') }}" class="mt-4 mb-8 max-w-xl mx-auto">
-                    <div class="flex item-center gap-2">
-                        <input type="text" id="cariSurvei" name="cariSurvei" placeholder="Cari judul ..."
+                <form method="GET" action="{{ url('/') }}" class="mt-4 mb-8 max-w-3xl mx-auto">
+                    <div class="flex flex-col sm:flex-row items-center gap-3">
+                        <!-- Search Input -->
+                        <input type="text" id="cariSurvei" name="cariSurvei" placeholder="Cari judul survei..."
                             value="{{ request('cariSurvei') }}"
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                        <button type="submit"
-                            class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300">Cari</button>
-                        @if (request('cariSurvei'))
-                            <a href="{{ url('/') }}"
-                                class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition duration-300">Reset</a>
-                        @endif
+
+                        <!-- Filter Target -->
+                        <select name="target" 
+                            class="w-full sm:w-48 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            <option value="">Semua Target</option>
+                            <option value="mahasiswa" {{ request('target') == 'mahasiswa' ? 'selected' : '' }}>Mahasiswa</option>
+                            <option value="dosen" {{ request('target') == 'dosen' ? 'selected' : '' }}>Dosen</option>
+                            <option value="staff" {{ request('target') == 'staff' ? 'selected' : '' }}>Staff</option>
+                            <option value="alumni" {{ request('target') == 'alumni' ? 'selected' : '' }}>Alumni</option>
+                            <option value="stakeholder" {{ request('target') == 'stakeholder' ? 'selected' : '' }}>Stakeholder</option>
+                        </select>
+                        
+                        <!-- Buttons -->
+                        <div class="flex gap-2 w-full sm:w-auto">
+                            <button type="submit"
+                                class="flex-1 sm:flex-none px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300 whitespace-nowrap">
+                                <i class="fas fa-search mr-1"></i> Cari
+                            </button>
+                            @if (request('cariSurvei') || request('target'))
+                                <a href="{{ url('/') }}"
+                                    class="flex-1 sm:flex-none px-6 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition duration-300 text-center whitespace-nowrap">
+                                    <i class="fas fa-redo mr-1"></i> Reset
+                                </a>
+                            @endif
+                        </div>
                     </div>
                 </form>
 
                 <!-- Surveys Grid -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     @foreach ($kuesioner as $item)
-                        <div class="bg-white shadow-sm rounded-lg p-6 flex flex-col justify-between">
-                            <div>
-                                <!-- Card -->
-                                <div class="flex items-center justify-between">
-                                    <!-- Bagian Kiri: Icon + Judul -->
-                                    <div class="flex items-center gap-3">
-                                        <div class="w-10 h-10 flex items-center justify-center rounded-lg bg-blue-100">
-                                            <i class="{{ $item->icon }} text-blue-600 text-xl"></i>
-                                        </div>
-                                        <h4 class="text-lg font-semibold text-gray-800 leading-tight">
-                                            {{ $item->judul }}</h4>
+                        <div class="bg-white shadow-sm rounded-lg overflow-hidden flex">
+                            <!-- Sidebar Icon -->
+                            <div class="w-50 bg-blue-50 flex items-center justify-center flex-shrink-0">
+                                <i class="{{ $item->icon }} text-blue-600 text-6xl"></i>
+                            </div>
+                            
+                            <!-- Content -->
+                            <div class="flex-1 p-5 flex flex-col justify-between">
+                                <div>
+                                    <!-- Header -->
+                                    <div class="flex items-start justify-between gap-2 mb-3">
+                                        <h4 class="text-lg font-semibold text-gray-800 leading-tight flex-1">
+                                            {{ $item->judul }}
+                                        </h4>
+                                        <span @class([
+                                            'text-xs px-2.5 py-1 rounded-full whitespace-nowrap flex-shrink-0',
+                                            'bg-green-100 text-green-700' => $item->status_aktif,
+                                            'bg-gray-100 text-gray-600' => !$item->status_aktif,
+                                        ])>
+                                            {{ $item->status_aktif ? 'Aktif' : 'Tidak Aktif' }}
+                                        </span>
                                     </div>
-                                    <span @class([
-                                        'text-xs px-2 py-1 rounded-full',
-                                        'bg-green-100 text-green-700' => $item->status_aktif,
-                                        'bg-gray-100 text-gray-600' => !$item->status_aktif,
-                                    ])>
-                                        {{ $item->status_aktif ? 'Aktif' : 'Tidak Aktif' }}
-                                    </span>
+
+                                    <!-- Deskripsi -->
+                                    <p class="text-gray-600 text-sm leading-relaxed mb-4">{{ Str::limit($item->deskripsi, 100) }}</p>
                                 </div>
 
-                                <!-- Deskripsi -->
-                                <p class="text-gray-600 mt-3">{{ Str::limit($item->deskripsi, 110) }}</p>
-                            </div>
-
-                            <!-- Footer Card -->
-                            <div class="mt-4 flex items-center justify-between">
-                                <small class="text-gray-500">
-                                    Batas waktu: {{ \Carbon\Carbon::parse($item->tanggal_selesai)->format('d M Y') }}
-                                </small>
-                                <a href="{{ route('survei.profil', $item->id) }}"
-                                    class="ml-4 inline-block px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 isi-button transition duration-300">
-                                    Isi Survei
-                                </a>
+                                <!-- Footer -->
+                                <div class="flex items-center justify-between pt-3 border-t border-gray-100">
+                                    <small class="text-gray-500 text-xs">
+                                        Batas waktu: {{ \Carbon\Carbon::parse($item->tanggal_selesai)->format('d M Y') }}
+                                    </small>
+                                    <a href="{{ route('survei.profil', $item->id) }}"
+                                        class="inline-block px-5 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition duration-300">
+                                        Isi Survei
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     @endforeach

@@ -19,10 +19,14 @@ class QuestionnaireController extends Controller
     public function index(Request $request)
     {
         $search = $request->query('cariSurvei', '');
+        $targetFilter = $request->query('target', '');
         $today = Carbon::today()->toDateString();
 
         $questionnaires = Kuesioner::query()
             ->active()
+            ->when($targetFilter, function ($query, $targetFilter) {
+                $query->where('target_responden', $targetFilter);
+            })
             ->currentPeriod($today)
             ->when($search, function ($query, $search) {
                 $query->search($search);
@@ -168,5 +172,228 @@ class QuestionnaireController extends Controller
                 ->withInput()
                 ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }
+    }
+
+    /**
+     * Display the specified questionnaire.
+     */
+    public function show(Kuesioner $kuesioner): View
+    {
+        $kuesioner->load(['admin', 'pertanyaan' => function ($query) {
+            $query->orderBy('urutan');
+        }]);
+
+        // Hitung jumlah responden
+        $respondenCount = DB::table('jawaban')
+            ->where('kuesioner_id', $kuesioner->id)
+            ->distinct('responden_id')
+            ->count('responden_id');
+
+        return view('admin.kuesioner.show', [
+            'kuesioner' => $kuesioner,
+            'respondenCount' => $respondenCount
+        ]);
+    }
+
+    /**
+     * Show the form for editing the specified questionnaire.
+     */
+    public function edit(Kuesioner $kuesioner): View
+    {
+        $kuesioner->load(['pertanyaan' => function ($query) {
+            $query->orderBy('urutan');
+        }]);
+
+        return view('admin.kuesioner.edit', [
+            'kuesioner' => $kuesioner
+        ]);
+    }
+
+    /**
+     * Update the specified questionnaire in storage.
+     */
+    public function update(Request $request, Kuesioner $kuesioner): RedirectResponse
+    {
+        $validated = $request->validate([
+            'judul' => 'required|string|max:255',
+            'deskripsi' => 'nullable|string',
+            'icon' => 'required|string',
+            'target_responden' => 'required|in:mahasiswa,dosen,staff,alumni,stakeholder',
+            'tanggal_mulai' => 'required|date',
+            'tanggal_selesai' => 'required|date|after_or_equal:tanggal_mulai',
+            'status_aktif' => 'boolean',
+            'pertanyaan' => 'required|array|min:1',
+            'pertanyaan.*.id' => 'nullable|exists:pertanyaan,id',
+            'pertanyaan.*.teks_pertanyaan' => 'required|string',
+            'pertanyaan.*.jenis_pertanyaan' => 'required|in:likert,pilihan_ganda,isian',
+            'pertanyaan.*.kategori' => 'nullable|string',
+            'pertanyaan.*.opsi' => 'nullable|array|min:2',
+            'pertanyaan.*.opsi.*' => 'nullable|string',
+        ]);
+
+        DB::beginTransaction();
+        try {
+            // Update questionnaire
+            $kuesioner->update([
+                'judul' => $validated['judul'],
+                'deskripsi' => $validated['deskripsi'],
+                'icon' => $validated['icon'],
+                'target_responden' => $validated['target_responden'],
+                'tanggal_mulai' => $validated['tanggal_mulai'],
+                'tanggal_selesai' => $validated['tanggal_selesai'],
+                'status_aktif' => $request->boolean('status_aktif', true),
+            ]);
+
+            // Get existing question IDs
+            $existingIds = $kuesioner->pertanyaan->pluck('id')->toArray();
+            $submittedIds = [];
+
+            // Update or create questions
+            foreach ($validated['pertanyaan'] as $index => $pertanyaanData) {
+                $opsiJawaban = null;
+                if ($pertanyaanData['jenis_pertanyaan'] === 'pilihan_ganda') {
+                    $opsiJawaban = isset($pertanyaanData['opsi']) ? array_values(array_filter($pertanyaanData['opsi'])) : null;
+                }
+
+                $pertanyaanId = $pertanyaanData['id'] ?? null;
+                
+                if ($pertanyaanId && in_array($pertanyaanId, $existingIds)) {
+                    // Update existing question
+                    Pertanyaan::where('id', $pertanyaanId)->update([
+                        'teks_pertanyaan' => $pertanyaanData['teks_pertanyaan'],
+                        'jenis_pertanyaan' => $pertanyaanData['jenis_pertanyaan'],
+                        'opsi_jawaban' => $opsiJawaban,
+                        'urutan' => $index + 1,
+                        'kategori' => $pertanyaanData['kategori'] ?? null,
+                    ]);
+                    $submittedIds[] = $pertanyaanId;
+                } else {
+                    // Create new question
+                    $newPertanyaan = Pertanyaan::create([
+                        'kuesioner_id' => $kuesioner->id,
+                        'teks_pertanyaan' => $pertanyaanData['teks_pertanyaan'],
+                        'jenis_pertanyaan' => $pertanyaanData['jenis_pertanyaan'],
+                        'opsi_jawaban' => $opsiJawaban,
+                        'urutan' => $index + 1,
+                        'wajib_diisi' => true,
+                        'kategori' => $pertanyaanData['kategori'] ?? null,
+                    ]);
+                    $submittedIds[] = $newPertanyaan->id;
+                }
+            }
+
+            // Delete questions that were removed
+            $idsToDelete = array_diff($existingIds, $submittedIds);
+            if (!empty($idsToDelete)) {
+                Pertanyaan::whereIn('id', $idsToDelete)->delete();
+            }
+
+            DB::commit();
+
+            return redirect()->route('dashboard.kuesioner.index')
+                ->with('success', 'Kuesioner berhasil diperbarui');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()
+                ->withInput()
+                ->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Remove the specified questionnaire from storage.
+     */
+    public function destroy(Kuesioner $kuesioner): RedirectResponse
+    {
+        DB::beginTransaction();
+        try {
+            // Check if there are responses
+            $respondenCount = DB::table('jawaban')
+                ->where('kuesioner_id', $kuesioner->id)
+                ->distinct('responden_id')
+                ->count('responden_id');
+
+            if ($respondenCount > 0) {
+                return back()->with('error', 'Tidak dapat menghapus kuesioner yang sudah memiliki responden');
+            }
+
+            // Delete questions and questionnaire
+            $kuesioner->pertanyaan()->delete();
+            $kuesioner->delete();
+
+            DB::commit();
+
+            return redirect()->route('dashboard.kuesioner.index')
+                ->with('success', 'Kuesioner berhasil dihapus');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Duplicate the specified questionnaire.
+     */
+    public function duplicate(Kuesioner $kuesioner): RedirectResponse
+    {
+        DB::beginTransaction();
+        try {
+            // Create duplicate questionnaire
+            $newKuesioner = $kuesioner->replicate();
+            $newKuesioner->judul = $kuesioner->judul . ' (Copy)';
+            $newKuesioner->status_aktif = false;
+            $newKuesioner->dibuat_oleh = Auth::id();
+            $newKuesioner->save();
+
+            // Duplicate questions
+            foreach ($kuesioner->pertanyaan as $pertanyaan) {
+                $newPertanyaan = $pertanyaan->replicate();
+                $newPertanyaan->kuesioner_id = $newKuesioner->id;
+                $newPertanyaan->save();
+            }
+
+            DB::commit();
+
+            return redirect()->route('dashboard.kuesioner.edit', $newKuesioner)
+                ->with('success', 'Kuesioner berhasil diduplikasi. Silakan edit sesuai kebutuhan.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Toggle the status of the specified questionnaire.
+     */
+    public function toggleStatus(Kuesioner $kuesioner): RedirectResponse
+    {
+        try {
+            $kuesioner->update([
+                'status_aktif' => !$kuesioner->status_aktif
+            ]);
+
+            $status = $kuesioner->status_aktif ? 'diaktifkan' : 'dinonaktifkan';
+            return back()->with('success', "Kuesioner berhasil {$status}");
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Export questionnaire to PDF or Excel.
+     */
+    public function export(Request $request, Kuesioner $kuesioner)
+    {
+        $format = $request->query('format', 'pdf');
+        
+        // Untuk saat ini, return view untuk print
+        $kuesioner->load(['admin', 'pertanyaan' => function ($query) {
+            $query->orderBy('urutan');
+        }]);
+
+        return view('admin.kuesioner.export', [
+            'kuesioner' => $kuesioner,
+            'format' => $format
+        ]);
     }
 }
