@@ -1,59 +1,67 @@
 @extends('layouts.app')
 @section('content')
-<div class="min-h-screen flex flex-col bg-gray-50">
-    <div class="flex-1 flex items-center justify-center px-4 sm:px-0">
-        <div class="bg-white w-full max-w-2xl mx-auto p-6 sm:p-8 rounded-xl shadow-sm border border-gray-200">
-        <div class="mx-auto max-w-2xl text-center">
-            <h1 class="text-3xl sm:text-4xl font-bold text-gray-900">Profil Responden</h1>
-            <p class="mt-2 text-gray-600">Isi profil Anda sebelum menjawab survei</p>
-        </div>
+<div class="min-h-screen flex flex-col bg-gradient-to-br from-gray-50 to-gray-100">
+    <div class="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+        <div class="w-full max-w-2xl">
+            <!-- Header Card -->
+            <div class="text-center mb-8">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-indigo-600 rounded-full mb-4">
+                    <i class="fas fa-user-edit text-white text-2xl"></i>
+                </div>
+                <h1 class="text-3xl sm:text-4xl font-bold text-gray-900">Profil Responden</h1>
+                <p class="mt-2 text-base text-gray-600">Isi profil Anda sebelum menjawab survei</p>
+            </div>
 
-        @if (session('error'))
-            <div class="mx-auto mt-6 max-w-xl bg-red-50 border border-red-200 rounded-lg p-4">
-                <div class="flex items-start">
-                    <div class="flex-shrink-0">
-                        <i class="fas fa-exclamation-circle text-red-600 text-xl"></i>
-                    </div>
-                    <div class="ml-3">
-                        <h3 class="text-sm font-medium text-red-800">
-                            {{ session('error') }}
-                        </h3>
-                        <div class="mt-2 text-sm text-red-700">
-                            <p>Anda sudah pernah mengisi survei ini. Silakan pilih survei lainnya atau hubungi admin jika ada kesalahan.</p>
+            <!-- Alert Messages -->
+            @if (session('error'))
+                <div class="mb-6 bg-red-50 border-l-4 border-red-500 rounded-lg p-4 shadow-sm">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-exclamation-circle text-red-500 text-xl"></i>
                         </div>
-                        <div class="mt-4">
-                            <a href="{{ route('beranda') }}" class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
-                                <i class="fas fa-arrow-left mr-1"></i> Kembali ke Beranda
-                            </a>
+                        <div class="ml-3 flex-1">
+                            <h3 class="text-sm font-semibold text-red-800">
+                                {{ session('error') }}
+                            </h3>
+                            <div class="mt-2 text-sm text-red-700">
+                                <p>Anda sudah pernah mengisi survei ini. Silakan pilih survei lainnya atau hubungi admin jika ada kesalahan.</p>
+                            </div>
+                            <div class="mt-4">
+                                <a href="{{ route('beranda') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors">
+                                    <i class="fas fa-arrow-left mr-2"></i> Kembali ke Beranda
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        @endif
+            @endif
 
-        @if (session('success'))
-            <div class="mx-auto mt-6 max-w-xl bg-green-50 border border-green-200 rounded-lg p-4">
-                <div class="flex items-start">
-                    <div class="flex-shrink-0">
-                        <i class="fas fa-check-circle text-green-600 text-xl"></i>
-                    </div>
-                    <div class="ml-3">
-                        <h3 class="text-sm font-medium text-green-800">
-                            {{ session('success') }}
-                        </h3>
+            @if (session('success'))
+                <div class="mb-6 bg-green-50 border-l-4 border-green-500 rounded-lg p-4 shadow-sm">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-check-circle text-green-500 text-xl"></i>
+                        </div>
+                        <div class="ml-3">
+                            <h3 class="text-sm font-semibold text-green-800">
+                                {{ session('success') }}
+                            </h3>
+                        </div>
                     </div>
                 </div>
-            </div>
-        @endif
+            @endif
 
-        <form action="{{ route('survei.profil.simpan', $kuesioner->id) }}" method="POST" class="mx-auto mt-10 max-w-xl">
-            @csrf
-            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+            <!-- Form Card -->
+            <div class="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
+                <div class="px-6 py-8 sm:px-10 sm:py-10">
+                    <form action="{{ route('survei.profil.simpan', $kuesioner->id) }}" method="POST" id="profileForm">
+                        @csrf
+                        <div class="space-y-6">
 
-                <div class="sm:col-span-2">
-                    <label class="block text-sm font-semibold text-gray-900">Jenis Responden <span class="text-red-600">*</span></label>
-                    <select name="jenis_responden"
-                        class="mt-2 block w-full rounded-md border @error('jenis_responden') border-red-500 @else border-gray-300 @enderror px-3.5 py-2 focus:outline-2 focus:outline-indigo-600">
+                <div>
+                    <label class="block text-sm font-semibold text-gray-900 mb-2">Jenis Responden <span class="text-red-600">*</span></label>
+                    <select name="jenis_responden" id="jenis_responden"
+                        class="block w-full rounded-lg border @error('jenis_responden') border-red-500 @else border-gray-300 @enderror px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
                         <option value="">Pilih jenis responden</option>
                         <option value="mahasiswa" @selected(old('jenis_responden', $profil['jenis_responden'] ?? '') === 'mahasiswa')>Mahasiswa</option>
                         <option value="dosen" @selected(old('jenis_responden', $profil['jenis_responden'] ?? '') === 'dosen')>Dosen</option>
@@ -62,44 +70,50 @@
                         <option value="stakeholder" @selected(old('jenis_responden', $profil['jenis_responden'] ?? '') === 'stakeholder')>Stakeholder</option>
                     </select>
                     @error('jenis_responden')
-                        <p class="mt-1 text-sm text-red-600"><i class="fas fa-exclamation-circle"></i> {{ $message }}</p>
+                        <p class="mt-2 text-sm text-red-600"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</p>
                     @enderror
                 </div>
 
-                <div class="sm:col-span-2">
-                    <label class="block text-sm font-semibold text-gray-900">Nama <span class="text-red-600">*</span></label>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-900 mb-2">Nama <span class="text-red-600">*</span></label>
                     <input type="text" name="nama" value="{{ old('nama', $profil['nama'] ?? '') }}"
-                        class="mt-2 block w-full rounded-md border @error('nama') border-red-500 @else border-gray-300 @enderror px-3.5 py-2 focus:outline-indigo-600"
-                        >
+                        class="block w-full rounded-lg border @error('nama') border-red-500 @else border-gray-300 @enderror px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                        placeholder="Masukkan nama lengkap">
                     @error('nama')
-                        <p class="mt-1 text-sm text-red-600"><i class="fas fa-exclamation-circle"></i> {{ $message }}</p>
+                        <p class="mt-2 text-sm text-red-600"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</p>
                     @enderror
                 </div>
 
-                <div>
-                    <label class="block text-sm font-semibold text-gray-900">NPM</label>
-                    <input type="text" name="npm" value="{{ old('npm', $profil['npm'] ?? '') }}"
-                        class="mt-2 block w-full rounded-md border @error('npm') border-red-500 @else border-gray-300 @enderror px-3.5 py-2"
-                        >
+                <div id="npmField">
+                    <label class="block text-sm font-semibold text-gray-900 mb-2">
+                        <span id="npmLabel">NPM</span>
+                        <span class="text-red-600" id="npmRequired">*</span>
+                    </label>
+                    <input type="text" name="npm" id="npm" value="{{ old('npm', $profil['npm'] ?? '') }}"
+                        class="block w-full rounded-lg border @error('npm') border-red-500 @else border-gray-300 @enderror px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                        placeholder="Masukkan NPM/NIP">
                     @error('npm')
-                        <p class="mt-1 text-sm text-red-600"><i class="fas fa-exclamation-circle"></i> {{ $message }}</p>
+                        <p class="mt-2 text-sm text-red-600"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</p>
                     @enderror
                 </div>
 
                 <div>
-                    <label class="block text-sm font-semibold text-gray-900">Email <span class="text-red-600">*</span></label>
+                    <label class="block text-sm font-semibold text-gray-900 mb-2">Email <span class="text-red-600">*</span></label>
                     <input type="email" name="email" value="{{ old('email', $profil['email'] ?? '') }}"
-                        class="mt-2 block w-full rounded-md border @error('email') border-red-500 @else border-gray-300 @enderror px-3.5 py-2"
-                        >
+                        class="block w-full rounded-lg border @error('email') border-red-500 @else border-gray-300 @enderror px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                        placeholder="nama@email.com">
                     @error('email')
-                        <p class="mt-1 text-sm text-red-600"><i class="fas fa-exclamation-circle"></i> {{ $message }}</p>
+                        <p class="mt-2 text-sm text-red-600"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</p>
                     @enderror
                 </div>
 
-                <div>
-                    <label class="block text-sm font-semibold text-gray-900">Fakultas <span class="text-red-600">*</span></label>
+                <div id="fakultasField">
+                    <label class="block text-sm font-semibold text-gray-900 mb-2">
+                        Fakultas 
+                        <span class="text-red-600" id="fakultasRequired">*</span>
+                    </label>
                     <select name="fakultas" id="fakultas"
-                        class="mt-2 block w-full rounded-md border @error('fakultas') border-red-500 @else border-gray-300 @enderror px-3.5 py-2 focus:outline-2 focus:outline-indigo-600">
+                        class="block w-full rounded-lg border @error('fakultas') border-red-500 @else border-gray-300 @enderror px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
                         <option value="">Pilih fakultas</option>
                         <option value="FKIP" @selected(old('fakultas', $profil['fakultas'] ?? '') === 'FKIP')>Fakultas Keguruan dan Ilmu Pendidikan</option>
                         <option value="FH" @selected(old('fakultas', $profil['fakultas'] ?? '') === 'FH')>Fakultas Hukum</option>
@@ -111,46 +125,58 @@
                         <option value="FKIK" @selected(old('fakultas', $profil['fakultas'] ?? '') === 'FKIK')>Fakultas Kedokteran dan Ilmu Kesehatan</option>
                     </select>
                     @error('fakultas')
-                        <p class="mt-1 text-sm text-red-600"><i class="fas fa-exclamation-circle"></i> {{ $message }}</p>
+                        <p class="mt-2 text-sm text-red-600"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</p>
                     @enderror
                 </div>
 
-                <div>
-                    <label class="block text-sm font-semibold text-gray-900">Jurusan <span class="text-red-600">*</span></label>
+                <div id="jurusanField">
+                    <label class="block text-sm font-semibold text-gray-900 mb-2">
+                        Jurusan 
+                        <span class="text-red-600" id="jurusanRequired">*</span>
+                    </label>
                     <div class="relative">
                         <input type="text" name="jurusan" id="jurusan" value="{{ old('jurusan', $profil['jurusan'] ?? '') }}"
-                            class="mt-2 block w-full rounded-md border @error('jurusan') border-red-500 @else border-gray-300 @enderror px-3.5 py-2"
+                            class="block w-full rounded-lg border @error('jurusan') border-red-500 @else border-gray-300 @enderror px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
                             placeholder="Pilih fakultas terlebih dahulu" autocomplete="off" readonly>
-                        <div id="jurusanDropdown" class="hidden absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-auto">
-                            <div class="sticky top-0 bg-white border-b border-gray-200 p-2">
+                        <div id="jurusanDropdown" class="hidden absolute z-50 w-full mt-2 bg-white border border-gray-300 rounded-lg shadow-xl max-h-60 overflow-auto">
+                            <div class="sticky top-0 bg-white border-b border-gray-200 p-3">
                                 <input type="text" id="jurusanSearch" 
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
                                     placeholder="Cari jurusan...">
                             </div>
-                            <ul id="jurusanOptions" class="py-1">
+                            <ul id="jurusanOptions" class="py-2">
                                 <!-- Options will be populated by JavaScript -->
                             </ul>
                         </div>
                     </div>
                     @error('jurusan')
-                        <p class="mt-1 text-sm text-red-600"><i class="fas fa-exclamation-circle"></i> {{ $message }}</p>
+                        <p class="mt-2 text-sm text-red-600"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</p>
                     @enderror
                 </div>
 
             </div>
 
-            <div class="mt-8 flex justify-between">
+            <div class="mt-8 pt-6 border-t border-gray-200 flex flex-col sm:flex-row gap-3 sm:justify-between">
                 <a href="{{ url('/') }}"
-                    class="rounded-md border border-gray-300 bg-white px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-100">Kembali</a>
+                    class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 rounded-lg text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all">
+                    <i class="fas fa-arrow-left mr-2"></i>
+                    Kembali
+                </a>
                 <button type="submit"
-                    class="rounded-md bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-indigo-500">Lanjut
-                    ke pertanyaan</button>
+                    class="inline-flex items-center justify-center px-6 py-3 border border-transparent rounded-lg text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all shadow-sm">
+                    Lanjut ke pertanyaan
+                    <i class="fas fa-arrow-right ml-2"></i>
+                </button>
             </div>
 
         </form>
+                </div>
+            </div>
         </div>
     </div>
-    <div class="mt-auto">
+    
+    <!-- Footer -->
+    <div class="w-full">
         @include('layouts.footer')
     </div>
 </div>
@@ -265,6 +291,90 @@ const jurusanData = {
 
 let currentJurusanList = [];
 
+// Update form fields based on jenis responden
+function updateFormFields() {
+    const jenisResponden = document.getElementById('jenis_responden').value;
+    const npmField = document.getElementById('npmField');
+    const npmInput = document.getElementById('npm');
+    const npmLabel = document.getElementById('npmLabel');
+    const npmRequired = document.getElementById('npmRequired');
+    const fakultasField = document.getElementById('fakultasField');
+    const fakultasRequired = document.getElementById('fakultasRequired');
+    const jurusanField = document.getElementById('jurusanField');
+    const jurusanRequired = document.getElementById('jurusanRequired');
+    
+    // Reset all fields to visible first
+    npmField.style.display = 'block';
+    fakultasField.style.display = 'block';
+    jurusanField.style.display = 'block';
+    
+    // Mahasiswa: semua field wajib, NPM ditampilkan
+    if (jenisResponden === 'mahasiswa') {
+        npmLabel.textContent = 'NPM';
+        npmRequired.style.display = 'inline';
+        npmInput.required = true;
+        fakultasRequired.style.display = 'inline';
+        jurusanRequired.style.display = 'inline';
+        document.getElementById('fakultas').required = true;
+        document.getElementById('jurusan').required = true;
+    }
+    // Dosen: semua field wajib, NPM diganti NIP
+    else if (jenisResponden === 'dosen') {
+        npmLabel.textContent = 'NIP';
+        npmRequired.style.display = 'inline';
+        npmInput.required = true;
+        fakultasRequired.style.display = 'inline';
+        jurusanRequired.style.display = 'inline';
+        document.getElementById('fakultas').required = true;
+        document.getElementById('jurusan').required = true;
+    }
+    // Staff: NPM disembunyikan, fakultas dan jurusan opsional
+    else if (jenisResponden === 'staff') {
+        npmField.style.display = 'none';
+        npmInput.value = '';
+        npmInput.required = false;
+        fakultasRequired.style.display = 'none';
+        jurusanRequired.style.display = 'none';
+        document.getElementById('fakultas').required = false;
+        document.getElementById('jurusan').required = false;
+    }
+    // Alumni: semua field wajib, NPM ditampilkan
+    else if (jenisResponden === 'alumni') {
+        npmLabel.textContent = 'NPM';
+        npmRequired.style.display = 'inline';
+        npmInput.required = true;
+        fakultasRequired.style.display = 'inline';
+        jurusanRequired.style.display = 'inline';
+        document.getElementById('fakultas').required = true;
+        document.getElementById('jurusan').required = true;
+    }
+    // Stakeholder: NPM, fakultas, dan jurusan disembunyikan
+    else if (jenisResponden === 'stakeholder') {
+        npmField.style.display = 'none';
+        fakultasField.style.display = 'none';
+        jurusanField.style.display = 'none';
+        npmInput.value = '';
+        npmInput.required = false;
+        document.getElementById('fakultas').value = '';
+        document.getElementById('fakultas').required = false;
+        document.getElementById('jurusan').value = '';
+        document.getElementById('jurusan').required = false;
+    }
+    // Default: sembunyikan NPM
+    else {
+        npmLabel.textContent = 'NPM';
+        npmRequired.style.display = 'none';
+        npmInput.required = false;
+        fakultasRequired.style.display = 'inline';
+        jurusanRequired.style.display = 'inline';
+    }
+}
+
+// Event listener untuk perubahan jenis responden
+document.getElementById('jenis_responden').addEventListener('change', function() {
+    updateFormFields();
+});
+
 // Event listener untuk perubahan fakultas
 document.getElementById('fakultas').addEventListener('change', function() {
     const fakultas = this.value;
@@ -349,8 +459,12 @@ document.addEventListener('click', function(e) {
     }
 });
 
-// Trigger change event on page load if fakultas is already selected
+// Initialize on page load
 window.addEventListener('DOMContentLoaded', function() {
+    // Update form fields based on selected jenis responden
+    updateFormFields();
+    
+    // Trigger change event on fakultas if already selected
     const fakultasSelect = document.getElementById('fakultas');
     if (fakultasSelect.value) {
         fakultasSelect.dispatchEvent(new Event('change'));

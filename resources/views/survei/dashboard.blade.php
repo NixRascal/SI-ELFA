@@ -81,22 +81,22 @@
                 <!-- Surveys Grid -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     @foreach ($kuesioner as $item)
-                        <div class="bg-white shadow-sm rounded-lg overflow-hidden flex">
+                        <div class="bg-white shadow-sm rounded-lg overflow-hidden flex flex-col sm:flex-row">
                             <!-- Sidebar Icon -->
-                            <div class="w-50 bg-blue-50 flex items-center justify-center flex-shrink-0">
-                                <i class="{{ $item->icon }} text-blue-600 text-6xl"></i>
+                            <div class="w-full sm:w-32 h-32 sm:h-auto bg-blue-50 flex items-center justify-center flex-shrink-0">
+                                <i class="{{ $item->icon }} text-blue-600 text-5xl sm:text-6xl"></i>
                             </div>
                             
                             <!-- Content -->
-                            <div class="flex-1 p-5 flex flex-col justify-between">
+                            <div class="flex-1 p-4 sm:p-5 flex flex-col justify-between">
                                 <div>
                                     <!-- Header -->
-                                    <div class="flex items-start justify-between gap-2 mb-3">
-                                        <h4 class="text-lg font-semibold text-gray-800 leading-tight flex-1">
+                                    <div class="flex flex-col sm:flex-row items-start sm:justify-between gap-2 mb-3">
+                                        <h4 class="text-base sm:text-lg font-semibold text-gray-800 leading-tight flex-1">
                                             {{ $item->judul }}
                                         </h4>
                                         <span @class([
-                                            'text-xs px-2.5 py-1 rounded-full whitespace-nowrap flex-shrink-0',
+                                            'text-xs px-2.5 py-1 rounded-full whitespace-nowrap self-start sm:self-auto flex-shrink-0',
                                             'bg-green-100 text-green-700' => $item->status_aktif,
                                             'bg-gray-100 text-gray-600' => !$item->status_aktif,
                                         ])>
@@ -105,16 +105,16 @@
                                     </div>
 
                                     <!-- Deskripsi -->
-                                    <p class="text-gray-600 text-sm leading-relaxed mb-4">{{ Str::limit($item->deskripsi, 100) }}</p>
+                                    <p class="text-gray-600 text-sm leading-relaxed mb-3 sm:mb-4">{{ Str::limit($item->deskripsi, 100) }}</p>
                                 </div>
 
                                 <!-- Footer -->
-                                <div class="flex items-center justify-between pt-3 border-t border-gray-100">
+                                <div class="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between gap-3 pt-3 border-t border-gray-100">
                                     <small class="text-gray-500 text-xs">
                                         Batas waktu: {{ \Carbon\Carbon::parse($item->tanggal_selesai)->format('d M Y') }}
                                     </small>
                                     <a href="{{ route('survei.profil', $item->id) }}"
-                                        class="inline-block px-5 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition duration-300">
+                                        class="w-full sm:w-auto text-center inline-block px-5 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition duration-300">
                                         Isi Survei
                                     </a>
                                 </div>

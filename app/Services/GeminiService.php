@@ -226,13 +226,38 @@ HASIL SURVEI:
 
 Berdasarkan data di atas, berikan analisis komprehensif dalam bahasa Indonesia yang mencakup:
 
-1. **Ringkasan Utama**: Insight utama dari hasil survei secara keseluruhan
-2. **Temuan Positif**: Aspek-aspek yang mendapat penilaian baik dan perlu dipertahankan
-3. **Area Perbaikan**: Aspek-aspek yang perlu ditingkatkan berdasarkan data
-4. **Tren dan Pola**: Pola atau tren menarik yang terlihat dari data
-5. **Rekomendasi**: Saran konkret untuk perbaikan berdasarkan hasil survei
+1. Ringkasan Utama
+Insight utama dari hasil survei secara keseluruhan
 
-Format analisis dengan markdown yang rapi dengan heading, bullet points, dan penekanan teks yang sesuai.";
+2. Temuan Positif
+Aspek-aspek yang mendapat penilaian baik dan perlu dipertahankan
+
+3. Area Perbaikan
+Aspek-aspek yang perlu ditingkatkan berdasarkan data
+
+4. Tren dan Pola
+Pola atau tren menarik yang terlihat dari data
+
+5. Rekomendasi
+Saran konkret untuk perbaikan berdasarkan hasil survei
+
+ATURAN FORMATTING KETAT:
+1. Untuk judul bagian: gunakan format angka saja \"1. Judul\" (TANPA bullet/asterisk)
+2. Untuk sub-poin di dalam bagian: gunakan HANYA tanda minus \"-\" atau asterisk \"*\" (TANPA angka)
+3. DILARANG KERAS menggunakan kombinasi seperti: \"1. *\", \"1. -\", \"• *\", \"* *\", \"- -\"
+4. JANGAN gunakan bullet unicode (•) sama sekali
+5. Setiap baris sub-poin harus dimulai dengan HANYA SATU tanda: \"-\" atau \"*\"
+
+CONTOH FORMAT YANG BENAR:
+1. Judul Bagian
+- Sub poin pertama
+- Sub poin kedua
+
+CONTOH FORMAT YANG SALAH (JANGAN GUNAKAN):
+1. • Judul (SALAH - ada bullet setelah angka)
+• • Item (SALAH - double bullet)
+1. - Item (SALAH - ada dash setelah angka)
+* * Item (SALAH - double asterisk)";
     }
 
     /**

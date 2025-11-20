@@ -325,16 +325,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Show result
                 aiContent.classList.remove('hidden');
                 
-                // Convert markdown to HTML (basic conversion)
-                let html = data.analysis
-                    .replace(/### (.*?)$/gm, '<h3 class="text-lg font-bold text-gray-900 mt-6 mb-3">$1</h3>')
-                    .replace(/## (.*?)$/gm, '<h2 class="text-xl font-bold text-gray-900 mt-6 mb-4">$1</h2>')
-                    .replace(/\*\*(.*?)\*\*/g, '<strong class="font-semibold text-gray-900">$1</strong>')
-                    .replace(/\* (.*?)$/gm, '<li class="ml-4 mb-2">$1</li>')
-                    .replace(/^(?!<[hl]|<li)(.+)$/gm, '<p class="mb-3 text-gray-700">$1</p>')
-                    .replace(/(<li.*?<\/li>\n?)+/g, '<ul class="list-disc list-inside mb-4 space-y-1">$&</ul>');
-                
-                aiResult.innerHTML = html;
+                // Tampilkan plain text untuk debugging
+                aiResult.innerHTML = `<pre class="whitespace-pre-wrap font-mono text-sm bg-gray-50 p-4 rounded-lg border border-gray-300">${data.analysis}</pre>`;
                 
                 // Update button
                 generateBtn.innerHTML = '<i class="fas fa-sync mr-2"></i> Generate Ulang';

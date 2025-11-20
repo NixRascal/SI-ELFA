@@ -283,13 +283,14 @@ document.getElementById('icon').addEventListener('change', function() {
 });
 
 function tambahPertanyaan() {
-    pertanyaanCount++;
     const container = document.getElementById('daftarPertanyaan');
+    const currentCount = container.querySelectorAll('.pertanyaan-item').length + 1;
+    pertanyaanCount++;
     
     const pertanyaanHTML = `
         <div class="pertanyaan-item bg-gray-50 rounded-lg border border-gray-200 p-5" data-index="${pertanyaanCount}">
             <div class="flex items-start justify-between mb-4">
-                <h4 class="font-semibold text-gray-900">Pertanyaan ${pertanyaanCount}</h4>
+                <h4 class="font-semibold text-gray-900">Pertanyaan ${currentCount}</h4>
                 <button type="button" onclick="hapusPertanyaan(this)" class="text-red-600 hover:text-red-800 cursor-pointer">
                     <i class="fas fa-trash"></i>
                 </button>
