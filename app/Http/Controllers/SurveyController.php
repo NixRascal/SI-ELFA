@@ -35,6 +35,13 @@ class SurveyController extends Controller
     ): RedirectResponse {
         $profileData = $request->validated();
         
+        // Validasi: Pastikan jenis responden sesuai dengan target kuesioner
+        if (!in_array($profileData['jenis_responden'], $questionnaire->target_responden)) {
+            return redirect()
+                ->route('survei.profil', $questionnaire->id)
+                ->with('error', 'Survei ini tidak tersedia untuk ' . ucfirst($profileData['jenis_responden']));
+        }
+        
         // Cek apakah responden sudah pernah mengisi kuesioner ini
         $existingResponden = Responden::where(function ($query) use ($profileData) {
             if (!empty($profileData['email'])) {

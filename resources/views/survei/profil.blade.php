@@ -5,7 +5,7 @@
         <div class="w-full max-w-2xl">
             <!-- Header Card -->
             <div class="text-center mb-8">
-                <div class="inline-flex items-center justify-center w-16 h-16 bg-indigo-600 rounded-full mb-4">
+                <div class="inline-flex items-center justify-center w-16 h-16 bg-deep-sapphire-600 rounded-full mb-4">
                     <i class="fas fa-user-edit text-white text-2xl"></i>
                 </div>
                 <h1 class="text-3xl sm:text-4xl font-bold text-gray-900">Profil Responden</h1>
@@ -52,7 +52,7 @@
             @endif
 
             <!-- Form Card -->
-            <div class="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-hidden">
+            <div class="bg-white rounded-2xl shadow-xl border border-gray-200 overflow-visible">
                 <div class="px-6 py-8 sm:px-10 sm:py-10">
                     <form action="{{ route('survei.profil.simpan', $kuesioner->id) }}" method="POST" id="profileForm">
                         @csrf
@@ -61,13 +61,13 @@
                 <div>
                     <label class="block text-sm font-semibold text-gray-900 mb-2">Jenis Responden <span class="text-red-600">*</span></label>
                     <select name="jenis_responden" id="jenis_responden"
-                        class="block w-full rounded-lg border @error('jenis_responden') border-red-500 @else border-gray-300 @enderror px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
+                        class="block w-full rounded-lg border @error('jenis_responden') border-red-500 @else border-gray-300 @enderror px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-deep-sapphire-500 focus:border-transparent transition-all">
                         <option value="">Pilih jenis responden</option>
-                        <option value="mahasiswa" @selected(old('jenis_responden', $profil['jenis_responden'] ?? '') === 'mahasiswa')>Mahasiswa</option>
-                        <option value="dosen" @selected(old('jenis_responden', $profil['jenis_responden'] ?? '') === 'dosen')>Dosen</option>
-                        <option value="staff" @selected(old('jenis_responden', $profil['jenis_responden'] ?? '') === 'staff')>Staff</option>
-                        <option value="alumni" @selected(old('jenis_responden', $profil['jenis_responden'] ?? '') === 'alumni')>Alumni</option>
-                        <option value="stakeholder" @selected(old('jenis_responden', $profil['jenis_responden'] ?? '') === 'stakeholder')>Stakeholder</option>
+                        @foreach($kuesioner->target_responden as $target)
+                            <option value="{{ $target }}" @selected(old('jenis_responden', $profil['jenis_responden'] ?? '') === $target)>
+                                {{ ucfirst($target) }}
+                            </option>
+                        @endforeach
                     </select>
                     @error('jenis_responden')
                         <p class="mt-2 text-sm text-red-600"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</p>
@@ -77,7 +77,7 @@
                 <div>
                     <label class="block text-sm font-semibold text-gray-900 mb-2">Nama <span class="text-red-600">*</span></label>
                     <input type="text" name="nama" value="{{ old('nama', $profil['nama'] ?? '') }}"
-                        class="block w-full rounded-lg border @error('nama') border-red-500 @else border-gray-300 @enderror px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                        class="block w-full rounded-lg border @error('nama') border-red-500 @else border-gray-300 @enderror px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-deep-sapphire-500 focus:border-transparent transition-all"
                         placeholder="Masukkan nama lengkap">
                     @error('nama')
                         <p class="mt-2 text-sm text-red-600"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</p>
@@ -90,7 +90,7 @@
                         <span class="text-red-600" id="npmRequired">*</span>
                     </label>
                     <input type="text" name="npm" id="npm" value="{{ old('npm', $profil['npm'] ?? '') }}"
-                        class="block w-full rounded-lg border @error('npm') border-red-500 @else border-gray-300 @enderror px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                        class="block w-full rounded-lg border @error('npm') border-red-500 @else border-gray-300 @enderror px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-deep-sapphire-500 focus:border-transparent transition-all"
                         placeholder="Masukkan NPM/NIP">
                     @error('npm')
                         <p class="mt-2 text-sm text-red-600"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</p>
@@ -100,7 +100,7 @@
                 <div>
                     <label class="block text-sm font-semibold text-gray-900 mb-2">Email <span class="text-red-600">*</span></label>
                     <input type="email" name="email" value="{{ old('email', $profil['email'] ?? '') }}"
-                        class="block w-full rounded-lg border @error('email') border-red-500 @else border-gray-300 @enderror px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                        class="block w-full rounded-lg border @error('email') border-red-500 @else border-gray-300 @enderror px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-deep-sapphire-500 focus:border-transparent transition-all"
                         placeholder="nama@email.com">
                     @error('email')
                         <p class="mt-2 text-sm text-red-600"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</p>
@@ -113,7 +113,7 @@
                         <span class="text-red-600" id="fakultasRequired">*</span>
                     </label>
                     <select name="fakultas" id="fakultas"
-                        class="block w-full rounded-lg border @error('fakultas') border-red-500 @else border-gray-300 @enderror px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
+                        class="block w-full rounded-lg border @error('fakultas') border-red-500 @else border-gray-300 @enderror px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-deep-sapphire-500 focus:border-transparent transition-all">
                         <option value="">Pilih fakultas</option>
                         <option value="FKIP" @selected(old('fakultas', $profil['fakultas'] ?? '') === 'FKIP')>Fakultas Keguruan dan Ilmu Pendidikan</option>
                         <option value="FH" @selected(old('fakultas', $profil['fakultas'] ?? '') === 'FH')>Fakultas Hukum</option>
@@ -136,12 +136,12 @@
                     </label>
                     <div class="relative">
                         <input type="text" name="jurusan" id="jurusan" value="{{ old('jurusan', $profil['jurusan'] ?? '') }}"
-                            class="block w-full rounded-lg border @error('jurusan') border-red-500 @else border-gray-300 @enderror px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+                            class="block w-full rounded-lg border @error('jurusan') border-red-500 @else border-gray-300 @enderror px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-deep-sapphire-500 focus:border-transparent transition-all"
                             placeholder="Pilih fakultas terlebih dahulu" autocomplete="off" readonly>
                         <div id="jurusanDropdown" class="hidden absolute z-50 w-full mt-2 bg-white border border-gray-300 rounded-lg shadow-xl max-h-60 overflow-auto">
                             <div class="sticky top-0 bg-white border-b border-gray-200 p-3">
                                 <input type="text" id="jurusanSearch" 
-                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-deep-sapphire-500 text-sm"
                                     placeholder="Cari jurusan...">
                             </div>
                             <ul id="jurusanOptions" class="py-2">
@@ -163,7 +163,7 @@
                     Kembali
                 </a>
                 <button type="submit"
-                    class="inline-flex items-center justify-center px-6 py-3 border border-transparent rounded-lg text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all shadow-sm">
+                    class="inline-flex items-center justify-center px-6 py-3 border border-transparent rounded-lg text-sm font-semibold text-white bg-deep-sapphire-600 hover:bg-deep-sapphire-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-deep-sapphire-500 transition-all shadow-sm">
                     Lanjut ke pertanyaan
                     <i class="fas fa-arrow-right ml-2"></i>
                 </button>
@@ -434,7 +434,7 @@ function populateJurusanOptions(jurusanList) {
     
     jurusanList.forEach(jurusan => {
         const li = document.createElement('li');
-        li.className = 'px-4 py-2 hover:bg-indigo-50 cursor-pointer text-gray-800 text-sm transition-colors';
+        li.className = 'px-4 py-2 hover:bg-deep-sapphire-50 cursor-pointer text-gray-800 text-sm transition-colors';
         li.textContent = jurusan;
         li.addEventListener('click', function() {
             document.getElementById('jurusan').value = jurusan;

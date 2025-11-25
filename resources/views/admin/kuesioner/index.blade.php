@@ -152,9 +152,13 @@
                                         </div>
                                     </td>
                                     <td class="whitespace-nowrap px-3 py-4 text-sm">
-                                        <span class="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800 capitalize">
-                                            {{ $item->target_responden }}
-                                        </span>
+                                        <div class="flex flex-wrap gap-1">
+                                            @foreach((array) $item->target_responden as $target)
+                                                <span class="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800 capitalize">
+                                                    {{ $target }}
+                                                </span>
+                                            @endforeach
+                                        </div>
                                     </td>
                                     <td class="whitespace-nowrap px-3 py-4 text-sm">
                                         @if ($item->status_aktif)
@@ -234,34 +238,99 @@
     </div>
 </div>
 
-<!-- Delete Confirmation Modal -->
-<div id="deleteModal" class="hidden fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity z-50">
-    <div class="fixed inset-0 z-50 overflow-y-auto">
-        <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-            <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
-                <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
-                    <div class="sm:flex sm:items-start">
-                        <div class="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
-                            <i class="fas fa-exclamation-triangle text-red-600"></i>
+<!-- Enhanced Delete Confirmation Modal -->
+<div id="deleteModal" class="hidden fixed inset-0 z-50" style="background-color: rgba(0, 0, 0, 0.4);">
+    <div class="fixed inset-0 overflow-y-auto">
+        <div class="flex min-h-full items-center justify-center p-4">
+            <!-- Modal Content -->
+            <div id="modalContent" class="relative transform rounded-2xl bg-white text-left shadow-2xl transition-all w-full max-w-lg animate-modal-in">
+                
+                <!-- Header with Gradient -->
+                <div class="relative bg-gradient-to-r from-red-500 to-red-600 px-6 py-5">
+                    <!-- Close Button -->
+                    <button type="button" onclick="closeDeleteModal()" class="absolute top-4 right-4 text-white hover:text-red-100 transition-colors">
+                        <i class="fas fa-times text-lg"></i>
+                    </button>
+                    
+                    <!-- Icon and Title -->
+                    <div class="flex items-center">
+                        <div class="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-white bg-opacity-20 backdrop-blur-sm">
+                            <i class="fas fa-trash-alt text-white text-2xl"></i>
                         </div>
-                        <div class="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
-                            <h3 class="text-base font-semibold leading-6 text-gray-900">Hapus Kuesioner</h3>
-                            <div class="mt-2">
-                                <p class="text-sm text-gray-500">Apakah Anda yakin ingin menghapus kuesioner "<span id="deleteTitle"></span>"?</p>
-                                <p class="text-sm text-red-600 mt-2"><i class="fas fa-info-circle mr-1"></i> Tindakan ini tidak dapat dibatalkan!</p>
-                            </div>
+                        <div class="ml-4">
+                            <h3 class="text-xl font-bold text-white">Hapus Kuesioner</h3>
+                            <p class="text-red-100 text-sm mt-0.5">Konfirmasi tindakan penghapusan</p>
                         </div>
                     </div>
                 </div>
-                <div class="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                    <form id="deleteForm" method="POST" class="inline">
+
+                <!-- Body -->
+                <div class="bg-white px-6 py-5">
+                    <!-- Questionnaire Info -->
+                    <div class="bg-gray-50 rounded-xl p-4 border border-gray-200">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-file-alt text-gray-400 text-xl"></i>
+                            </div>
+                            <div class="ml-3 flex-1">
+                                <p class="text-xs font-medium text-gray-500 uppercase tracking-wide">Kuesioner yang akan dihapus:</p>
+                                <p class="mt-1 text-base font-semibold text-gray-900" id="deleteTitle"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Warning Message -->
+                    <div class="mt-4 bg-red-50 border-l-4 border-red-500 rounded-lg p-4">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-exclamation-triangle text-red-500 text-lg"></i>
+                            </div>
+                            <div class="ml-3">
+                                <h4 class="text-sm font-semibold text-red-800">Peringatan Penting!</h4>
+                                <div class="mt-2 text-sm text-red-700">
+                                    <p class="leading-relaxed">Tindakan ini akan menghapus:</p>
+                                    <ul class="mt-2 space-y-1 ml-4">
+                                        <li class="flex items-center">
+                                            <i class="fas fa-circle text-red-400 text-xs mr-2"></i>
+                                            <span>Semua pertanyaan dalam kuesioner</span>
+                                        </li>
+                                        <li class="flex items-center">
+                                            <i class="fas fa-circle text-red-400 text-xs mr-2"></i>
+                                            <span>Semua jawaban responden</span>
+                                        </li>
+                                        <li class="flex items-center">
+                                            <i class="fas fa-circle text-red-400 text-xs mr-2"></i>
+                                            <span>Semua data terkait kuesioner</span>
+                                        </li>
+                                    </ul>
+                                    <p class="mt-3 font-semibold">
+                                        <i class="fas fa-ban mr-1"></i>
+                                        Data yang dihapus tidak dapat dipulihkan kembali.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Confirmation Question -->
+                    <div class="mt-5 text-center">
+                        <p class="text-base font-medium text-gray-900">Apakah Anda yakin ingin melanjutkan?</p>
+                    </div>
+                </div>
+
+                <!-- Footer with Action Buttons -->
+                <div class="bg-gray-50 px-6 py-4 flex flex-col-reverse sm:flex-row-reverse gap-3">
+                    <form id="deleteForm" method="POST" class="w-full sm:w-auto">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="inline-flex w-full justify-center rounded-md bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-700 sm:ml-3 sm:w-auto cursor-pointer">
-                            <i class="fas fa-trash mr-2"></i> Hapus
+                        <button type="submit" id="deleteButton" class="w-full sm:w-auto inline-flex justify-center items-center rounded-lg bg-red-600 px-6 py-3 text-sm font-semibold text-white shadow-lg hover:bg-red-700 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all duration-200">
+                            <i class="fas fa-trash-alt mr-2" id="deleteIcon"></i>
+                            <span id="deleteButtonText">Ya, Hapus Kuesioner</span>
+                            <i class="fas fa-spinner fa-spin ml-2" id="deleteSpinner" style="display: none;"></i>
                         </button>
                     </form>
-                    <button type="button" onclick="closeDeleteModal()" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-4 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto cursor-pointer">
+                    <button type="button" onclick="closeDeleteModal()" class="w-full sm:w-auto inline-flex justify-center items-center rounded-lg bg-white px-6 py-3 text-sm font-semibold text-gray-700 shadow-md hover:bg-gray-50 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all duration-200 border border-gray-300">
+                        <i class="fas fa-times mr-2"></i>
                         Batal
                     </button>
                 </div>
@@ -270,22 +339,113 @@
     </div>
 </div>
 
+<!-- Add CSS for animations -->
+<style>
+@keyframes modalIn {
+    from {
+        opacity: 0;
+        transform: scale(0.95) translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+.animate-modal-in {
+    animation: modalIn 0.3s ease-out;
+}
+
+#deleteModal:not(.hidden) {
+    animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Prevent body scroll when modal is open */
+body.modal-open {
+    overflow: hidden;
+}
+</style>
+
 <script>
 function confirmDelete(id, title) {
+    console.log('Opening delete modal for:', id, title);
+    
+    // Set title and form action
     document.getElementById('deleteTitle').textContent = title;
     document.getElementById('deleteForm').action = `/dashboard/kuesioner/${id}`;
-    document.getElementById('deleteModal').classList.remove('hidden');
+    
+    // Show modal
+    const modal = document.getElementById('deleteModal');
+    modal.classList.remove('hidden');
+    document.body.classList.add('modal-open');
+    
+    // Reset button and spinner state
+    const button = document.getElementById('deleteButton');
+    const buttonText = document.getElementById('deleteButtonText');
+    const spinner = document.getElementById('deleteSpinner');
+    const icon = document.getElementById('deleteIcon');
+    
+    buttonText.textContent = 'Ya, Hapus Kuesioner';
+    spinner.style.display = 'none';
+    icon.style.display = 'inline-block';
+    button.disabled = false;
 }
 
 function closeDeleteModal() {
-    document.getElementById('deleteModal').classList.add('hidden');
+    const modal = document.getElementById('deleteModal');
+    modal.classList.add('hidden');
+    document.body.classList.remove('modal-open');
 }
 
-// Close modal on ESC key
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        closeDeleteModal();
+// Handle form submission
+document.addEventListener('DOMContentLoaded', function() {
+    const deleteForm = document.getElementById('deleteForm');
+    
+    if (deleteForm) {
+        deleteForm.addEventListener('submit', function(e) {
+            const button = document.getElementById('deleteButton');
+            const buttonText = document.getElementById('deleteButtonText');
+            const spinner = document.getElementById('deleteSpinner');
+            const icon = document.getElementById('deleteIcon');
+            
+            // Show loading state
+            buttonText.textContent = 'Menghapus...';
+            icon.style.display = 'none';
+            spinner.style.display = 'inline-block';
+            button.disabled = true;
+            
+            console.log('Form submitting to:', deleteForm.action);
+            
+            // Let form submit naturally
+        });
+    }
+    
+    // Close modal on ESC key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            const modal = document.getElementById('deleteModal');
+            if (!modal.classList.contains('hidden')) {
+                closeDeleteModal();
+            }
+        }
+    });
+    
+    // Close modal when clicking outside (on backdrop)
+    const deleteModal = document.getElementById('deleteModal');
+    if (deleteModal) {
+        deleteModal.addEventListener('click', function(e) {
+            // Only close if clicking the backdrop itself, not the modal content
+            if (e.target === deleteModal) {
+                closeDeleteModal();
+            }
+        });
     }
 });
 </script>
 @endsection
+```

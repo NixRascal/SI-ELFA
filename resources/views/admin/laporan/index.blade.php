@@ -58,8 +58,8 @@
                     <p class="text-sm font-medium text-gray-600">Kuesioner Aktif</p>
                     <p class="mt-2 text-3xl font-bold text-gray-900">{{ $kuesionerAktif }}</p>
                 </div>
-                <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center">
-                    <i class="fas fa-check-circle text-indigo-600 text-xl"></i>
+                <div class="w-12 h-12 bg-deep-sapphire-100 rounded-lg flex items-center justify-center">
+                    <i class="fas fa-check-circle text-deep-sapphire-600 text-xl"></i>
                 </div>
             </div>
         </div>
@@ -104,8 +104,8 @@
                                 <td class="px-6 py-4">
                                     <div class="flex items-center min-w-[250px]">
                                         <div class="h-10 w-10 flex-shrink-0">
-                                            <div class="h-10 w-10 rounded-lg bg-indigo-100 flex items-center justify-center">
-                                                <i class="{{ $item->icon }} text-indigo-600"></i>
+                                            <div class="h-10 w-10 rounded-lg bg-deep-sapphire-100 flex items-center justify-center">
+                                                <i class="{{ $item->icon }} text-deep-sapphire-600"></i>
                                             </div>
                                         </div>
                                         <div class="ml-4">
@@ -201,8 +201,8 @@
                                         #{{ $index + 1 }}
                                     </span>
                                 </div>
-                                <div class="h-10 w-10 rounded-lg bg-indigo-100 flex items-center justify-center">
-                                    <i class="{{ $item->icon }} text-indigo-600"></i>
+                                <div class="h-10 w-10 rounded-lg bg-deep-sapphire-100 flex items-center justify-center">
+                                    <i class="{{ $item->icon }} text-deep-sapphire-600"></i>
                                 </div>
                             </div>
                         </div>

@@ -111,9 +111,9 @@
                 <a href="{{ route('dashboard.admin.index') }}" class="px-4 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
                     Batal
                 </a>
-                <button type="submit" class="px-4 py-2.5 text-sm font-medium text-white bg-indigo-600 rounded-lg hover:bg-indigo-700">
+                <button type="submit" class="px-4 py-2.5 text-sm font-medium text-white bg-deep-sapphire-600 rounded-lg hover:bg-deep-sapphire-700">
                     <i class="fas fa-save mr-2"></i>
-                    Simpan Perubahan
+                    Update Admin
                 </button>
             </div>
         </form>

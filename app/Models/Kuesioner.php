@@ -24,6 +24,7 @@ class Kuesioner extends Model
     ];
 
     protected $casts = [
+        'target_responden' => 'array',
         'status_aktif' => 'boolean',
         'tanggal_mulai' => 'date',
         'tanggal_selesai' => 'date',

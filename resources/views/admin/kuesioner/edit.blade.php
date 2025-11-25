@@ -119,25 +119,29 @@
                         >{{ old('deskripsi', $kuesioner->deskripsi) }}</textarea>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-                        <!-- Target Responden -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                        <!-- Target Responden - Multiple Selection -->
                         <div>
-                            <label for="target_responden" class="block text-sm font-medium text-gray-700 mb-2">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
                                 Target Responden <span class="text-red-500">*</span>
                             </label>
-                            <select 
-                                name="target_responden" 
-                                id="target_responden"
-                                class="w-full px-3.5 py-2.5 border @error('target_responden') border-red-500 @else border-gray-300 @enderror rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                                required
-                            >
-                                <option value="">Pilih Target</option>
-                                <option value="mahasiswa" {{ old('target_responden', $kuesioner->target_responden) == 'mahasiswa' ? 'selected' : '' }}>Mahasiswa</option>
-                                <option value="dosen" {{ old('target_responden', $kuesioner->target_responden) == 'dosen' ? 'selected' : '' }}>Dosen</option>
-                                <option value="staff" {{ old('target_responden', $kuesioner->target_responden) == 'staff' ? 'selected' : '' }}>Staff</option>
-                                <option value="alumni" {{ old('target_responden', $kuesioner->target_responden) == 'alumni' ? 'selected' : '' }}>Alumni</option>
-                                <option value="stakeholder" {{ old('target_responden', $kuesioner->target_responden) == 'stakeholder' ? 'selected' : '' }}>Stakeholder</option>
-                            </select>
+                            <div class="space-y-2 p-3 border @error('target_responden') border-red-500 @else border-gray-300 @enderror rounded-lg">
+                                @php
+                                    $targets = ['mahasiswa' => 'Mahasiswa', 'dosen' => 'Dosen', 'staff' => 'Staff', 'alumni' => 'Alumni', 'stakeholder' => 'Stakeholder'];
+                                    $oldTargets = old('target_responden', $kuesioner->target_responden ?? []);
+                                @endphp
+                                @foreach($targets as $value => $label)
+                                    <label class="flex items-center cursor-pointer hover:bg-gray-50 p-2 rounded">
+                                        <input 
+                                            type="checkbox" 
+                                            name="target_responden[]" 
+                                            value="{{ $value }}"
+                                            {{ in_array($value, $oldTargets) ? 'checked' : '' }}
+                                            class="rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500">
+                                        <span class="ml-2 text-sm text-gray-700">{{ $label }}</span>
+                                    </label>
+                                @endforeach
+                            </div>
                             @error('target_responden')
                                 <p class="mt-1 text-sm text-red-600">
                                     <i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}

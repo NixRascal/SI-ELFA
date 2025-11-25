@@ -120,7 +120,7 @@
                         </h3>
                         <p class="mt-1 text-sm text-gray-700">{{ $item['pertanyaan']->teks_pertanyaan }}</p>
                     </div>
-                    <span class="ml-4 inline-flex items-center rounded-full bg-indigo-100 px-3 py-1 text-xs font-medium text-indigo-800 capitalize">
+                    <span class="ml-4 inline-flex items-center rounded-full bg-deep-sapphire-100 px-3 py-1 text-xs font-medium text-deep-sapphire-800 capitalize">
                         {{ str_replace('_', ' ', $item['pertanyaan']->jenis_pertanyaan) }}
                     </span>
                 </div>
@@ -132,7 +132,7 @@
                     <div class="mb-4">
                         <div class="flex items-center justify-between mb-4">
                             <span class="text-sm font-medium text-gray-600">Rata-rata:</span>
-                            <span class="text-2xl font-bold text-indigo-600">{{ $item['rata_rata'] }}</span>
+                            <span class="text-2xl font-bold text-deep-sapphire-600">{{ $item['rata_rata'] }}</span>
                         </div>
                         
                         <div class="space-y-3">
@@ -144,7 +144,7 @@
                                     <span class="w-16 text-sm text-gray-600">Skala {{ $i }}</span>
                                     <div class="flex-1 mx-4">
                                         <div class="bg-gray-200 rounded-full h-6 overflow-hidden">
-                                            <div class="bg-indigo-600 h-6 flex items-center justify-end px-2" 
+                                            <div class="bg-deep-sapphire-600 h-6 flex items-center justify-end px-2" 
                                                 style="width: {{ $data['percentage'] }}%">
                                                 @if($data['percentage'] > 10)
                                                     <span class="text-xs text-white font-medium">{{ $data['percentage'] }}%</span>
@@ -325,8 +325,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Show result
                 aiContent.classList.remove('hidden');
                 
-                // Tampilkan plain text untuk debugging
-                aiResult.innerHTML = `<pre class="whitespace-pre-wrap font-mono text-sm bg-gray-50 p-4 rounded-lg border border-gray-300">${data.analysis}</pre>`;
+                // Remove ** (bold markdown) but keep * (bullets/lists)
+                let cleanText = data.analysis.replace(/\*\*([^\*]+)\*\*/g, '$1');
+                
+                // Convert * at start of line to bullet point •
+                cleanText = cleanText.replace(/^\* /gm, '• ');
+                
+                // Display cleaned text
+                aiResult.innerHTML = `<pre class="whitespace-pre-wrap font-mono text-sm bg-gray-50 p-4 rounded-lg border border-gray-300">${cleanText}</pre>`;
                 
                 // Update button
                 generateBtn.innerHTML = '<i class="fas fa-sync mr-2"></i> Generate Ulang';

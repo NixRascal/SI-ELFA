@@ -173,7 +173,7 @@
 
                     <div class="mt-6 flex justify-end">
                         <button type="submit" 
-                                class="inline-flex items-center px-6 py-2.5 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 focus:ring-4 focus:ring-indigo-300 transition-colors">
+                                class="inline-flex items-center px-6 py-2.5 bg-deep-sapphire-600 text-white text-sm font-medium rounded-lg hover:bg-deep-sapphire-700 focus:ring-4 focus:ring-deep-sapphire-300 transition-colors">
                             <i class="fas fa-key mr-2"></i>
                             Update Password
                         </button>

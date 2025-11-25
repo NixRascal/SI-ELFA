@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('judul');
             $table->text('deskripsi')->nullable();
             $table->string('icon')->nullable();
-            $table->enum('target_responden', ['mahasiswa', 'dosen', 'staff', 'alumni', 'stakeholder']);
+            $table->json('target_responden')->default('["mahasiswa"]');
             $table->boolean('status_aktif')->default(true);
             $table->date('tanggal_mulai');
             $table->date('tanggal_selesai');

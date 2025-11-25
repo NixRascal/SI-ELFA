@@ -77,7 +77,7 @@
                                 <label for="{{ $radioId }}"
                                     class="flex flex-col items-center gap-2 rounded-lg border border-gray-200 px-4 py-3 hover:bg-gray-50 cursor-pointer">
                                     <input type="radio" id="{{ $radioId }}" name="jawaban[{{ $q->id }}]"
-                                        value="{{ $nilai }}" class="h-4 w-4 text-indigo-600 focus:ring-indigo-600"
+                                        value="{{ $nilai }}" class="h-4 w-4 text-deep-sapphire-600 focus:ring-deep-sapphire-600"
                                         @checked(old("jawaban.{$q->id}") == $nilai) @required($q->wajib_diisi)>
                                     <span class="text-sm font-medium text-gray-900">{{ $nilai }}</span>
                                     <span class="text-xs text-gray-500 text-center leading-snug">
@@ -96,7 +96,7 @@
                                 <label for="{{ $radioId }}"
                                     class="flex items-center gap-3 rounded-lg border border-gray-200 px-4 py-3 hover:bg-gray-50 cursor-pointer">
                                     <input type="radio" id="{{ $radioId }}" name="jawaban[{{ $q->id }}]"
-                                        value="{{ $ops }}" class="h-4 w-4 text-indigo-600 focus:ring-indigo-600"
+                                        value="{{ $ops }}" class="h-4 w-4 text-deep-sapphire-600 focus:ring-deep-sapphire-600"
                                         @checked(old("jawaban.{$q->id}") == $ops) @required($q->wajib_diisi)>
                                     <span class="text-sm text-gray-900">{{ $ops }}</span>
                                 </label>
@@ -104,7 +104,7 @@
                         </div>
                     @else
                         <textarea name="jawaban[{{ $q->id }}]" rows="3"
-                            class="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3.5 py-2 text-base text-gray-900 placeholder:text-gray-400 focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"
+                            class="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3.5 py-2 text-base text-gray-900 placeholder:text-gray-400 focus:border-indigo-500 focus:ring-1 focus:ring-deep-sapphire-500"
                             placeholder="Tulis jawaban Anda..." @required($q->wajib_diisi)>{{ old("jawaban.{$q->id}") }}</textarea>
                     @endif
 
@@ -116,7 +116,7 @@
             @endforeach
             <div class="flex items-center justify-center">
                 <button type="submit"
-                    class="inline-flex items-center rounded-lg bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-indigo-500">
+                    class="inline-flex items-center rounded-lg bg-deep-sapphire-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-deep-sapphire-500">
                     Kirim Jawaban
                 </button>
             </div>

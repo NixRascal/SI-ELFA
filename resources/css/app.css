@@ -11,22 +11,68 @@
 }
 
 @theme {
-  --color-deep-sapphire-50: #eef5ff;
-  --color-deep-sapphire-100: #d8e7ff;
-  --color-deep-sapphire-200: #bad6ff;
-  --color-deep-sapphire-300: #8abcff;
-  --color-deep-sapphire-400: #5399ff;
-  --color-deep-sapphire-500: #2b70ff;
-  --color-deep-sapphire-600: #144efc;
-  --color-deep-sapphire-700: #0d38e8;
-  --color-deep-sapphire-800: #112ebc;
-  --color-deep-sapphire-900: #152d93;
-  --color-deep-sapphire-950: #15236a;
+    --color-deep-sapphire-50: #eef5ff;
+    --color-deep-sapphire-100: #d8e7ff;
+    --color-deep-sapphire-200: #bad6ff;
+    --color-deep-sapphire-300: #8abcff;
+    --color-deep-sapphire-400: #5399ff;
+    --color-deep-sapphire-500: #2b70ff;
+    --color-deep-sapphire-600: #144efc;
+    --color-deep-sapphire-700: #0d38e8;
+    --color-deep-sapphire-800: #112ebc;
+    --color-deep-sapphire-900: #152d93;
+    --color-deep-sapphire-950: #15236a;
 }
 
+/* ======================================
+   GLOBAL PLACEHOLDER STYLING
+   ====================================== */
+
+/* Standard placeholder styling */
+input::placeholder,
+textarea::placeholder,
+select::placeholder {
+    color: #9ca3af;
+    /* gray-400 */
+    opacity: 0.6;
+    /* Reduced opacity for softer appearance */
+    font-weight: 400;
+}
+
+/* Firefox specific placeholder styling */
+input::-moz-placeholder,
+textarea::-moz-placeholder {
+    color: #9ca3af;
+    opacity: 0.6;
+}
+
+/* Edge and IE specific placeholder styling */
+input::-ms-input-placeholder,
+textarea::-ms-input-placeholder {
+    color: #9ca3af;
+    opacity: 0.6;
+}
+
+/* WebKit specific placeholder styling (Chrome, Safari, Opera) */
+input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder {
+    color: #9ca3af;
+    opacity: 0.6;
+}
+
+/* Focus state - slightly darker for better visibility */
+input:focus::placeholder,
+textarea:focus::placeholder {
+    color: #6b7280;
+    /* gray-500 */
+    opacity: 0.5;
+}
+
+/* ====================================== */
+
 .landing-pattern {
-  background: #EEF5FF;
-  background: radial-gradient(circle, rgba(238, 245, 255, 1) 0%, rgba(51, 118, 254, 1) 53%, rgba(25, 50, 143, 1) 100%);
+    background: #EEF5FF;
+    background: radial-gradient(circle, rgba(238, 245, 255, 1) 0%, rgba(51, 118, 254, 1) 53%, rgba(25, 50, 143, 1) 100%);
 }
 
 .survey-selection {

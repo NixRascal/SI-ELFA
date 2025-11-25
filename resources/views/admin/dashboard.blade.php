@@ -50,8 +50,8 @@
                     <!-- Total Responden -->
                     <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-200 hover:shadow-md transition-all">
                         <div class="flex items-center justify-between mb-4">
-                            <div class="w-12 h-12 bg-indigo-50 rounded-lg flex items-center justify-center">
-                                <i class="fas fa-users text-indigo-600 text-xl"></i>
+                            <div class="w-12 h-12 bg-deep-sapphire-50 rounded-lg flex items-center justify-center">
+                                <i class="fas fa-users text-deep-sapphire-600 text-xl"></i>
                             </div>
                         </div>
                         <div class="text-3xl font-bold text-gray-800 mb-1">{{ number_format($totalResponden) }}</div>
@@ -170,13 +170,13 @@
                             <div>
                                 <div class="flex items-center justify-between mb-2">
                                     <div class="flex items-center gap-2">
-                                        <i class="fas fa-user-tie text-indigo-600 text-sm"></i>
+                                        <i class="fas fa-user-tie text-deep-sapphire-600 text-sm"></i>
                                         <span class="text-sm font-medium text-gray-700">Staff</span>
                                     </div>
                                     <span class="text-sm font-semibold text-gray-800">{{ $respondenStats['staff']['count'] }} ({{ $respondenStats['staff']['percentage'] }}%)</span>
                                 </div>
                                 <div class="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
-                                    <div class="bg-indigo-600 h-2 rounded-full transition-all duration-500" style="width: {{ $respondenStats['staff']['percentage'] }}%"></div>
+                                    <div class="bg-deep-sapphire-600 h-2 rounded-full transition-all duration-500" style="width: {{ $respondenStats['staff']['percentage'] }}%"></div>
                                 </div>
                             </div>
 
@@ -243,7 +243,7 @@
                                             <div class="w-9 h-9 
                                                 @if($responden->jenis_responden == 'mahasiswa') bg-blue-100
                                                 @elseif($responden->jenis_responden == 'dosen') bg-green-100
-                                                @elseif($responden->jenis_responden == 'staff') bg-indigo-100
+                                                @elseif($responden->jenis_responden == 'staff') bg-deep-sapphire-100
                                                 @elseif($responden->jenis_responden == 'alumni') bg-orange-100
                                                 @elseif($responden->jenis_responden == 'stakeholder') bg-gray-200
                                                 @else bg-gray-100
@@ -251,7 +251,7 @@
                                                 rounded-full flex items-center justify-center 
                                                 @if($responden->jenis_responden == 'mahasiswa') text-blue-700
                                                 @elseif($responden->jenis_responden == 'dosen') text-green-700
-                                                @elseif($responden->jenis_responden == 'staff') text-indigo-700
+                                                @elseif($responden->jenis_responden == 'staff') text-deep-sapphire-700
                                                 @elseif($responden->jenis_responden == 'alumni') text-orange-700
                                                 @elseif($responden->jenis_responden == 'stakeholder') text-gray-700
                                                 @else text-gray-700
@@ -272,7 +272,7 @@
                                         <span class="px-2.5 py-1 
                                             @if($responden->jenis_responden == 'mahasiswa') bg-blue-100 text-blue-700
                                             @elseif($responden->jenis_responden == 'dosen') bg-green-100 text-green-700
-                                            @elseif($responden->jenis_responden == 'staff') bg-indigo-100 text-indigo-700
+                                            @elseif($responden->jenis_responden == 'staff') bg-deep-sapphire-100 text-deep-sapphire-700
                                             @elseif($responden->jenis_responden == 'alumni') bg-orange-100 text-orange-700
                                             @elseif($responden->jenis_responden == 'stakeholder') bg-gray-200 text-gray-700
                                             @else bg-gray-100 text-gray-700

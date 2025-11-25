@@ -25,7 +25,7 @@ class QuestionnaireController extends Controller
         $questionnaires = Kuesioner::query()
             ->active()
             ->when($targetFilter, function ($query, $targetFilter) {
-                $query->where('target_responden', $targetFilter);
+                $query->whereJsonContains('target_responden', $targetFilter);
             })
             ->currentPeriod($today)
             ->when($search, function ($query, $search) {
@@ -65,7 +65,7 @@ class QuestionnaireController extends Controller
                 }
             })
             ->when($targetFilter, function ($query, $target) {
-                $query->where('target_responden', $target);
+                $query->whereJsonContains('target_responden', $target);
             })
             ->latest()
             ->paginate(9)
@@ -106,7 +106,8 @@ class QuestionnaireController extends Controller
             'judul' => 'required|string|max:255',
             'deskripsi' => 'nullable|string',
             'icon' => 'required|string',
-            'target_responden' => 'required|in:mahasiswa,dosen,staff,alumni,stakeholder',
+            'target_responden' => 'required|array|min:1',
+            'target_responden.*' => 'required|in:mahasiswa,dosen,staff,alumni,stakeholder',
             'tanggal_mulai' => 'required|date',
             'tanggal_selesai' => 'required|date|after_or_equal:tanggal_mulai',
             'status_aktif' => 'boolean',
@@ -218,7 +219,8 @@ class QuestionnaireController extends Controller
             'judul' => 'required|string|max:255',
             'deskripsi' => 'nullable|string',
             'icon' => 'required|string',
-            'target_responden' => 'required|in:mahasiswa,dosen,staff,alumni,stakeholder',
+            'target_responden' => 'required|array|min:1',
+            'target_responden.*' => 'required|in:mahasiswa,dosen,staff,alumni,stakeholder',
             'tanggal_mulai' => 'required|date',
             'tanggal_selesai' => 'required|date|after_or_equal:tanggal_mulai',
             'status_aktif' => 'boolean',
@@ -302,32 +304,52 @@ class QuestionnaireController extends Controller
 
     /**
      * Remove the specified questionnaire from storage.
+     * Force delete with cascade - removes all related data (responses, questions)
      */
     public function destroy(Kuesioner $kuesioner): RedirectResponse
     {
         DB::beginTransaction();
         try {
-            // Check if there are responses
+            // Count responses for logging
             $respondenCount = DB::table('jawaban')
                 ->where('kuesioner_id', $kuesioner->id)
                 ->distinct('responden_id')
                 ->count('responden_id');
 
-            if ($respondenCount > 0) {
-                return back()->with('error', 'Tidak dapat menghapus kuesioner yang sudah memiliki responden');
-            }
+            $jawabanCount = DB::table('jawaban')
+                ->where('kuesioner_id', $kuesioner->id)
+                ->count();
 
-            // Delete questions and questionnaire
+            $pertanyaanCount = $kuesioner->pertanyaan()->count();
+
+            // FORCE DELETE - Cascade deletion
+            // 1. Delete all answers (jawaban) related to this questionnaire
+            DB::table('jawaban')
+                ->where('kuesioner_id', $kuesioner->id)
+                ->delete();
+
+            // 2. Delete all questions (pertanyaan)
             $kuesioner->pertanyaan()->delete();
+
+            // 3. Delete the questionnaire itself
             $kuesioner->delete();
 
             DB::commit();
 
+            // Success message with details
+            $message = "Kuesioner '{$kuesioner->judul}' berhasil dihapus";
+            if ($respondenCount > 0) {
+                $message .= " beserta {$pertanyaanCount} pertanyaan dan {$jawabanCount} jawaban dari {$respondenCount} responden";
+            } else {
+                $message .= " beserta {$pertanyaanCount} pertanyaan";
+            }
+
             return redirect()->route('dashboard.kuesioner.index')
-                ->with('success', 'Kuesioner berhasil dihapus');
+                ->with('success', $message);
+
         } catch (\Exception $e) {
             DB::rollBack();
-            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+            return back()->with('error', 'Terjadi kesalahan saat menghapus kuesioner: ' . $e->getMessage());
         }
     }
 
