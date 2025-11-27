@@ -46,7 +46,7 @@
                 <h3 class="text-sm font-medium text-gray-600">Target</h3>
                 <p class="mt-1">
                     <span class="inline-flex items-center rounded-full bg-gray-100 px-3 py-1.5 text-sm font-medium text-gray-800 capitalize">
-                        {{ $kuesioner->target_responden }}
+                        {{ is_array($kuesioner->target_responden) ? implode(', ', array_map('ucfirst', $kuesioner->target_responden)) : ucfirst($kuesioner->target_responden) }}
                     </span>
                 </p>
             </div>

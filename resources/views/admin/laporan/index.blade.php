@@ -116,7 +116,7 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <span class="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800 capitalize">
-                                        {{ $item->target_responden }}
+                                        {{ is_array($item->target_responden) ? implode(', ', array_map('ucfirst', $item->target_responden)) : ucfirst($item->target_responden) }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
@@ -218,7 +218,7 @@
                             </div>
                             <div class="flex items-center justify-between text-xs">
                                 <span class="text-gray-600">Target:</span>
-                                <span class="font-medium text-gray-900 capitalize">{{ $item->target_responden }}</span>
+                                <span class="font-medium text-gray-900 capitalize">{{ is_array($item->target_responden) ? implode(', ', array_map('ucfirst', $item->target_responden)) : ucfirst($item->target_responden) }}</span>
                             </div>
                         </div>
                         <div class="mt-3 pt-3 border-t border-gray-200">

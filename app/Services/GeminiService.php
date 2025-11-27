@@ -147,10 +147,18 @@ class GeminiService
      */
     protected function prepareSummary($kuesioner, $analisis, $totalResponden)
     {
+        // Format target_responden for AI prompt
+        $target = $kuesioner->target_responden;
+        if (is_array($target)) {
+            $target = implode(', ', array_map('ucfirst', $target));
+        } else {
+            $target = ucfirst($target);
+        }
+        
         $summary = [
             'judul' => $kuesioner->judul,
             'deskripsi' => $kuesioner->deskripsi,
-            'target' => $kuesioner->target_responden,
+            'target' => $target,
             'total_responden' => $totalResponden,
             'total_pertanyaan' => $kuesioner->pertanyaan->count(),
             'pertanyaan' => []

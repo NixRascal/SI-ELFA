@@ -70,7 +70,7 @@
                         <!-- Target Responden -->
                         <div>
                             <dt class="text-xs font-medium text-gray-500">Target Responden</dt>
-                            <dd class="mt-1 text-sm font-semibold text-gray-900 capitalize">{{ $kuesioner->target_responden }}</dd>
+                            <dd class="mt-1 text-sm font-semibold text-gray-900 capitalize">{{ is_array($kuesioner->target_responden) ? implode(', ', array_map('ucfirst', $kuesioner->target_responden)) : ucfirst($kuesioner->target_responden) }}</dd>
                         </div>
 
                         <!-- Periode -->
