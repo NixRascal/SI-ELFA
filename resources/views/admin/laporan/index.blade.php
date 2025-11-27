@@ -70,30 +70,30 @@
         <div class="px-6 py-4 border-b border-gray-200">
             <h2 class="text-lg font-semibold text-gray-900">Laporan Per Kuesioner</h2>
         </div>
-        <div class="overflow-x-auto">
-            <div class="inline-block min-w-full align-middle">
+        <div class="overflow-hidden">
+            <div class="align-middle">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 tracking-wider whitespace-nowrap">
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 tracking-wider">
                                 Kuesioner
                             </th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 tracking-wider whitespace-nowrap">
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 tracking-wider">
                                 Target
                             </th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 tracking-wider whitespace-nowrap">
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 tracking-wider">
                                 Status
                             </th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 tracking-wider whitespace-nowrap">
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 tracking-wider">
                                 Responden
                             </th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 tracking-wider whitespace-nowrap">
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 tracking-wider">
                                 Pertanyaan
                             </th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 tracking-wider whitespace-nowrap">
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 tracking-wider">
                                 Periode
                             </th>
-                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 tracking-wider whitespace-nowrap">
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 tracking-wider">
                                 Aksi
                             </th>
                         </tr>
@@ -102,7 +102,7 @@
                         @forelse ($laporanKuesioner as $item)
                             <tr class="hover:bg-gray-50">
                                 <td class="px-6 py-4">
-                                    <div class="flex items-center min-w-[250px]">
+                                    <div class="flex items-center">
                                         <div class="h-10 w-10 flex-shrink-0">
                                             <div class="h-10 w-10 rounded-lg bg-deep-sapphire-100 flex items-center justify-center">
                                                 <i class="{{ $item->icon }} text-deep-sapphire-600"></i>
@@ -114,12 +114,19 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span class="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800 capitalize">
-                                        {{ is_array($item->target_responden) ? implode(', ', array_map('ucfirst', $item->target_responden)) : ucfirst($item->target_responden) }}
-                                    </span>
+                                <td class="px-6 py-4">
+                                    <div class="flex flex-col gap-1">
+                                        @php
+                                            $targetArray = is_array($item->target_responden) ? $item->target_responden : [$item->target_responden];
+                                        @endphp
+                                        @foreach($targetArray as $target)
+                                            <span class="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800 capitalize w-fit">
+                                                {{ ucfirst($target) }}
+                                            </span>
+                                        @endforeach
+                                    </div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td class="px-6 py-4">
                                     @if ($item->status_aktif)
                                         <span class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
                                             Aktif
@@ -130,25 +137,25 @@
                                         </span>
                                     @endif
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                <td class="px-6 py-4 text-sm text-gray-900">
                                     <div class="flex items-center">
                                         <i class="fas fa-users text-gray-400 mr-2"></i>
                                         <span class="font-semibold">{{ $item->responden_count }}</span>
                                         <span class="ml-1 text-gray-500">Responden</span>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                <td class="px-6 py-4 text-sm text-gray-900">
                                     <div class="flex items-center">
                                         <i class="fas fa-question-circle text-gray-400 mr-2"></i>
                                         <span class="font-semibold">{{ $item->pertanyaan_count }}</span>
                                         <span class="ml-1 text-gray-500">Pertanyaan</span>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">
+                                <td class="px-6 py-4 text-xs text-gray-500">
                                     {{ \Carbon\Carbon::parse($item->tanggal_mulai)->format('d M Y') }} - 
                                     {{ \Carbon\Carbon::parse($item->tanggal_selesai)->format('d M Y') }}
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                <td class="px-6 py-4 text-sm">
                                     <div class="flex items-center space-x-2">
                                         <a href="{{ route('dashboard.laporan.show', $item->id) }}" 
                                             class="text-blue-600 hover:text-blue-800" title="Lihat Detail">
@@ -216,9 +223,18 @@
                                 <span class="text-gray-600">Pertanyaan:</span>
                                 <span class="font-semibold text-gray-900">{{ $item->pertanyaan_count }}</span>
                             </div>
-                            <div class="flex items-center justify-between text-xs">
-                                <span class="text-gray-600">Target:</span>
-                                <span class="font-medium text-gray-900 capitalize">{{ is_array($item->target_responden) ? implode(', ', array_map('ucfirst', $item->target_responden)) : ucfirst($item->target_responden) }}</span>
+                            <div class="text-xs">
+                                <span class="text-gray-600 block mb-1">Target:</span>
+                                <div class="flex flex-col gap-1">
+                                    @php
+                                        $targetArrayCard = is_array($item->target_responden) ? $item->target_responden : [$item->target_responden];
+                                    @endphp
+                                    @foreach($targetArrayCard as $target)
+                                        <span class="inline-flex items-center rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-800 capitalize w-fit">
+                                            {{ ucfirst($target) }}
+                                        </span>
+                                    @endforeach
+                                </div>
                             </div>
                         </div>
                         <div class="mt-3 pt-3 border-t border-gray-200">

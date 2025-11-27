@@ -105,32 +105,30 @@
     </div>
 
     <!-- Table -->
-    <div class="mt-6 flow-root">
-        <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-            <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-                <div class="overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg">
-                    <table class="min-w-full divide-y divide-gray-300">
+    <div class="mt-6 bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6">
+                                <th scope="col" class="py-3 pl-4 pr-3 text-left text-xs font-semibold text-gray-900 sm:pl-6">
                                     Kuesioner
                                 </th>
-                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                <th scope="col" class="px-3 py-3 text-left text-xs font-semibold text-gray-900">
                                     Target
                                 </th>
-                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                <th scope="col" class="px-3 py-3 text-left text-xs font-semibold text-gray-900">
                                     Status
                                 </th>
-                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                <th scope="col" class="px-3 py-3 text-left text-xs font-semibold text-gray-900">
                                     Periode
                                 </th>
-                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                <th scope="col" class="px-3 py-3 text-left text-xs font-semibold text-gray-900">
                                     Responden
                                 </th>
-                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                <th scope="col" class="px-3 py-3 text-left text-xs font-semibold text-gray-900">
                                     Dibuat
                                 </th>
-                                <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                                <th scope="col" class="px-3 py-3 text-left text-xs font-semibold text-gray-900">
                                     Aksi
                                 </th>
                             </tr>
@@ -138,23 +136,23 @@
                         <tbody class="divide-y divide-gray-200 bg-white">
                             @forelse ($kuesioner as $item)
                                 <tr class="hover:bg-gray-50">
-                                    <td class="whitespace-nowrap py-4 pl-4 pr-3 sm:pl-6">
+                                    <td class="whitespace-nowrap py-3 pl-4 pr-3 sm:pl-6">
                                         <div class="flex items-center">
-                                            <div class="h-10 w-10 flex-shrink-0">
-                                                <div class="h-10 w-10 rounded-lg bg-blue-100 flex items-center justify-center">
-                                                    <i class="{{ $item->icon }} text-blue-600"></i>
+                                            <div class="h-8 w-8 flex-shrink-0">
+                                                <div class="h-8 w-8 rounded-lg bg-blue-100 flex items-center justify-center">
+                                                    <i class="{{ $item->icon }} text-blue-600 text-sm"></i>
                                                 </div>
                                             </div>
-                                            <div class="ml-4">
-                                                <div class="font-medium text-gray-900">{{ $item->judul }}</div>
+                                            <div class="ml-3">
+                                                <div class="text-sm font-medium text-gray-900">{{ $item->judul }}</div>
                                                 <div class="text-xs text-gray-500">{{ $item->pertanyaan->count() }} Pertanyaan</div>
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="whitespace-nowrap px-3 py-4 text-sm">
+                                    <td class="whitespace-nowrap px-3 py-3 text-xs">
                                         <div class="flex flex-wrap gap-1">
                                             @foreach((array) $item->target_responden as $target)
-                                                <span class="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800 capitalize">
+                                                <span class="inline-flex items-center rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-800 capitalize">
                                                     {{ $target }}
                                                 </span>
                                             @endforeach
@@ -171,26 +169,26 @@
                                             </span>
                                         @endif
                                     </td>
-                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                        <div class="text-xs">
+                                    <td class="whitespace-nowrap px-3 py-3 text-xs text-gray-500">
+                                        <div>
                                             {{ \Carbon\Carbon::parse($item->tanggal_mulai)->format('d M Y') }} - 
                                             {{ \Carbon\Carbon::parse($item->tanggal_selesai)->format('d M Y') }}
                                         </div>
                                     </td>
-                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-900">
+                                    <td class="whitespace-nowrap px-3 py-3 text-xs text-gray-900">
                                         <div class="flex items-center">
-                                            <i class="fas fa-users text-gray-400 mr-2"></i>
+                                            <i class="fas fa-users text-gray-400 mr-1.5 text-xs"></i>
                                             <span class="font-medium">{{ $item->responden_count }}</span>
                                             <span class="text-gray-500 ml-1">Responden</span>
                                         </div>
                                     </td>
-                                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                                        <div class="text-xs">
+                                    <td class="whitespace-nowrap px-3 py-3 text-xs text-gray-500">
+                                        <div>
                                             <div class="font-medium text-gray-700">{{ $item->admin->nama ?? 'Admin' }}</div>
                                             <div>{{ $item->created_at->format('d M Y') }}</div>
                                         </div>
                                     </td>
-                                    <td class="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6">
+                                    <td class="relative whitespace-nowrap py-3 pl-3 pr-4 text-right text-xs font-medium sm:pr-6">
                                         <div class="flex items-center justify-end space-x-2">
                                             <a href="{{ route('dashboard.kuesioner.show', $item) }}" class="text-gray-400 hover:text-gray-600 cursor-pointer" title="Lihat Detail">
                                                 <i class="fas fa-eye"></i>
@@ -225,16 +223,14 @@
                             @endforelse
                         </tbody>
                     </table>
-                </div>
-
-                <!-- Pagination -->
-                @if ($kuesioner->hasPages())
-                    <div class="mt-4">
-                        {{ $kuesioner->links('pagination.custom') }}
-                    </div>
-                @endif
-            </div>
         </div>
+
+        <!-- Pagination -->
+        @if ($kuesioner->hasPages())
+            <div class="px-4 py-3 border-t border-gray-200">
+                {{ $kuesioner->links('pagination.custom') }}
+            </div>
+        @endif
     </div>
 </div>
 

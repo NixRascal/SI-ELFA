@@ -125,32 +125,32 @@
         <div class="px-6 py-4 border-b border-gray-200">
             <h2 class="text-lg font-semibold text-gray-900">Daftar Responden</h2>
         </div>
-        <div class="overflow-x-auto">
+        <div class="overflow-hidden">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                             No
                         </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                             Nama
                         </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                             Email
                         </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                             NPM
                         </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                             Fakultas
                         </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                             Jurusan
                         </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                             Jenis
                         </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                        <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                             Waktu Isi
                         </th>
                     </tr>
@@ -158,30 +158,30 @@
                 <tbody class="bg-white divide-y divide-gray-200">
                     @forelse ($responden as $index => $item)
                         <tr class="hover:bg-gray-50">
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            <td class="px-4 py-4 text-sm text-gray-900">
                                 {{ $index + 1 }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
+                            <td class="px-4 py-4">
                                 <div class="text-sm font-medium text-gray-900">{{ $item->nama }}</div>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                            <td class="px-4 py-4 text-sm text-gray-600 break-all">
                                 {{ $item->email }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                            <td class="px-4 py-4 text-sm text-gray-600">
                                 {{ $item->npm ?: '-' }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                            <td class="px-4 py-4 text-sm text-gray-600">
                                 {{ $item->fakultas }}
                             </td>
-                            <td class="px-6 py-4 text-sm text-gray-600">
+                            <td class="px-4 py-4 text-sm text-gray-600">
                                 {{ $item->jurusan }}
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
+                            <td class="px-4 py-4">
                                 <span class="inline-flex items-center rounded-full bg-gray-100 px-2.5 py-0.5 text-xs font-medium text-gray-800 capitalize">
                                     {{ $item->jenis_responden }}
                                 </span>
                             </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-xs text-gray-500">
+                            <td class="px-4 py-4 text-xs text-gray-500">
                                 {{ \Carbon\Carbon::parse($item->waktu_isi)->format('d M Y H:i') }}
                             </td>
                         </tr>

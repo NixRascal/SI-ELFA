@@ -88,8 +88,20 @@
                         </div>
                     @elseif($q->jenis_pertanyaan === 'pilihan_ganda')
                         {{-- Untuk pertanyaan pilihan ganda --}}
+                        @php
+                            $opsiJawaban = $q->opsi_jawaban;
+                            if (is_string($opsiJawaban)) {
+                                $decoded = json_decode($opsiJawaban, true);
+                                if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+                                    $opsiJawaban = $decoded;
+                                } else {
+                                    $opsiJawaban = [$opsiJawaban];
+                                }
+                            }
+                            $opsiJawaban = is_array($opsiJawaban) ? $opsiJawaban : [];
+                        @endphp
                         <div class="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                            @foreach ($q->opsi_jawaban as $ops)
+                            @foreach ($opsiJawaban as $ops)
                                 @php
                                     $radioId = "jawaban_{$q->id}_{$loop->index}";
                                 @endphp

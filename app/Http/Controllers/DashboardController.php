@@ -25,11 +25,8 @@ class DashboardController extends Controller
         
         $totalResponden = Responden::count();
         
-        // Hitung total jawaban sebagai jumlah unik kombinasi responden-kuesioner
-        // 1 responden mengisi 1 survei = 1 jawaban (bukan dihitung per pertanyaan)
-        $totalJawaban = DB::table('jawaban')
-            ->select(DB::raw('COUNT(DISTINCT CONCAT(responden_id, "-", kuesioner_id)) as total'))
-            ->value('total');
+        // Hitung total jawaban (total butir pertanyaan yang dijawab)
+        $totalJawaban = Jawaban::count();
 
         // Get recent questionnaires (3 latest) with responden count
         $recentQuestionnaires = Kuesioner::with('admin')
