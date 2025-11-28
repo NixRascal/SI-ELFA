@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="id">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +11,7 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
             font-size: 11px;
@@ -18,168 +19,167 @@
             color: #1f2937;
             padding: 15px;
         }
-        
+
         /* Cover Page */
         .cover-page {
             text-align: center;
             padding: 80px 40px;
             page-break-after: always;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-radius: 10px;
+            background: #FFFFFF;
+            border: 3px solid #000000;
+            color: #000000;
             margin-bottom: 30px;
         }
-        
+
         .cover-page h1 {
             font-size: 32px;
             margin-bottom: 20px;
             font-weight: 700;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            color: #000000;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
-        
+
         .cover-page .subtitle {
             font-size: 20px;
             margin-bottom: 40px;
-            opacity: 0.95;
+            color: #374151;
+            font-weight: 500;
         }
-        
+
         .cover-info {
-            background: rgba(255,255,255,0.15);
+            background: #F9FAFB;
             padding: 25px;
-            border-radius: 8px;
-            backdrop-filter: blur(10px);
+            border: 2px solid #E5E7EB;
             margin: 40px auto;
             max-width: 500px;
         }
-        
+
         .cover-info-item {
             margin: 15px 0;
             font-size: 14px;
+            color: #000000;
         }
-        
+
         .cover-info-label {
-            font-weight: 600;
+            font-weight: 700;
             display: inline-block;
             width: 150px;
+            color: #000000;
         }
-        
+
         /* Header */
         .page-header {
             text-align: center;
             margin-bottom: 30px;
             padding: 25px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-radius: 8px;
+            background: #000000;
+            color: #FFFFFF;
         }
-        
+
         .page-header h1 {
             font-size: 22px;
             margin-bottom: 8px;
             font-weight: 700;
         }
-        
+
         .page-header .subtitle {
             font-size: 15px;
-            opacity: 0.9;
             margin-bottom: 5px;
         }
-        
+
         .page-header .period {
             font-size: 12px;
-            opacity: 0.85;
             margin-top: 8px;
+            opacity: 0.9;
         }
-        
+
         /* Executive Summary */
         .executive-summary {
-            background: #f0f9ff;
-            border-left: 4px solid #3b82f6;
+            background: #F9FAFB;
+            border-left: 4px solid #000000;
             padding: 20px;
             margin-bottom: 30px;
-            border-radius: 5px;
             page-break-inside: avoid;
         }
-        
+
         .executive-summary h2 {
-            color: #1e40af;
+            color: #000000;
             font-size: 16px;
             margin-bottom: 15px;
             font-weight: 700;
         }
-        
+
         .summary-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 15px;
             margin-top: 15px;
         }
-        
+
         .summary-item {
             background: white;
             padding: 12px;
-            border-radius: 5px;
-            border: 1px solid #bfdbfe;
+            border: 1px solid #D1D5DB;
         }
-        
+
         .summary-label {
             font-size: 10px;
-            color: #6b7280;
+            color: #6B7280;
             text-transform: uppercase;
             font-weight: 600;
             letter-spacing: 0.5px;
         }
-        
+
         .summary-value {
             font-size: 14px;
             font-weight: 700;
-            color: #1e40af;
+            color: #000000;
             margin-top: 4px;
         }
-        
+
         /* Info Section */
         .info-section {
             margin-bottom: 25px;
-            background: #f9fafb;
+            background: #F9FAFB;
             padding: 18px;
-            border-radius: 8px;
-            border: 1px solid #e5e7eb;
+            border: 1px solid #E5E7EB;
         }
-        
+
         .info-section h3 {
             font-size: 14px;
-            color: #374151;
+            color: #000000;
             margin-bottom: 12px;
             font-weight: 700;
-            border-bottom: 2px solid #d1d5db;
+            border-bottom: 2px solid #000000;
             padding-bottom: 6px;
         }
-        
+
         .info-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 12px;
         }
-        
+
         .info-item {
             display: flex;
             flex-direction: column;
         }
-        
+
         .info-label {
             font-weight: 600;
-            color: #6b7280;
+            color: #6B7280;
             font-size: 10px;
             text-transform: uppercase;
             margin-bottom: 4px;
         }
-        
+
         .info-value {
-            color: #1f2937;
+            color: #1F2937;
             font-size: 12px;
             font-weight: 500;
         }
-        
+
         /* Statistics Cards */
         .stats {
             display: grid;
@@ -187,161 +187,147 @@
             gap: 12px;
             margin-bottom: 25px;
         }
-        
+
         .stat-card {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: #F9FAFB;
+            color: #000000;
             padding: 18px 12px;
-            border-radius: 8px;
+            border: 2px solid #E5E7EB;
             text-align: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        
-        .stat-card.green {
-            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-        }
-        
-        .stat-card.blue {
-            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-        }
-        
+
+        .stat-card.green,
+        .stat-card.blue,
         .stat-card.orange {
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            background: #F3F4F6;
+            border-color: #D1D5DB;
         }
-        
+
         .stat-label {
             font-size: 9px;
             text-transform: uppercase;
-            opacity: 0.9;
             font-weight: 600;
             letter-spacing: 0.5px;
+            color: #6B7280;
         }
-        
+
         .stat-value {
             font-size: 28px;
             font-weight: 700;
             margin-top: 6px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            color: #000000;
         }
-        
+
         .stat-subtext {
             font-size: 9px;
-            opacity: 0.85;
             margin-top: 4px;
+            color: #6B7280;
         }
-        
+
         /* Question Section */
         .question-section {
             margin-bottom: 25px;
             page-break-inside: avoid;
-            border: 1px solid #e5e7eb;
-            border-radius: 8px;
+            border: 1px solid #E5E7EB;
             overflow: hidden;
         }
-        
+
         .question-header {
-            background: linear-gradient(to right, #f3f4f6, #e5e7eb);
+            background: #F3F4F6;
             padding: 12px 18px;
-            border-bottom: 2px solid #d1d5db;
+            border-bottom: 2px solid #000000;
         }
-        
+
         .question-title {
             font-weight: 700;
             font-size: 13px;
             margin-bottom: 6px;
-            color: #111827;
+            color: #000000;
         }
-        
+
         .question-text {
-            color: #4b5563;
+            color: #374151;
             font-size: 12px;
             line-height: 1.5;
         }
-        
+
         .question-meta {
             display: flex;
             gap: 8px;
             margin-top: 8px;
             flex-wrap: wrap;
         }
-        
+
         .question-type {
             display: inline-flex;
             align-items: center;
-            background: #6366f1;
+            background: #000000;
             color: white;
             padding: 3px 10px;
-            border-radius: 12px;
             font-size: 9px;
             font-weight: 600;
             text-transform: uppercase;
         }
-        
+
         .question-category {
             display: inline-flex;
             align-items: center;
-            background: #10b981;
+            background: #6B7280;
             color: white;
             padding: 3px 10px;
-            border-radius: 12px;
             font-size: 9px;
             font-weight: 600;
         }
-        
+
         .question-required {
             display: inline-flex;
             align-items: center;
-            background: #ef4444;
+            background: #1F2937;
             color: white;
             padding: 3px 10px;
-            border-radius: 12px;
             font-size: 9px;
             font-weight: 600;
         }
-        
+
         .question-content {
             padding: 18px;
             background: white;
         }
-        
+
         /* Score Display */
         .score-display {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #000000;
             color: white;
             padding: 15px;
-            border-radius: 8px;
             margin-bottom: 18px;
             text-align: center;
         }
-        
+
         .score-label {
             font-size: 11px;
-            opacity: 0.9;
             margin-bottom: 5px;
         }
-        
+
         .score-value {
             font-size: 32px;
             font-weight: 700;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
         }
-        
+
         .score-interpretation {
             font-size: 10px;
             margin-top: 8px;
-            opacity: 0.95;
             font-weight: 600;
         }
-        
+
         /* Bar Chart */
         .bar-chart {
             margin-bottom: 15px;
         }
-        
+
         .bar-item {
             margin-bottom: 10px;
         }
-        
+
         .bar-label {
             display: inline-block;
             width: 90px;
@@ -349,48 +335,45 @@
             font-weight: 600;
             color: #374151;
         }
-        
+
         .bar-container {
             display: inline-block;
             width: calc(100% - 200px);
             height: 24px;
-            background: #f3f4f6;
-            border-radius: 4px;
+            background: #F3F4F6;
             vertical-align: middle;
             position: relative;
             overflow: hidden;
-            border: 1px solid #e5e7eb;
+            border: 1px solid #D1D5DB;
         }
-        
+
         .bar-fill {
             height: 100%;
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            background: #4B5563;
             display: flex;
             align-items: center;
             justify-content: flex-end;
             padding-right: 8px;
-            transition: width 0.3s ease;
         }
-        
+
         .bar-fill.green {
-            background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+            background: #1F2937;
         }
-        
+
         .bar-fill.red {
-            background: linear-gradient(90deg, #ef4444 0%, #dc2626 100%);
+            background: #6B7280;
         }
-        
+
         .bar-fill.yellow {
-            background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%);
+            background: #9CA3AF;
         }
-        
+
         .bar-percentage {
             color: white;
             font-size: 10px;
             font-weight: 700;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
         }
-        
+
         .bar-count {
             display: inline-block;
             width: 100px;
@@ -400,85 +383,84 @@
             font-weight: 600;
             color: #374151;
         }
-        
+
         /* Text Answers */
         .text-answer {
-            background: #f9fafb;
+            background: #F9FAFB;
             padding: 10px 14px;
             margin-bottom: 6px;
-            border-radius: 6px;
             font-size: 11px;
-            border-left: 3px solid #6366f1;
+            border-left: 3px solid #000000;
             line-height: 1.6;
         }
-        
+
         .answer-count {
             margin-top: 12px;
             padding: 12px;
-            background: #eff6ff;
-            border-radius: 6px;
-            border-left: 3px solid #3b82f6;
+            background: #F3F4F6;
+            border-left: 3px solid #000000;
         }
-        
+
         .answer-count strong {
-            color: #1e40af;
+            color: #000000;
             font-size: 12px;
         }
-        
+
         /* Insights Box */
         .insights-box {
-            background: #fef3c7;
-            border-left: 4px solid #f59e0b;
+            background: #F9FAFB;
+            border-left: 4px solid #000000;
             padding: 12px 15px;
             margin-top: 15px;
-            border-radius: 5px;
             font-size: 10px;
         }
-        
+
         .insights-box strong {
-            color: #92400e;
+            color: #000000;
             display: block;
             margin-bottom: 5px;
             font-size: 11px;
         }
-        
+
         /* Footer */
         .footer {
             margin-top: 40px;
             padding-top: 20px;
-            border-top: 2px solid #d1d5db;
+            border-top: 2px solid #000000;
             text-align: center;
             font-size: 10px;
-            color: #6b7280;
+            color: #6B7280;
         }
-        
+
         .footer p {
             margin: 5px 0;
         }
-        
+
         .footer strong {
-            color: #374151;
+            color: #000000;
         }
-        
+
         /* Page Break */
         .page-break {
             page-break-after: always;
         }
-        
+
         /* Print Styles */
         @media print {
             body {
                 padding: 0;
             }
-            
-            .question-section, .executive-summary, .info-section {
+
+            .question-section,
+            .executive-summary,
+            .info-section {
                 page-break-inside: avoid;
             }
-            
+
             .cover-page {
                 page-break-after: always;
             }
-            
+
             @page {
                 margin: 1.5cm;
                 size: A4;
@@ -486,17 +468,18 @@
         }
     </style>
 </head>
+
 <body>
     {{-- Cover Page --}}
     <div class="cover-page">
         <h1>📊 LAPORAN HASIL SURVEI</h1>
         <div class="subtitle">{{ $kuesioner->judul }}</div>
-        
+
         <div class="cover-info">
             <div class="cover-info-item">
                 <span class="cover-info-label">Periode Survei:</span>
                 <div style="margin-top: 5px;">
-                    {{ \Carbon\Carbon::parse($kuesioner->tanggal_mulai)->format('d F Y') }} - 
+                    {{ \Carbon\Carbon::parse($kuesioner->tanggal_mulai)->format('d F Y') }} -
                     {{ \Carbon\Carbon::parse($kuesioner->tanggal_selesai)->format('d F Y') }}
                 </div>
             </div>
@@ -506,14 +489,16 @@
             </div>
             <div class="cover-info-item">
                 <span class="cover-info-label">Target Responden:</span>
-                <div style="margin-top: 5px;">{{ is_array($kuesioner->target_responden) ? implode(', ', array_map('ucfirst', $kuesioner->target_responden)) : ucfirst($kuesioner->target_responden) }}</div>
+                <div style="margin-top: 5px;">
+                    {{ is_array($kuesioner->target_responden) ? implode(', ', array_map('ucfirst', $kuesioner->target_responden)) : ucfirst($kuesioner->target_responden) }}
+                </div>
             </div>
             <div class="cover-info-item" style="margin-top: 30px; font-size: 12px;">
                 Laporan dicetak pada<br>
                 <strong>{{ now()->format('d F Y, H:i') }} WIB</strong>
             </div>
         </div>
-        
+
         <div style="margin-top: 50px; font-size: 13px; opacity: 0.9;">
             SI-ELFA - Sistem Informasi Evaluasi Layanan Fakultas Akademik
         </div>
@@ -524,7 +509,7 @@
         <h1>{{ $kuesioner->judul }}</h1>
         <div class="subtitle">Analisis Komprehensif Hasil Survei</div>
         <div class="period">
-            Periode: {{ \Carbon\Carbon::parse($kuesioner->tanggal_mulai)->format('d M Y') }} - 
+            Periode: {{ \Carbon\Carbon::parse($kuesioner->tanggal_mulai)->format('d M Y') }} -
             {{ \Carbon\Carbon::parse($kuesioner->tanggal_selesai)->format('d M Y') }}
         </div>
     </div>
@@ -541,8 +526,8 @@
     <div class="executive-summary">
         <h2>📋 Ringkasan Eksekutif</h2>
         <p style="color: #374151; margin-bottom: 10px;">
-            Survei ini telah diisi oleh <strong>{{ $totalResponden }} responden</strong> dengan total 
-            <strong>{{ $kuesioner->pertanyaan->count() }} pertanyaan</strong>. 
+            Survei ini telah diisi oleh <strong>{{ $totalResponden }} responden</strong> dengan total
+            <strong>{{ $kuesioner->pertanyaan->count() }} pertanyaan</strong>.
             @if($avgScore)
                 Rata-rata kepuasan keseluruhan mencapai <strong>{{ number_format($avgScore, 2) }}/5.0</strong>
                 @if($avgScore >= 4)
@@ -556,7 +541,7 @@
                 @endif
             @endif
         </p>
-        
+
         <div class="summary-grid">
             <div class="summary-item">
                 <div class="summary-label">Status Survei</div>
@@ -564,7 +549,9 @@
             </div>
             <div class="summary-item">
                 <div class="summary-label">Target Responden</div>
-                <div class="summary-value">{{ is_array($kuesioner->target_responden) ? implode(', ', array_map('ucfirst', $kuesioner->target_responden)) : ucfirst($kuesioner->target_responden) }}</div>
+                <div class="summary-value">
+                    {{ is_array($kuesioner->target_responden) ? implode(', ', array_map('ucfirst', $kuesioner->target_responden)) : ucfirst($kuesioner->target_responden) }}
+                </div>
             </div>
             <div class="summary-item">
                 <div class="summary-label">Tingkat Partisipasi</div>
@@ -587,7 +574,8 @@
             </div>
             <div class="info-item">
                 <span class="info-label">Target Responden</span>
-                <span class="info-value">{{ is_array($kuesioner->target_responden) ? implode(', ', array_map('ucfirst', $kuesioner->target_responden)) : ucfirst($kuesioner->target_responden) }}</span>
+                <span
+                    class="info-value">{{ is_array($kuesioner->target_responden) ? implode(', ', array_map('ucfirst', $kuesioner->target_responden)) : ucfirst($kuesioner->target_responden) }}</span>
             </div>
             <div class="info-item">
                 <span class="info-label">Tanggal Mulai</span>
@@ -595,13 +583,14 @@
             </div>
             <div class="info-item">
                 <span class="info-label">Tanggal Selesai</span>
-                <span class="info-value">{{ \Carbon\Carbon::parse($kuesioner->tanggal_selesai)->format('d F Y') }}</span>
+                <span
+                    class="info-value">{{ \Carbon\Carbon::parse($kuesioner->tanggal_selesai)->format('d F Y') }}</span>
             </div>
             @if($kuesioner->deskripsi)
-            <div class="info-item" style="grid-column: 1 / -1;">
-                <span class="info-label">Deskripsi</span>
-                <span class="info-value">{{ $kuesioner->deskripsi }}</span>
-            </div>
+                <div class="info-item" style="grid-column: 1 / -1;">
+                    <span class="info-label">Deskripsi</span>
+                    <span class="info-value">{{ $kuesioner->deskripsi }}</span>
+                </div>
             @endif
         </div>
     </div>
@@ -633,7 +622,8 @@
     <div style="page-break-before: always;"></div>
 
     {{-- Questions Analysis --}}
-    <h2 style="margin-bottom: 20px; font-size: 18px; color: #111827; border-bottom: 3px solid #667eea; padding-bottom: 12px; font-weight: 700;">
+    <h2
+        style="margin-bottom: 20px; font-size: 18px; color: #111827; border-bottom: 3px solid #667eea; padding-bottom: 12px; font-weight: 700;">
         📊 Analisis Hasil Per Pertanyaan
     </h2>
 
@@ -662,43 +652,46 @@
                     @endif
                 </div>
             </div>
-            
+
             <div class="question-content">
                 @if($item['pertanyaan']->jenis_pertanyaan === 'likert')
                     {{-- Likert Scale Analysis --}}
                     @php
                         $score = $item['rata_rata'];
                         $interpretation = '';
-                        if($score >= 4.5) {
+                        if ($score >= 4.5) {
                             $interpretation = 'Sangat Memuaskan';
-                        } elseif($score >= 3.5) {
+                        } elseif ($score >= 3.5) {
                             $interpretation = 'Memuaskan';
-                        } elseif($score >= 2.5) {
+                        } elseif ($score >= 2.5) {
                             $interpretation = 'Cukup Memuaskan';
-                        } elseif($score >= 1.5) {
+                        } elseif ($score >= 1.5) {
                             $interpretation = 'Kurang Memuaskan';
                         } else {
                             $interpretation = 'Tidak Memuaskan';
                         }
                     @endphp
-                    
+
                     <div class="score-display">
                         <div class="score-label">Rata-rata Skor Kepuasan</div>
                         <div class="score-value">{{ $score }}</div>
                         <div style="font-size: 16px; opacity: 0.9;">dari 5.0</div>
                         <div class="score-interpretation">{{ $interpretation }}</div>
                     </div>
-                    
+
                     <div class="bar-chart">
                         @for($i = 1; $i <= 5; $i++)
                             @php
                                 $data = $item['distribusi'][$i] ?? ['count' => 0, 'percentage' => 0];
                                 $barClass = '';
-                                if($i >= 4) $barClass = 'green';
-                                elseif($i == 3) $barClass = 'yellow';
-                                elseif($i <= 2) $barClass = 'red';
-                                
-                                $label = match($i) {
+                                if ($i >= 4)
+                                    $barClass = 'green';
+                                elseif ($i == 3)
+                                    $barClass = 'yellow';
+                                elseif ($i <= 2)
+                                    $barClass = 'red';
+
+                                $label = match ($i) {
                                     1 => 'Sangat Buruk',
                                     2 => 'Buruk',
                                     3 => 'Netral',
@@ -719,7 +712,7 @@
                             </div>
                         @endfor
                     </div>
-                    
+
                     <div class="insights-box">
                         <strong>💡 Insight:</strong>
                         @php
@@ -728,7 +721,8 @@
                             $highestScale = $highest ? $distribusiCollection->search($highest) : null;
                         @endphp
                         @if($highest && $highestScale !== null && $highestScale !== false)
-                            Mayoritas responden ({{ $highest['count'] ?? 0 }} orang atau {{ $highest['percentage'] ?? 0 }}%) memberikan penilaian skala {{ $highestScale }}.
+                            Mayoritas responden ({{ $highest['count'] ?? 0 }} orang atau {{ $highest['percentage'] ?? 0 }}%)
+                            memberikan penilaian skala {{ $highestScale }}.
                             @if($score >= 4)
                                 Aspek ini mendapat apresiasi tinggi dari responden dan perlu dipertahankan.
                             @elseif($score >= 3)
@@ -748,16 +742,18 @@
                         $mostChosen = $distribusiPG->sortByDesc('count')->first();
                         $mostChosenOption = $mostChosen ? $distribusiPG->search($mostChosen) : null;
                     @endphp
-                    
+
                     @if($mostChosen && $mostChosenOption !== null && $mostChosenOption !== false)
-                    <div style="background: #eff6ff; padding: 12px; border-radius: 6px; margin-bottom: 15px; border-left: 4px solid #3b82f6;">
-                        <strong style="color: #1e40af; font-size: 12px;">Pilihan Terpopuler:</strong>
-                        <div style="font-size: 14px; color: #1e3a8a; margin-top: 5px; font-weight: 600;">
-                            "{{ $mostChosenOption }}" - {{ $mostChosen['count'] ?? 0 }} orang ({{ $mostChosen['percentage'] ?? 0 }}%)
+                        <div
+                            style="background: #eff6ff; padding: 12px; border-radius: 6px; margin-bottom: 15px; border-left: 4px solid #3b82f6;">
+                            <strong style="color: #1e40af; font-size: 12px;">Pilihan Terpopuler:</strong>
+                            <div style="font-size: 14px; color: #1e3a8a; margin-top: 5px; font-weight: 600;">
+                                "{{ $mostChosenOption }}" - {{ $mostChosen['count'] ?? 0 }} orang
+                                ({{ $mostChosen['percentage'] ?? 0 }}%)
+                            </div>
                         </div>
-                    </div>
                     @endif
-                    
+
                     <div class="bar-chart">
                         @foreach(($item['distribusi'] ?? []) as $pilihan => $data)
                             <div class="bar-item">
@@ -773,13 +769,14 @@
                             </div>
                         @endforeach
                     </div>
-                    
+
                     @if($mostChosen && $mostChosenOption !== null && $mostChosenOption !== false)
-                    <div class="insights-box">
-                        <strong>💡 Insight:</strong>
-                        Dari {{ $item['total_jawaban'] }} responden, pilihan "{{ $mostChosenOption }}" menjadi yang paling banyak dipilih dengan {{ $mostChosen['percentage'] ?? 0 }}% suara. 
-                        Distribusi ini menunjukkan preferensi dominan responden terhadap opsi tersebut.
-                    </div>
+                        <div class="insights-box">
+                            <strong>💡 Insight:</strong>
+                            Dari {{ $item['total_jawaban'] }} responden, pilihan "{{ $mostChosenOption }}" menjadi yang paling
+                            banyak dipilih dengan {{ $mostChosen['percentage'] ?? 0 }}% suara.
+                            Distribusi ini menunjukkan preferensi dominan responden terhadap opsi tersebut.
+                        </div>
                     @endif
 
                 @elseif($item['pertanyaan']->jenis_pertanyaan === 'isian')
@@ -788,41 +785,39 @@
                         $jawabanText = $item['jawaban_text'] ?? collect([]);
                         $jawabanCount = $jawabanText->count();
                     @endphp
-                    
-                    <div style="background: #eff6ff; padding: 12px; border-radius: 6px; margin-bottom: 15px; border-left: 4px solid #3b82f6;">
+
+                    <div
+                        style="background: #eff6ff; padding: 12px; border-radius: 6px; margin-bottom: 15px; border-left: 4px solid #3b82f6;">
                         <strong style="color: #1e40af; font-size: 11px;">Total Jawaban Text:</strong>
                         <div style="font-size: 18px; color: #1e3a8a; margin-top: 4px; font-weight: 700;">
                             {{ $jawabanCount }} Jawaban
                         </div>
                     </div>
-                    
+
                     @if($jawabanCount > 0)
-                    <div style="max-height: 400px; overflow-y: auto;">
-                        <strong style="font-size: 11px; color: #6b7280; display: block; margin-bottom: 10px;">
-                            Sample Jawaban (Menampilkan 20 jawaban pertama):
-                        </strong>
-                        @foreach($jawabanText->take(20) as $idx => $jawaban)
-                            <div class="text-answer">
-                                <strong style="color: #6366f1; font-size: 10px;">Responden #{{ $idx + 1 }}:</strong>
-                                <div style="margin-top: 4px;">{{ $jawaban }}</div>
-                            </div>
-                        @endforeach
-                        @if($jawabanCount > 20)
-                            <p style="font-style: italic; color: #6b7280; margin-top: 12px; text-align: center; background: #f9fafb; padding: 10px; border-radius: 6px;">
-                                ... dan {{ $jawabanCount - 20 }} jawaban lainnya
-                            </p>
-                        @endif
-                    </div>
-                    
-                    <div class="insights-box">
-                        <strong>💡 Insight:</strong>
-                        Terkumpul {{ $jawabanCount }} jawaban berbasis text dari responden. 
-                        Jawaban-jawaban ini memberikan perspektif kualitatif yang berharga untuk memahami pengalaman dan masukan responden secara mendalam.
-                    </div>
+                        <div style="max-height: none;">
+                            <strong style="font-size: 11px; color: #6b7280; display: block; margin-bottom: 10px;">
+                                Semua Jawaban ({{ $jawabanCount }} jawaban):
+                            </strong>
+                            @foreach($jawabanText as $idx => $jawaban)
+                                <div class="text-answer">
+                                    <strong style="color: #6366f1; font-size: 10px;">Responden #{{ $idx + 1 }}:</strong>
+                                    <div style="margin-top: 4px;">{{ $jawaban }}</div>
+                                </div>
+                            @endforeach
+                        </div>
+
+                        <div class="insights-box">
+                            <strong>💡 Insight:</strong>
+                            Terkumpul {{ $jawabanCount }} jawaban berbasis text dari responden.
+                            Jawaban-jawaban ini memberikan perspektif kualitatif yang berharga untuk memahami pengalaman dan
+                            masukan
+                            responden secara mendalam.
+                        </div>
                     @else
-                    <p style="text-align: center; color: #6b7280; padding: 20px; font-style: italic;">
-                        Belum ada jawaban untuk pertanyaan ini.
-                    </p>
+                        <p style="text-align: center; color: #6b7280; padding: 20px; font-style: italic;">
+                            Belum ada jawaban untuk pertanyaan ini.
+                        </p>
                     @endif
                 @endif
 
@@ -830,7 +825,9 @@
                     <strong>📊 Statistik Jawaban:</strong>
                     <div style="margin-top: 6px; font-size: 11px; color: #4b5563;">
                         Total responden yang menjawab: <strong>{{ $item['total_jawaban'] }} orang</strong>
-                        ({{ $totalResponden > 0 ? round(($item['total_jawaban'] / $totalResponden) * 100, 1) : 0 }}% dari total responden)
+                        ({{ $totalResponden > 0 ? round(($item['total_jawaban'] / $totalResponden) * 100, 1) : 0 }}%
+                        dari
+                        total responden)
                     </div>
                 </div>
             </div>
@@ -849,9 +846,10 @@
     </div>
 
     <script>
-        window.onload = function() {
+        window.onload = function () {
             window.print();
         };
     </script>
 </body>
+
 </html>

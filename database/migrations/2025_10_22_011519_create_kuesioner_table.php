@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -16,7 +15,7 @@ return new class extends Migration
             $table->string('judul');
             $table->text('deskripsi')->nullable();
             $table->string('icon')->nullable();
-            $table->json('target_responden')->default('["mahasiswa"]');
+            $table->json('target_responden');
             $table->boolean('status_aktif')->default(true);
             $table->date('tanggal_mulai');
             $table->date('tanggal_selesai');

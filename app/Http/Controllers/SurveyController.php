@@ -16,10 +16,15 @@ class SurveyController extends Controller
     /**
      * Display the respondent profile form.
      */
-    public function showProfileForm(Kuesioner $questionnaire): View
+    public function showProfileForm(Kuesioner $questionnaire): View|RedirectResponse
     {
+        if (!$questionnaire->is_active) {
+            return redirect()->route('beranda')
+                ->with('error', 'Maaf, kuesioner ini tidak aktif atau periode pengisian telah berakhir.');
+        }
+
         $profile = session("survey.{$questionnaire->id}.profile", []);
-        
+
         return view('survei.profil', [
             'kuesioner' => $questionnaire,
             'profil' => $profile
@@ -34,14 +39,14 @@ class SurveyController extends Controller
         Kuesioner $questionnaire
     ): RedirectResponse {
         $profileData = $request->validated();
-        
+
         // Validasi: Pastikan jenis responden sesuai dengan target kuesioner
         if (!in_array($profileData['jenis_responden'], $questionnaire->target_responden)) {
             return redirect()
                 ->route('survei.profil', $questionnaire->id)
                 ->with('error', 'Survei ini tidak tersedia untuk ' . ucfirst($profileData['jenis_responden']));
         }
-        
+
         // Cek apakah responden sudah pernah mengisi kuesioner ini
         $existingResponden = Responden::where(function ($query) use ($profileData) {
             if (!empty($profileData['email'])) {
@@ -69,6 +74,11 @@ class SurveyController extends Controller
      */
     public function showQuestions(Kuesioner $questionnaire): View|RedirectResponse
     {
+        if (!$questionnaire->is_active) {
+            return redirect()->route('beranda')
+                ->with('error', 'Maaf, kuesioner ini tidak aktif atau periode pengisian telah berakhir.');
+        }
+
         $profile = session("survey.{$questionnaire->id}.profile");
 
         if (!$profile) {
@@ -122,7 +132,7 @@ class SurveyController extends Controller
         // Jika responden sudah ada, cek apakah sudah mengisi kuesioner ini
         if ($existingResponden && $existingResponden->sudahMengisiKuesioner($questionnaire->id)) {
             session()->forget("survey.{$questionnaire->id}.profile");
-            
+
             return redirect()
                 ->route('survei.profil', $questionnaire->id)
                 ->with('error', 'Anda sudah mengisi kuesioner ini sebelumnya.');
@@ -142,14 +152,14 @@ class SurveyController extends Controller
 
         // Store answers with kuesioner_id
         $answers = $request->validated()['jawaban'] ?? [];
-        
+
         foreach ($answers as $questionId => $answer) {
             Jawaban::create([
                 'responden_id' => $respondent->id,
                 'kuesioner_id' => $questionnaire->id,
                 'pertanyaan_id' => $questionId,
                 'isi_jawaban' => $answer,
-                'nilai_likert' => is_numeric($answer) ? (int)$answer : null,
+                'nilai_likert' => is_numeric($answer) ? (int) $answer : null,
             ]);
         }
 

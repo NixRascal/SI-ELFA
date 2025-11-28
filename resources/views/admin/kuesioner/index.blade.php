@@ -136,20 +136,20 @@
                         <tbody class="divide-y divide-gray-200 bg-white">
                             @forelse ($kuesioner as $item)
                                 <tr class="hover:bg-gray-50">
-                                    <td class="whitespace-nowrap py-3 pl-4 pr-3 sm:pl-6">
+                                    <td class="py-3 pl-4 pr-3 sm:pl-6">
                                         <div class="flex items-center">
                                             <div class="h-8 w-8 flex-shrink-0">
                                                 <div class="h-8 w-8 rounded-lg bg-blue-100 flex items-center justify-center">
                                                     <i class="{{ $item->icon }} text-blue-600 text-sm"></i>
                                                 </div>
                                             </div>
-                                            <div class="ml-3">
-                                                <div class="text-sm font-medium text-gray-900">{{ $item->judul }}</div>
+                                            <div class="ml-3 min-w-0">
+                                                <div class="text-sm font-medium text-gray-900 break-words">{{ $item->judul }}</div>
                                                 <div class="text-xs text-gray-500">{{ $item->pertanyaan->count() }} Pertanyaan</div>
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="whitespace-nowrap px-3 py-3 text-xs">
+                                    <td class="px-3 py-3 text-xs">
                                         <div class="flex flex-wrap gap-1">
                                             @foreach((array) $item->target_responden as $target)
                                                 <span class="inline-flex items-center rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-800 capitalize">
@@ -158,8 +158,8 @@
                                             @endforeach
                                         </div>
                                     </td>
-                                    <td class="whitespace-nowrap px-3 py-4 text-sm">
-                                        @if ($item->status_aktif)
+                                    <td class="px-3 py-4 text-sm">
+                                        @if ($item->is_active)
                                             <span class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
                                                 <i class="fas fa-check-circle mr-1"></i> Aktif
                                             </span>
@@ -169,26 +169,27 @@
                                             </span>
                                         @endif
                                     </td>
-                                    <td class="whitespace-nowrap px-3 py-3 text-xs text-gray-500">
-                                        <div>
-                                            {{ \Carbon\Carbon::parse($item->tanggal_mulai)->format('d M Y') }} - 
-                                            {{ \Carbon\Carbon::parse($item->tanggal_selesai)->format('d M Y') }}
+                                    <td class="px-3 py-3 text-xs text-gray-500">
+                                        <div class="flex flex-col">
+                                            <span>{{ \Carbon\Carbon::parse($item->tanggal_mulai)->format('d M Y') }}</span>
+                                            <span class="text-gray-300 text-[10px]">-</span>
+                                            <span>{{ \Carbon\Carbon::parse($item->tanggal_selesai)->format('d M Y') }}</span>
                                         </div>
                                     </td>
-                                    <td class="whitespace-nowrap px-3 py-3 text-xs text-gray-900">
+                                    <td class="px-3 py-3 text-xs text-gray-900">
                                         <div class="flex items-center">
                                             <i class="fas fa-users text-gray-400 mr-1.5 text-xs"></i>
                                             <span class="font-medium">{{ $item->responden_count }}</span>
-                                            <span class="text-gray-500 ml-1">Responden</span>
+                                            <span class="text-gray-500 ml-1 hidden sm:inline">Responden</span>
                                         </div>
                                     </td>
-                                    <td class="whitespace-nowrap px-3 py-3 text-xs text-gray-500">
+                                    <td class="px-3 py-3 text-xs text-gray-500">
                                         <div>
                                             <div class="font-medium text-gray-700">{{ $item->admin->nama ?? 'Admin' }}</div>
-                                            <div>{{ $item->created_at->format('d M Y') }}</div>
+                                            <div class="text-[10px]">{{ $item->created_at->format('d M Y') }}</div>
                                         </div>
                                     </td>
-                                    <td class="relative whitespace-nowrap py-3 pl-3 pr-4 text-right text-xs font-medium sm:pr-6">
+                                    <td class="relative py-3 pl-3 pr-4 text-right text-xs font-medium sm:pr-6">
                                         <div class="flex items-center justify-end space-x-2">
                                             <a href="{{ route('dashboard.kuesioner.show', $item) }}" class="text-gray-400 hover:text-gray-600 cursor-pointer" title="Lihat Detail">
                                                 <i class="fas fa-eye"></i>
@@ -200,13 +201,30 @@
                                             <!-- Toggle Status -->
                                             <form action="{{ route('dashboard.kuesioner.toggle-status', $item) }}" method="POST" class="inline">
                                                 @csrf
-                                                <button type="submit" class="{{ $item->status_aktif ? 'text-yellow-400 hover:text-yellow-600' : 'text-green-400 hover:text-green-600' }} cursor-pointer" title="{{ $item->status_aktif ? 'Nonaktifkan' : 'Aktifkan' }}">
-                                                    <i class="fas fa-{{ $item->status_aktif ? 'toggle-on' : 'toggle-off' }}"></i>
-                                                </button>
+                                                @if($item->is_period_valid)
+                                                    <button type="submit" class="{{ $item->status_aktif ? 'text-yellow-400 hover:text-yellow-600' : 'text-green-400 hover:text-green-600' }} cursor-pointer" title="{{ $item->status_aktif ? 'Nonaktifkan' : 'Aktifkan' }}">
+                                                        <i class="fas fa-{{ $item->status_aktif ? 'toggle-on' : 'toggle-off' }}"></i>
+                                                    </button>
+                                                @else
+                                                    @php
+                                                        $now = now();
+                                                        $start = \Carbon\Carbon::parse($item->tanggal_mulai)->startOfDay();
+                                                        $end = \Carbon\Carbon::parse($item->tanggal_selesai)->endOfDay();
+                                                        $reason = '';
+                                                        if ($now->lessThan($start)) {
+                                                            $reason = 'Periode belum dimulai (Mulai: ' . $start->format('d M Y') . ')';
+                                                        } elseif ($now->greaterThan($end)) {
+                                                            $reason = 'Periode sudah berakhir (Selesai: ' . $end->format('d M Y') . ')';
+                                                        }
+                                                    @endphp
+                                                    <button type="button" class="text-gray-300 cursor-not-allowed" title="Tidak dapat diaktifkan: {{ $reason }}">
+                                                        <i class="fas fa-toggle-off"></i>
+                                                    </button>
+                                                @endif
                                             </form>
 
                                             <!-- Delete -->
-                                            <button type="button" onclick="confirmDelete({{ $item->id }}, '{{ $item->judul }}')" class="text-red-400 hover:text-red-600 cursor-pointer" title="Hapus">
+                                            <button type="button" onclick="confirmDelete({{ $item->id }}, {{ json_encode($item->judul) }})" class="text-red-400 hover:text-red-600 cursor-pointer" title="Hapus">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </div>
@@ -311,6 +329,8 @@
                     <!-- Confirmation Question -->
                     <div class="mt-5 text-center">
                         <p class="text-base font-medium text-gray-900">Apakah Anda yakin ingin melanjutkan?</p>
+                        <p class="mt-2 text-sm text-gray-500">Ketik <span class="font-bold text-red-600">hapus kuesioner</span> di bawah ini untuk konfirmasi:</p>
+                        <input type="text" id="deleteConfirmationInput" class="mt-4 block w-full rounded-lg border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 text-lg p-3 text-center" placeholder="Ketik di sini...">
                     </div>
                 </div>
 
@@ -319,7 +339,7 @@
                     <form id="deleteForm" method="POST" class="w-full sm:w-auto">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" id="deleteButton" class="w-full sm:w-auto inline-flex justify-center items-center rounded-lg bg-red-600 px-6 py-3 text-sm font-semibold text-white shadow-lg hover:bg-red-700 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all duration-200">
+                        <button type="submit" id="deleteButton" disabled class="w-full sm:w-auto inline-flex justify-center items-center rounded-lg bg-red-600 px-6 py-3 text-sm font-semibold text-white shadow-lg hover:bg-red-700 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
                             <i class="fas fa-trash-alt mr-2" id="deleteIcon"></i>
                             <span id="deleteButtonText">Ya, Hapus Kuesioner</span>
                             <i class="fas fa-spinner fa-spin ml-2" id="deleteSpinner" style="display: none;"></i>
@@ -375,6 +395,10 @@ function confirmDelete(id, title) {
     document.getElementById('deleteTitle').textContent = title;
     document.getElementById('deleteForm').action = `/dashboard/kuesioner/${id}`;
     
+    // Reset input
+    const input = document.getElementById('deleteConfirmationInput');
+    input.value = '';
+    
     // Show modal
     const modal = document.getElementById('deleteModal');
     modal.classList.remove('hidden');
@@ -389,7 +413,10 @@ function confirmDelete(id, title) {
     buttonText.textContent = 'Ya, Hapus Kuesioner';
     spinner.style.display = 'none';
     icon.style.display = 'inline-block';
-    button.disabled = false;
+    button.disabled = true; // Initially disabled
+    
+    // Focus input
+    setTimeout(() => input.focus(), 100);
 }
 
 function closeDeleteModal() {
@@ -398,8 +425,21 @@ function closeDeleteModal() {
     document.body.classList.remove('modal-open');
 }
 
-// Handle form submission
+// Handle confirmation input
 document.addEventListener('DOMContentLoaded', function() {
+    const input = document.getElementById('deleteConfirmationInput');
+    const button = document.getElementById('deleteButton');
+    
+    if (input && button) {
+        input.addEventListener('input', function() {
+            if (this.value.toLowerCase() === 'hapus kuesioner') {
+                button.disabled = false;
+            } else {
+                button.disabled = true;
+            }
+        });
+    }
+
     const deleteForm = document.getElementById('deleteForm');
     
     if (deleteForm) {

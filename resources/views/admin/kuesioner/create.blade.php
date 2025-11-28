@@ -95,6 +95,16 @@
                                 <option value="fas fa-laptop" {{ old('icon') == 'fas fa-laptop' ? 'selected' : '' }}>💻 Laptop</option>
                                 <option value="fas fa-chart-bar" {{ old('icon') == 'fas fa-chart-bar' ? 'selected' : '' }}>📊 Chart</option>
                                 <option value="fas fa-star" {{ old('icon') == 'fas fa-star' ? 'selected' : '' }}>⭐ Star</option>
+                                <option value="fas fa-user-graduate" {{ old('icon') == 'fas fa-user-graduate' ? 'selected' : '' }}>🎓 User Graduate</option>
+                                <option value="fas fa-user-tie" {{ old('icon') == 'fas fa-user-tie' ? 'selected' : '' }}>👔 User Tie</option>
+                                <option value="fas fa-university" {{ old('icon') == 'fas fa-university' ? 'selected' : '' }}>🏛️ University</option>
+                                <option value="fas fa-building" {{ old('icon') == 'fas fa-building' ? 'selected' : '' }}>🏢 Building</option>
+                                <option value="fas fa-comments" {{ old('icon') == 'fas fa-comments' ? 'selected' : '' }}>💬 Comments</option>
+                                <option value="fas fa-check-circle" {{ old('icon') == 'fas fa-check-circle' ? 'selected' : '' }}>✅ Check Circle</option>
+                                <option value="fas fa-bullhorn" {{ old('icon') == 'fas fa-bullhorn' ? 'selected' : '' }}>📢 Bullhorn</option>
+                                <option value="fas fa-calendar-alt" {{ old('icon') == 'fas fa-calendar-alt' ? 'selected' : '' }}>📅 Calendar</option>
+                                <option value="fas fa-clock" {{ old('icon') == 'fas fa-clock' ? 'selected' : '' }}>⏰ Clock</option>
+                                <option value="fas fa-cog" {{ old('icon') == 'fas fa-cog' ? 'selected' : '' }}>⚙️ Cog</option>
                             </select>
                             @error('icon')
                                 <p class="mt-1 text-sm text-red-600">
@@ -149,30 +159,7 @@
                             @enderror
                         </div>
 
-                        <!-- Limit Responden -->
-                        <div>
-                            <label for="limit_responden" class="block text-sm font-medium text-gray-700 mb-2">
-                                Limit Responden
-                                <span class="text-gray-500 text-xs">(opsional)</span>
-                            </label>
-                            <input 
-                                type="number" 
-                                name="limit_responden" 
-                                id="limit_responden" 
-                                value="{{ old('limit_responden') }}"
-                                min="1"
-                                class="w-full px-3.5 py-2.5 border @error('limit_responden') border-red-500 @else border-gray-300 @enderror rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
-                                placeholder="Kosongkan untuk unlimited"
-                            >
-                            <p class="mt-1 text-xs text-gray-500">
-                                <i class="fas fa-info-circle mr-1"></i>Batas maksimal responden yang dapat mengisi
-                            </p>
-                            @error('limit_responden')
-                                <p class="mt-1 text-sm text-red-600">
-                                    <i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}
-                                </p>
-                            @enderror
-                        </div>
+
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
@@ -328,8 +315,8 @@ function tambahPertanyaan() {
                 </button>
             </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="md:col-span-2">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="md:col-span-3">
                     <label class="block text-sm font-medium text-gray-700 mb-2">
                         Teks Pertanyaan <span class="text-red-500">*</span>
                     </label>
@@ -342,7 +329,7 @@ function tambahPertanyaan() {
                     ></textarea>
                 </div>
                 
-                <div>
+                <div class="md:col-span-1">
                     <label class="block text-sm font-medium text-gray-700 mb-2">
                         Jenis Pertanyaan <span class="text-red-500">*</span>
                     </label>
@@ -359,20 +346,37 @@ function tambahPertanyaan() {
                     </select>
                 </div>
                 
-                <div>
+                <div class="md:col-span-2">
                     <label class="block text-sm font-medium text-gray-700 mb-2">
                         Kategori
                     </label>
-                    <input 
-                        type="text" 
-                        name="pertanyaan[${pertanyaanCount}][kategori]"
-                        class="w-full px-3.5 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        placeholder="Contoh: Layanan, Fasilitas, dll"
-                    >
+                    <div class="flex items-center gap-3">
+                        <input 
+                            type="text" 
+                            name="pertanyaan[${pertanyaanCount}][kategori]"
+                            class="flex-1 px-3.5 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            placeholder="Contoh: Layanan, Fasilitas, dll"
+                        >
+                        
+                        <div class="flex items-center flex-shrink-0">
+                            <input 
+                                type="checkbox" 
+                                name="pertanyaan[${pertanyaanCount}][wajib_diisi]"
+                                value="1"
+                                checked
+                                class="rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
+                                id="wajib_${pertanyaanCount}"
+                            >
+                            <label for="wajib_${pertanyaanCount}" class="ml-2 text-sm text-gray-700">
+                                <i class="fas fa-asterisk text-red-500 text-xs mr-1"></i>
+                                Wajib diisi
+                            </label>
+                        </div>
+                    </div>
                 </div>
                 
                 <!-- Opsi Jawaban untuk Pilihan Ganda -->
-                <div class="md:col-span-2 opsi-jawaban-container" style="display: none;">
+                <div class="md:col-span-3 opsi-jawaban-container" style="display: none;">
                     <label class="block text-sm font-medium text-gray-700 mb-2">
                         Opsi Jawaban <span class="text-red-500">*</span>
                     </label>

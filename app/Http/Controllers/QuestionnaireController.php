@@ -18,6 +18,9 @@ class QuestionnaireController extends Controller
      */
     public function index(Request $request)
     {
+        // Sync active status based on dates
+        Kuesioner::syncActiveStatus();
+
         $search = $request->query('cariSurvei', '');
         $targetFilter = $request->query('target', '');
         $today = Carbon::today()->toDateString();
@@ -45,6 +48,9 @@ class QuestionnaireController extends Controller
      */
     public function manage(Request $request)
     {
+        // Sync active status based on dates
+        Kuesioner::syncActiveStatus();
+
         $search = $request->query('cari', '');
         $statusFilter = $request->query('status', '');
         $targetFilter = $request->query('target', '');
@@ -54,7 +60,7 @@ class QuestionnaireController extends Controller
             ->when($search, function ($query, $search) {
                 $query->where(function ($q) use ($search) {
                     $q->where('judul', 'like', "%{$search}%")
-                      ->orWhere('deskripsi', 'like', "%{$search}%");
+                        ->orWhere('deskripsi', 'like', "%{$search}%");
                 });
             })
             ->when($statusFilter, function ($query, $status) {
@@ -77,7 +83,7 @@ class QuestionnaireController extends Controller
                 ->where('kuesioner_id', $kuesioner->id)
                 ->distinct('responden_id')
                 ->count('responden_id');
-            
+
             return $kuesioner;
         });
 
@@ -115,6 +121,7 @@ class QuestionnaireController extends Controller
             'pertanyaan.*.teks_pertanyaan' => 'required|string',
             'pertanyaan.*.jenis_pertanyaan' => 'required|in:likert,pilihan_ganda,isian',
             'pertanyaan.*.kategori' => 'nullable|string',
+            'pertanyaan.*.wajib_diisi' => 'nullable|boolean',
             'pertanyaan.*.opsi' => 'nullable|array|min:2',
             'pertanyaan.*.opsi.*' => 'nullable|string',
         ], [
@@ -151,14 +158,14 @@ class QuestionnaireController extends Controller
                 if ($pertanyaanData['jenis_pertanyaan'] === 'pilihan_ganda') {
                     $opsiJawaban = isset($pertanyaanData['opsi']) ? array_values(array_filter($pertanyaanData['opsi'])) : null;
                 }
-                
+
                 Pertanyaan::create([
                     'kuesioner_id' => $kuesioner->id,
                     'teks_pertanyaan' => $pertanyaanData['teks_pertanyaan'],
                     'jenis_pertanyaan' => $pertanyaanData['jenis_pertanyaan'],
                     'opsi_jawaban' => $opsiJawaban,
                     'urutan' => $index + 1,
-                    'wajib_diisi' => true,
+                    'wajib_diisi' => isset($pertanyaanData['wajib_diisi']),
                     'kategori' => $pertanyaanData['kategori'] ?? null,
                 ]);
             }
@@ -178,11 +185,14 @@ class QuestionnaireController extends Controller
     /**
      * Display the specified questionnaire.
      */
-    public function show(Kuesioner $kuesioner): View
+    public function show(Request $request, Kuesioner $kuesioner): View
     {
-        $kuesioner->load(['admin', 'pertanyaan' => function ($query) {
-            $query->orderBy('urutan');
-        }]);
+        $kuesioner->load([
+            'admin',
+            'pertanyaan' => function ($query) {
+                $query->orderBy('urutan');
+            }
+        ]);
 
         // Hitung jumlah responden
         $respondenCount = DB::table('jawaban')
@@ -190,9 +200,29 @@ class QuestionnaireController extends Controller
             ->distinct('responden_id')
             ->count('responden_id');
 
+        // Ambil data responden dengan pagination
+        $responden = DB::table('responden')
+            ->join('jawaban', 'responden.id', '=', 'jawaban.responden_id')
+            ->where('jawaban.kuesioner_id', $kuesioner->id)
+            ->select(
+                'responden.id',
+                'responden.nama',
+                'responden.npm',
+                'responden.email',
+                'responden.jenis_responden',
+                DB::raw('MIN(jawaban.created_at) as waktu_mulai'),
+                DB::raw('MAX(jawaban.created_at) as waktu_selesai'),
+                DB::raw('COUNT(jawaban.id) as jumlah_jawaban')
+            )
+            ->groupBy('responden.id', 'responden.nama', 'responden.npm', 'responden.email', 'responden.jenis_responden')
+            ->orderBy('waktu_selesai', 'desc')
+            ->paginate(10)
+            ->withQueryString();
+
         return view('admin.kuesioner.show', [
             'kuesioner' => $kuesioner,
-            'respondenCount' => $respondenCount
+            'respondenCount' => $respondenCount,
+            'responden' => $responden
         ]);
     }
 
@@ -201,9 +231,11 @@ class QuestionnaireController extends Controller
      */
     public function edit(Kuesioner $kuesioner): View
     {
-        $kuesioner->load(['pertanyaan' => function ($query) {
-            $query->orderBy('urutan');
-        }]);
+        $kuesioner->load([
+            'pertanyaan' => function ($query) {
+                $query->orderBy('urutan');
+            }
+        ]);
 
         return view('admin.kuesioner.edit', [
             'kuesioner' => $kuesioner
@@ -229,6 +261,7 @@ class QuestionnaireController extends Controller
             'pertanyaan.*.teks_pertanyaan' => 'required|string',
             'pertanyaan.*.jenis_pertanyaan' => 'required|in:likert,pilihan_ganda,isian',
             'pertanyaan.*.kategori' => 'nullable|string',
+            'pertanyaan.*.wajib_diisi' => 'nullable|boolean',
             'pertanyaan.*.opsi' => 'nullable|array|min:2',
             'pertanyaan.*.opsi.*' => 'nullable|string',
         ]);
@@ -258,7 +291,7 @@ class QuestionnaireController extends Controller
                 }
 
                 $pertanyaanId = $pertanyaanData['id'] ?? null;
-                
+
                 if ($pertanyaanId && in_array($pertanyaanId, $existingIds)) {
                     // Update existing question
                     Pertanyaan::where('id', $pertanyaanId)->update([
@@ -266,6 +299,7 @@ class QuestionnaireController extends Controller
                         'jenis_pertanyaan' => $pertanyaanData['jenis_pertanyaan'],
                         'opsi_jawaban' => $opsiJawaban,
                         'urutan' => $index + 1,
+                        'wajib_diisi' => isset($pertanyaanData['wajib_diisi']),
                         'kategori' => $pertanyaanData['kategori'] ?? null,
                     ]);
                     $submittedIds[] = $pertanyaanId;
@@ -277,7 +311,7 @@ class QuestionnaireController extends Controller
                         'jenis_pertanyaan' => $pertanyaanData['jenis_pertanyaan'],
                         'opsi_jawaban' => $opsiJawaban,
                         'urutan' => $index + 1,
-                        'wajib_diisi' => true,
+                        'wajib_diisi' => isset($pertanyaanData['wajib_diisi']),
                         'kategori' => $pertanyaanData['kategori'] ?? null,
                     ]);
                     $submittedIds[] = $newPertanyaan->id;
@@ -390,8 +424,24 @@ class QuestionnaireController extends Controller
     public function toggleStatus(Kuesioner $kuesioner): RedirectResponse
     {
         try {
+            $willActivate = !$kuesioner->status_aktif;
+
+            if ($willActivate) {
+                $now = now();
+                $start = \Carbon\Carbon::parse($kuesioner->tanggal_mulai)->startOfDay();
+                $end = \Carbon\Carbon::parse($kuesioner->tanggal_selesai)->endOfDay();
+
+                if ($now->lessThan($start)) {
+                    return back()->with('error', 'Gagal mengaktifkan: Periode kuesioner belum dimulai (Mulai: ' . $start->format('d M Y') . ').');
+                }
+
+                if ($now->greaterThan($end)) {
+                    return back()->with('error', 'Gagal mengaktifkan: Periode kuesioner sudah berakhir (Selesai: ' . $end->format('d M Y') . ').');
+                }
+            }
+
             $kuesioner->update([
-                'status_aktif' => !$kuesioner->status_aktif
+                'status_aktif' => $willActivate
             ]);
 
             $status = $kuesioner->status_aktif ? 'diaktifkan' : 'dinonaktifkan';
@@ -407,11 +457,14 @@ class QuestionnaireController extends Controller
     public function export(Request $request, Kuesioner $kuesioner)
     {
         $format = $request->query('format', 'pdf');
-        
+
         // Untuk saat ini, return view untuk print
-        $kuesioner->load(['admin', 'pertanyaan' => function ($query) {
-            $query->orderBy('urutan');
-        }]);
+        $kuesioner->load([
+            'admin',
+            'pertanyaan' => function ($query) {
+                $query->orderBy('urutan');
+            }
+        ]);
 
         return view('admin.kuesioner.export', [
             'kuesioner' => $kuesioner,

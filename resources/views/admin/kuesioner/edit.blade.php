@@ -96,6 +96,16 @@
                                 <option value="fas fa-laptop" {{ old('icon', $kuesioner->icon) == 'fas fa-laptop' ? 'selected' : '' }}>💻 Laptop</option>
                                 <option value="fas fa-chart-bar" {{ old('icon', $kuesioner->icon) == 'fas fa-chart-bar' ? 'selected' : '' }}>📊 Chart</option>
                                 <option value="fas fa-star" {{ old('icon', $kuesioner->icon) == 'fas fa-star' ? 'selected' : '' }}>⭐ Star</option>
+                                <option value="fas fa-user-graduate" {{ old('icon', $kuesioner->icon) == 'fas fa-user-graduate' ? 'selected' : '' }}>🎓 User Graduate</option>
+                                <option value="fas fa-user-tie" {{ old('icon', $kuesioner->icon) == 'fas fa-user-tie' ? 'selected' : '' }}>👔 User Tie</option>
+                                <option value="fas fa-university" {{ old('icon', $kuesioner->icon) == 'fas fa-university' ? 'selected' : '' }}>🏛️ University</option>
+                                <option value="fas fa-building" {{ old('icon', $kuesioner->icon) == 'fas fa-building' ? 'selected' : '' }}>🏢 Building</option>
+                                <option value="fas fa-comments" {{ old('icon', $kuesioner->icon) == 'fas fa-comments' ? 'selected' : '' }}>💬 Comments</option>
+                                <option value="fas fa-check-circle" {{ old('icon', $kuesioner->icon) == 'fas fa-check-circle' ? 'selected' : '' }}>✅ Check Circle</option>
+                                <option value="fas fa-bullhorn" {{ old('icon', $kuesioner->icon) == 'fas fa-bullhorn' ? 'selected' : '' }}>📢 Bullhorn</option>
+                                <option value="fas fa-calendar-alt" {{ old('icon', $kuesioner->icon) == 'fas fa-calendar-alt' ? 'selected' : '' }}>📅 Calendar</option>
+                                <option value="fas fa-clock" {{ old('icon', $kuesioner->icon) == 'fas fa-clock' ? 'selected' : '' }}>⏰ Clock</option>
+                                <option value="fas fa-cog" {{ old('icon', $kuesioner->icon) == 'fas fa-cog' ? 'selected' : '' }}>⚙️ Cog</option>
                             </select>
                             @error('icon')
                                 <p class="mt-1 text-sm text-red-600">
@@ -299,8 +309,8 @@ function tambahPertanyaan() {
                 </button>
             </div>
             
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="md:col-span-2">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="md:col-span-3">
                     <label class="block text-sm font-medium text-gray-700 mb-2">
                         Teks Pertanyaan <span class="text-red-500">*</span>
                     </label>
@@ -314,7 +324,7 @@ function tambahPertanyaan() {
                     ></textarea>
                 </div>
                 
-                <div>
+                <div class="md:col-span-1">
                     <label class="block text-sm font-medium text-gray-700 mb-2">
                         Jenis Pertanyaan <span class="text-red-500">*</span>
                     </label>
@@ -332,21 +342,38 @@ function tambahPertanyaan() {
                     </select>
                 </div>
                 
-                <div>
+                <div class="md:col-span-2">
                     <label class="block text-sm font-medium text-gray-700 mb-2">
                         Kategori
                     </label>
-                    <input 
-                        id="kategori_${pertanyaanCount}"
-                        type="text" 
-                        name="pertanyaan[${pertanyaanCount}][kategori]"
-                        class="w-full px-3.5 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        placeholder="Contoh: Layanan, Fasilitas, dll"
-                    >
+                    <div class="flex items-center gap-3">
+                        <input 
+                            id="kategori_${pertanyaanCount}"
+                            type="text" 
+                            name="pertanyaan[${pertanyaanCount}][kategori]"
+                            class="flex-1 px-3.5 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            placeholder="Contoh: Layanan, Fasilitas, dll"
+                        >
+                        
+                        <div class="flex items-center flex-shrink-0">
+                            <input 
+                                type="checkbox" 
+                                name="pertanyaan[${pertanyaanCount}][wajib_diisi]"
+                                value="1"
+                                checked
+                                class="rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
+                                id="wajib_${pertanyaanCount}"
+                            >
+                            <label for="wajib_${pertanyaanCount}" class="ml-2 text-sm text-gray-700">
+                                <i class="fas fa-asterisk text-red-500 text-xs mr-1"></i>
+                                Wajib diisi
+                            </label>
+                        </div>
+                    </div>
                 </div>
                 
                 <!-- Opsi Jawaban untuk Pilihan Ganda -->
-                <div id="opsi_container_${pertanyaanCount}" class="md:col-span-2 opsi-jawaban-container" style="display: none;">
+                <div id="opsi_container_${pertanyaanCount}" class="md:col-span-3 opsi-jawaban-container" style="display: none;">
                     <label class="block text-sm font-medium text-gray-700 mb-2">
                         Opsi Jawaban <span class="text-red-500">*</span>
                     </label>
@@ -504,16 +531,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 const tekstPertanyaan = document.getElementById(`teks_pertanyaan_${currentIndex_{{ $index }}}`);
                 const jenisPertanyaan = document.getElementById(`jenis_pertanyaan_${currentIndex_{{ $index }}}`);
                 const kategori = document.getElementById(`kategori_${currentIndex_{{ $index }}}`);
+                const wajibDiisi = document.getElementById(`wajib_${currentIndex_{{ $index }}}`);
                 
                 console.log('Elements found for index', currentIndex_{{ $index }}, ':', {
                     tekstPertanyaan: !!tekstPertanyaan,
                     jenisPertanyaan: !!jenisPertanyaan,
-                    kategori: !!kategori
+                    kategori: !!kategori,
+                    wajibDiisi: !!wajibDiisi
                 });
                 
                 if (tekstPertanyaan) tekstPertanyaan.value = `{!! str_replace(["\r\n", "\n", "\r", "'"], [' ', ' ', ' ', "\\'"], $pertanyaan->teks_pertanyaan) !!}`;
                 if (jenisPertanyaan) jenisPertanyaan.value = `{{ $pertanyaan->jenis_pertanyaan }}`;
                 if (kategori) kategori.value = `{{ $pertanyaan->kategori ?? '' }}`;
+                if (wajibDiisi) wajibDiisi.checked = {{ $pertanyaan->wajib_diisi ? 'true' : 'false' }};
                 
                 // Add hidden input for pertanyaan ID
                 const pertanyaanDiv = document.getElementById(`pertanyaan_${currentIndex_{{ $index }}}`);
@@ -526,7 +556,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 jenisPertanyaanChanged(currentIndex_{{ $index }});
                 
                 @if($pertanyaan->jenis_pertanyaan === 'pilihan_ganda' && $pertanyaan->opsi_jawaban)
-                    console.log('Loading {{ count($pertanyaan->opsi_jawaban) }} options for pilihan ganda');
+                    @php
+                        // Ensure opsi_jawaban is an array
+                        $opsiArray = is_array($pertanyaan->opsi_jawaban) 
+                            ? $pertanyaan->opsi_jawaban 
+                            : json_decode($pertanyaan->opsi_jawaban, true) ?? [];
+                    @endphp
+                    console.log('Loading {{ count($opsiArray) }} options for pilihan ganda');
                     
                     // Clear default opsi
                     const opsiList = document.querySelector(`.opsi-list[data-pertanyaan="${currentIndex_{{ $index }}}"]`);
@@ -534,7 +570,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         opsiList.innerHTML = '';
                         
                         // Add existing opsi
-                        @foreach($pertanyaan->opsi_jawaban as $opsiIndex => $opsi)
+                        @foreach($opsiArray as $opsiIndex => $opsi)
                             const opsiHTML_{{ $index }}_{{ $opsiIndex }} = `
                                 <div class="flex gap-2 opsi-item">
                                     <input 

@@ -23,23 +23,23 @@ class GeminiService
         try {
             // Prepare data summary for AI
             $summary = $this->prepareSummary($kuesioner, $analisis, $totalResponden);
-            
+
             // Create prompt for Gemini
             $prompt = $this->createAnalysisPrompt($summary);
-            
+
             Log::info('Calling Gemini API...', [
                 'url' => $this->baseUrl,
                 'has_api_key' => !empty($this->apiKey),
                 'prompt_length' => strlen($prompt)
             ]);
-            
+
             // Retry with exponential backoff
             $maxRetries = 3;
             $baseDelay = 2; // seconds
-            
+
             for ($attempt = 1; $attempt <= $maxRetries; $attempt++) {
                 Log::info("Gemini API attempt {$attempt}/{$maxRetries}");
-                
+
                 // Call Gemini API
                 $response = Http::timeout(60)
                     ->post("{$this->baseUrl}/v1/models/gemini-2.5-flash:generateContent?key={$this->apiKey}", [
@@ -59,7 +59,7 @@ class GeminiService
                     ]);
 
                 $statusCode = $response->status();
-                
+
                 Log::info('Gemini API response received', [
                     'attempt' => $attempt,
                     'status' => $statusCode,
@@ -69,11 +69,11 @@ class GeminiService
                 // Success
                 if ($response->successful()) {
                     $result = $response->json();
-                    
+
                     Log::info('Gemini API response structure', [
                         'has_candidates' => isset($result['candidates'])
                     ]);
-                    
+
                     if (isset($result['candidates'][0]['content']['parts'][0]['text'])) {
                         return [
                             'success' => true,
@@ -83,7 +83,7 @@ class GeminiService
                         Log::error('Invalid response structure from Gemini API', ['result' => $result]);
                     }
                 }
-                
+
                 // Rate limit - retry with exponential backoff
                 if ($statusCode === 429) {
                     if ($attempt < $maxRetries) {
@@ -96,20 +96,20 @@ class GeminiService
                             'attempts' => $maxRetries,
                             'response' => $response->body()
                         ]);
-                        
+
                         return [
                             'success' => false,
                             'error' => 'Terlalu banyak permintaan. Mohon tunggu 1-2 menit lalu coba lagi.'
                         ];
                     }
                 }
-                
+
                 // Other errors
                 Log::error("Gemini API request failed on attempt {$attempt}", [
                     'status' => $statusCode,
                     'body' => $response->body()
                 ]);
-                
+
                 // Retry for server errors (5xx)
                 if ($statusCode >= 500 && $attempt < $maxRetries) {
                     $waitTime = $baseDelay * $attempt;
@@ -117,7 +117,7 @@ class GeminiService
                     sleep($waitTime);
                     continue;
                 }
-                
+
                 // Don't retry for client errors (4xx except 429)
                 if ($statusCode >= 400 && $statusCode < 500 && $statusCode !== 429) {
                     break;
@@ -134,7 +134,7 @@ class GeminiService
                 'file' => $e->getFile(),
                 'line' => $e->getLine()
             ]);
-            
+
             return [
                 'success' => false,
                 'error' => 'Terjadi kesalahan saat menghubungi AI: ' . $e->getMessage()
@@ -154,7 +154,7 @@ class GeminiService
         } else {
             $target = ucfirst($target);
         }
-        
+
         $summary = [
             'judul' => $kuesioner->judul,
             'deskripsi' => $kuesioner->deskripsi,
@@ -200,7 +200,7 @@ class GeminiService
         foreach ($summary['pertanyaan'] as $p) {
             $pertanyaanText .= "\n\nPertanyaan {$p['nomor']}: {$p['teks']}\n";
             $pertanyaanText .= "Jenis: {$p['jenis']}\n";
-            
+
             if (isset($p['rata_rata'])) {
                 $pertanyaanText .= "Rata-rata skor: {$p['rata_rata']}/5.0\n";
                 $pertanyaanText .= "Distribusi:\n";
@@ -275,7 +275,7 @@ CONTOH FORMAT YANG SALAH (JANGAN GUNAKAN):
     {
         try {
             $prompt = $this->createQuestionPrompt($pertanyaan, $data);
-            
+
             $response = Http::timeout(20)
                 ->post("{$this->baseUrl}/models/gemini-1.5-flash:generateContent?key={$this->apiKey}", [
                     'contents' => [
@@ -293,7 +293,7 @@ CONTOH FORMAT YANG SALAH (JANGAN GUNAKAN):
 
             if ($response->successful()) {
                 $result = $response->json();
-                
+
                 if (isset($result['candidates'][0]['content']['parts'][0]['text'])) {
                     return $result['candidates'][0]['content']['parts'][0]['text'];
                 }
@@ -313,7 +313,7 @@ CONTOH FORMAT YANG SALAH (JANGAN GUNAKAN):
     protected function createQuestionPrompt($pertanyaan, $data)
     {
         $dataText = '';
-        
+
         if ($pertanyaan->jenis_pertanyaan === 'likert' && isset($data['rata_rata'])) {
             $dataText = "Rata-rata: {$data['rata_rata']}/5.0";
         } elseif (isset($data['distribusi'])) {

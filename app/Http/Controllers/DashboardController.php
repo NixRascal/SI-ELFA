@@ -16,15 +16,15 @@ class DashboardController extends Controller
      */
     public function index(): View
     {
+        // Sync active status based on dates
+        Kuesioner::syncActiveStatus();
+
         // Get statistics
         $totalKuesioner = Kuesioner::count();
-        $kuesionerAktif = Kuesioner::where('status_aktif', true)
-            ->where('tanggal_mulai', '<=', Carbon::today())
-            ->where('tanggal_selesai', '>=', Carbon::today())
-            ->count();
-        
+        $kuesionerAktif = Kuesioner::active()->count();
+
         $totalResponden = Responden::count();
-        
+
         // Hitung total jawaban (total butir pertanyaan yang dijawab)
         $totalJawaban = Jawaban::count();
 
@@ -41,12 +41,10 @@ class DashboardController extends Controller
                     ->where('pertanyaan.kuesioner_id', $kuesioner->id)
                     ->distinct('jawaban.responden_id')
                     ->count('jawaban.responden_id');
-                
+
                 $kuesioner->responden_count = $respondenCount;
-                $kuesioner->is_active = $kuesioner->status_aktif && 
-                    Carbon::parse($kuesioner->tanggal_mulai)->isPast() &&
-                    Carbon::parse($kuesioner->tanggal_selesai)->isFuture();
-                
+                // is_active is now handled by the model accessor
+    
                 return $kuesioner;
             });
 
@@ -84,17 +82,19 @@ class DashboardController extends Controller
         ];
 
         // Get recent respondents with their latest kuesioner
-        $recentRespondents = Responden::with(['jawaban' => function ($query) {
+        $recentRespondents = Responden::with([
+            'jawaban' => function ($query) {
                 $query->with('pertanyaan.kuesioner')->latest()->limit(1);
-            }])
+            }
+        ])
             ->latest('waktu_pengisian')
             ->take(5)
             ->get()
             ->map(function ($responden) {
                 // Get kuesioner from first jawaban's pertanyaan
                 $latestAnswer = $responden->jawaban->first();
-                $responden->kuesioner_judul = $latestAnswer && $latestAnswer->pertanyaan && $latestAnswer->pertanyaan->kuesioner 
-                    ? $latestAnswer->pertanyaan->kuesioner->judul 
+                $responden->kuesioner_judul = $latestAnswer && $latestAnswer->pertanyaan && $latestAnswer->pertanyaan->kuesioner
+                    ? $latestAnswer->pertanyaan->kuesioner->judul
                     : '-';
                 return $responden;
             });

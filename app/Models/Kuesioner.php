@@ -70,11 +70,38 @@ class Kuesioner extends Model
     }
 
     /**
+     * Get the active status based on date period and manual status.
+     */
+    public function getIsActiveAttribute(): bool
+    {
+        if (!$this->status_aktif) {
+            return false;
+        }
+
+        return $this->is_period_valid;
+    }
+
+    /**
+     * Check if the current date is within the start and end dates.
+     */
+    public function getIsPeriodValidAttribute(): bool
+    {
+        $now = now();
+        $start = \Carbon\Carbon::parse($this->tanggal_mulai)->startOfDay();
+        $end = \Carbon\Carbon::parse($this->tanggal_selesai)->endOfDay();
+
+        return $now->greaterThanOrEqualTo($start) && $now->lessThanOrEqualTo($end);
+    }
+
+    /**
      * Scope a query to only include active questionnaires.
      */
     public function scopeActive(Builder $query): Builder
     {
-        return $query->where('status_aktif', true);
+        $now = now();
+        return $query->where('status_aktif', true)
+            ->whereDate('tanggal_mulai', '<=', $now)
+            ->whereDate('tanggal_selesai', '>=', $now);
     }
 
     /**
@@ -83,7 +110,7 @@ class Kuesioner extends Model
     public function scopeCurrentPeriod(Builder $query, string $date): Builder
     {
         return $query->where('tanggal_mulai', '<=', $date)
-                    ->where('tanggal_selesai', '>=', $date);
+            ->where('tanggal_selesai', '>=', $date);
     }
 
     /**
@@ -93,7 +120,32 @@ class Kuesioner extends Model
     {
         return $query->where(function ($query) use ($search) {
             $query->where('judul', 'like', "%{$search}%")
-                  ->orWhere('deskripsi', 'like', "%{$search}%");
+                ->orWhere('deskripsi', 'like', "%{$search}%");
         });
+    }
+
+    /**
+     * Sync the active status in the database based on the current date.
+     * This ensures the status_aktif column reflects the actual period validity.
+     */
+    public static function syncActiveStatus(): void
+    {
+        $now = now();
+
+        // Set status to false if outside of period (expired or not started)
+        static::where('status_aktif', true)
+            ->where(function ($query) use ($now) {
+                $query->whereDate('tanggal_selesai', '<', $now)
+                    ->orWhereDate('tanggal_mulai', '>', $now);
+            })
+            ->update(['status_aktif' => false]);
+
+        // Set status to true if inside period (and currently false)
+        // Note: This enforces "Date rules all". If manual off is desired, this overrides it.
+        // Based on user request: "otomatis aktif jika masa periodenya aktif"
+        static::where('status_aktif', false)
+            ->whereDate('tanggal_mulai', '<=', $now)
+            ->whereDate('tanggal_selesai', '>=', $now)
+            ->update(['status_aktif' => true]);
     }
 }

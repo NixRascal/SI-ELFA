@@ -79,7 +79,7 @@
                                 <i class="fas fa-clipboard-list text-gray-700"></i>
                                 Kuesioner Terbaru
                             </h2>
-                            <a href="#" class="text-blue-600 hover:text-blue-700 font-medium text-sm flex items-center gap-1">
+                            <a href="{{ route('dashboard.kuesioner.index') }}" class="text-blue-600 hover:text-blue-700 font-medium text-sm flex items-center gap-1">
                                 Lihat Semua
                                 <i class="fas fa-arrow-right text-xs"></i>
                             </a>
@@ -88,7 +88,7 @@
                         <div class="space-y-3">
                             @forelse($recentQuestionnaires as $index => $kuesioner)
                             <!-- Kuesioner Item {{ $index + 1 }} -->
-                            <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50/50 transition-all">
+                            <a href="{{ route('dashboard.kuesioner.show', $kuesioner->id) }}" class="block bg-gray-50 p-4 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50/50 transition-all">
                                 <div class="flex items-start justify-between">
                                     <div class="flex-1">
                                         <div class="flex items-center gap-2 mb-2">
@@ -120,7 +120,7 @@
                                     </span>
                                     @endif
                                 </div>
-                            </div>
+                            </a>
                             @empty
                             <div class="text-center py-12 text-gray-500">
                                 <i class="fas fa-inbox text-3xl block mb-2 text-gray-400"></i>
@@ -218,10 +218,6 @@
                             <i class="fas fa-history text-gray-700"></i>
                             Aktivitas Terbaru
                         </h2>
-                        <a href="#" class="text-blue-600 hover:text-blue-700 font-medium text-sm flex items-center gap-1">
-                            Lihat Semua
-                            <i class="fas fa-arrow-right text-xs"></i>
-                        </a>
                     </div>
                     
                     <div class="overflow-x-auto">
