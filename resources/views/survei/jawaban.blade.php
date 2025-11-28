@@ -1,6 +1,15 @@
 @extends('layouts.app')
 @section('content')
-    <main class="mx-auto max-w-5xl px-4 py-10 relative">
+<div class="bg-gray-50 relative w-full min-h-screen flex flex-col">
+    <div class="relative isolate px-4 sm:px-6 lg:px-8 flex-1 py-12">
+        <div aria-hidden="true"
+            class="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80">
+            <div style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"
+                class="relative left-[calc(50%-11rem)] aspect-1155/678 w-[36.125rem] -translate-x-1/2 rotate-30 bg-linear-to-tr from-[#19328f] to-[#19328f] opacity-20 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]">
+            </div>
+        </div>
+
+        <main class="mx-auto max-w-4xl relative">
         {{-- Judul halaman --}}
         <header class="mb-8 text-center">
             <h1 class="text-4xl font-bold tracking-tight text-gray-900">Jawaban Survei</h1>
@@ -34,24 +43,24 @@
             @csrf
 
             @foreach ($pertanyaan as $i => $q)
-                <section class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+                <section class="rounded-2xl border border-gray-100 bg-white p-6 sm:p-8 shadow-lg hover:shadow-xl transition-shadow duration-300">
                     {{-- Header pertanyaan: nomor, kategori, wajib diisi --}}
-                    <div class="mb-3 flex flex-wrap items-center justify-between gap-3">
-                        <div class="text-sm text-gray-500">
+                    <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+                        <div class="text-sm font-semibold text-gray-500 uppercase tracking-wide">
                             Pertanyaan {{ $q->urutan ?? $i + 1 }}
                         </div>
 
                         <div class="flex items-center gap-2">
                             @if (!empty($q->kategori))
                                 <span
-                                    class="inline-flex items-center rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-700">
+                                    class="inline-flex items-center rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
                                     {{ $q->kategori }}
                                 </span>
                             @endif
 
                             @if ($q->wajib_diisi)
                                 <span
-                                    class="inline-flex items-center rounded-full bg-red-50 px-3 py-1 text-xs font-medium text-red-700">
+                                    class="inline-flex items-center rounded-full bg-red-50 px-3 py-1 text-xs font-medium text-red-700 ring-1 ring-inset ring-red-600/10">
                                     Wajib diisi
                                 </span>
                             @endif
@@ -59,7 +68,7 @@
                     </div>
 
                     {{-- Teks pertanyaan --}}
-                    <p class="mb-5 text-base font-medium text-gray-900">
+                    <p class="mb-6 text-lg font-medium text-gray-900 leading-relaxed">
                         {{ $q->teks_pertanyaan }}
                         @if ($q->wajib_diisi)
                             <span class="text-red-500">*</span>
@@ -75,12 +84,16 @@
                                     $radioId = "jawaban_{$q->id}_{$nilai}";
                                 @endphp
                                 <label for="{{ $radioId }}"
-                                    class="flex flex-col items-center gap-2 rounded-lg border border-gray-200 px-4 py-3 hover:bg-gray-50 cursor-pointer">
+                                    class="group relative flex flex-col items-center justify-center gap-2 rounded-xl border-2 border-gray-100 bg-white p-4 hover:border-blue-500 hover:bg-blue-50 cursor-pointer transition-all duration-200 has-[:checked]:border-blue-600 has-[:checked]:bg-blue-50">
                                     <input type="radio" id="{{ $radioId }}" name="jawaban[{{ $q->id }}]"
-                                        value="{{ $nilai }}" class="h-4 w-4 text-deep-sapphire-600 focus:ring-deep-sapphire-600"
+                                        value="{{ $nilai }}" class="sr-only peer"
                                         @checked(old("jawaban.{$q->id}") == $nilai) @required($q->wajib_diisi)>
-                                    <span class="text-sm font-medium text-gray-900">{{ $nilai }}</span>
-                                    <span class="text-xs text-gray-500 text-center leading-snug">
+                                    
+                                    <div class="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-sm font-bold text-gray-500 group-hover:bg-blue-200 group-hover:text-blue-700 peer-checked:bg-blue-600 peer-checked:text-white transition-colors">
+                                        {{ $nilai }}
+                                    </div>
+                                    
+                                    <span class="text-xs font-medium text-gray-500 text-center leading-snug group-hover:text-blue-700 peer-checked:text-blue-800">
                                         {{ $skalaLabel[$nilai] }}
                                     </span>
                                 </label>
@@ -106,33 +119,44 @@
                                     $radioId = "jawaban_{$q->id}_{$loop->index}";
                                 @endphp
                                 <label for="{{ $radioId }}"
-                                    class="flex items-center gap-3 rounded-lg border border-gray-200 px-4 py-3 hover:bg-gray-50 cursor-pointer">
-                                    <input type="radio" id="{{ $radioId }}" name="jawaban[{{ $q->id }}]"
-                                        value="{{ $ops }}" class="h-4 w-4 text-deep-sapphire-600 focus:ring-deep-sapphire-600"
-                                        @checked(old("jawaban.{$q->id}") == $ops) @required($q->wajib_diisi)>
-                                    <span class="text-sm text-gray-900">{{ $ops }}</span>
+                                    class="group flex items-center gap-3 rounded-xl border-2 border-gray-100 bg-white px-5 py-4 hover:border-blue-500 hover:bg-blue-50 cursor-pointer transition-all duration-200 has-[:checked]:border-blue-600 has-[:checked]:bg-blue-50">
+                                    <div class="relative flex items-center">
+                                        <input type="radio" id="{{ $radioId }}" name="jawaban[{{ $q->id }}]"
+                                            value="{{ $ops }}" class="peer h-5 w-5 border-gray-300 text-blue-600 focus:ring-blue-600"
+                                            @checked(old("jawaban.{$q->id}") == $ops) @required($q->wajib_diisi)>
+                                    </div>
+                                    <span class="text-sm font-medium text-gray-700 group-hover:text-blue-800 peer-checked:text-blue-900">{{ $ops }}</span>
                                 </label>
                             @endforeach
                         </div>
                     @else
-                        <textarea name="jawaban[{{ $q->id }}]" rows="3"
-                            class="mt-1 block w-full rounded-md border border-gray-300 bg-white px-3.5 py-2 text-base text-gray-900 placeholder:text-gray-400 focus:border-indigo-500 focus:ring-1 focus:ring-deep-sapphire-500"
-                            placeholder="Tulis jawaban Anda..." @required($q->wajib_diisi)>{{ old("jawaban.{$q->id}") }}</textarea>
+                        <textarea name="jawaban[{{ $q->id }}]" rows="4"
+                            class="block w-full rounded-xl border-2 border-gray-300 p-4 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm transition-colors resize-y"
+                            placeholder="Tulis jawaban Anda di sini..." @required($q->wajib_diisi)>{{ old("jawaban.{$q->id}") }}</textarea>
                     @endif
 
                     {{-- Error per pertanyaan --}}
                     @error("jawaban.{$q->id}")
-                        <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                        <p class="mt-2 text-sm text-red-600 flex items-center gap-1">
+                            <i class="fas fa-exclamation-circle"></i> {{ $message }}
+                        </p>
                     @enderror
                 </section>
             @endforeach
-            <div class="flex items-center justify-center">
+            <div class="flex items-center justify-center pt-6">
                 <button type="submit"
-                    class="inline-flex items-center rounded-lg bg-deep-sapphire-600 px-5 py-2.5 text-sm font-semibold text-white hover:bg-deep-sapphire-500">
-                    Kirim Jawaban
+                    class="inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-8 py-4 text-base font-semibold text-white shadow-lg hover:bg-blue-500 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+                    <span>Kirim Jawaban</span>
+                    <i class="fas fa-paper-plane"></i>
                 </button>
             </div>
         </form>
-    </main>
-    @include('layouts.footer')
+        </main>
+
+    </div>
+
+    <div class="mt-12">
+        @include('layouts.footer')
+    </div>
+</div>
 @endsection

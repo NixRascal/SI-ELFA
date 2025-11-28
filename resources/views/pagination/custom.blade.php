@@ -10,7 +10,7 @@
                         ‹
                     </span>
                 @else
-                    <a href="{{ $paginator->previousPageUrl() }}"
+                    <a href="{{ $paginator->previousPageUrl() }}#survey-section"
                         class="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 hover:bg-gray-50">
                         ‹
                     </a>
@@ -29,7 +29,7 @@
 
                 {{-- Tombol Berikutnya --}}
                 @if ($paginator->hasMorePages())
-                    <a href="{{ $paginator->nextPageUrl() }}"
+                    <a href="{{ $paginator->nextPageUrl() }}#survey-section"
                         class="inline-flex items-center rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 hover:bg-gray-50">
                         ›
                     </a>
@@ -60,7 +60,7 @@
                     <span
                         class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-300 border border-gray-300 cursor-default">‹</span>
                 @else
-                    <a href="{{ $paginator->previousPageUrl() }}"
+                    <a href="{{ $paginator->previousPageUrl() }}#survey-section"
                         class="relative inline-flex items-center rounded-l-md px-2 py-2 text-gray-400 border border-gray-300 hover:bg-gray-50">‹</a>
                 @endif
 
@@ -77,7 +77,7 @@
                                 <span aria-current="page"
                                     class="relative inline-flex items-center bg-deep-sapphire-600 px-4 py-2 text-sm font-semibold text-white">{{ $page }}</span>
                             @else
-                                <a href="{{ $url }}"
+                                <a href="{{ $url }}#survey-section"
                                     class="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-gray-900 border border-gray-300 hover:bg-gray-50">{{ $page }}</a>
                             @endif
                         @endforeach
@@ -86,7 +86,7 @@
 
                 {{-- Next --}}
                 @if ($paginator->hasMorePages())
-                    <a href="{{ $paginator->nextPageUrl() }}"
+                    <a href="{{ $paginator->nextPageUrl() }}#survey-section"
                         class="relative inline-flex items-center rounded-r-md px-2 py-2 text-gray-400 border border-gray-300 hover:bg-gray-50">›</a>
                 @else
                     <span

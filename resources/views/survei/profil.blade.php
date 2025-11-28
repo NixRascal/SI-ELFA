@@ -1,7 +1,14 @@
 @extends('layouts.app')
 @section('content')
-<div class="min-h-screen flex flex-col bg-gradient-to-br from-gray-50 to-gray-100">
-    <div class="flex-1 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+<div class="bg-gray-50 relative w-full min-h-screen flex flex-col">
+    <div class="relative isolate px-4 sm:px-6 lg:px-8 flex-1 flex items-center justify-center py-12">
+        <div aria-hidden="true"
+            class="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80">
+            <div style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"
+                class="relative left-[calc(50%-11rem)] aspect-1155/678 w-[36.125rem] -translate-x-1/2 rotate-30 bg-linear-to-tr from-[#19328f] to-[#19328f] opacity-20 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]">
+            </div>
+        </div>
+
         <div class="w-full max-w-2xl">
             <!-- Header Card -->
             <div class="text-center mb-8">
@@ -61,7 +68,7 @@
                 <div>
                     <label class="block text-sm font-semibold text-gray-900 mb-2">Jenis Responden <span class="text-red-600">*</span></label>
                     <select name="jenis_responden" id="jenis_responden"
-                        class="block w-full rounded-lg border @error('jenis_responden') border-red-500 @else border-gray-300 @enderror px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-deep-sapphire-500 focus:border-transparent transition-all">
+                        class="block w-full rounded-xl border @error('jenis_responden') border-red-500 @else border-gray-300 @enderror px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-deep-sapphire-500 focus:border-transparent transition-all shadow-sm">
                         <option value="">Pilih jenis responden</option>
                         @foreach($kuesioner->target_responden as $target)
                             <option value="{{ $target }}" @selected(old('jenis_responden', $profil['jenis_responden'] ?? '') === $target)>
@@ -77,7 +84,7 @@
                 <div>
                     <label class="block text-sm font-semibold text-gray-900 mb-2">Nama <span class="text-red-600">*</span></label>
                     <input type="text" name="nama" value="{{ old('nama', $profil['nama'] ?? '') }}"
-                        class="block w-full rounded-lg border @error('nama') border-red-500 @else border-gray-300 @enderror px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-deep-sapphire-500 focus:border-transparent transition-all"
+                        class="block w-full rounded-xl border @error('nama') border-red-500 @else border-gray-300 @enderror px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-deep-sapphire-500 focus:border-transparent transition-all shadow-sm"
                         placeholder="Masukkan nama lengkap">
                     @error('nama')
                         <p class="mt-2 text-sm text-red-600"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</p>
@@ -90,7 +97,7 @@
                         <span class="text-red-600" id="npmRequired">*</span>
                     </label>
                     <input type="text" name="npm" id="npm" value="{{ old('npm', $profil['npm'] ?? '') }}"
-                        class="block w-full rounded-lg border @error('npm') border-red-500 @else border-gray-300 @enderror px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-deep-sapphire-500 focus:border-transparent transition-all"
+                        class="block w-full rounded-xl border @error('npm') border-red-500 @else border-gray-300 @enderror px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-deep-sapphire-500 focus:border-transparent transition-all shadow-sm"
                         placeholder="Masukkan NPM/NIP">
                     @error('npm')
                         <p class="mt-2 text-sm text-red-600"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</p>
@@ -100,7 +107,7 @@
                 <div>
                     <label class="block text-sm font-semibold text-gray-900 mb-2">Email <span class="text-red-600">*</span></label>
                     <input type="email" name="email" value="{{ old('email', $profil['email'] ?? '') }}"
-                        class="block w-full rounded-lg border @error('email') border-red-500 @else border-gray-300 @enderror px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-deep-sapphire-500 focus:border-transparent transition-all"
+                        class="block w-full rounded-xl border @error('email') border-red-500 @else border-gray-300 @enderror px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-deep-sapphire-500 focus:border-transparent transition-all shadow-sm"
                         placeholder="nama@email.com">
                     @error('email')
                         <p class="mt-2 text-sm text-red-600"><i class="fas fa-exclamation-circle mr-1"></i>{{ $message }}</p>
@@ -113,7 +120,7 @@
                         <span class="text-red-600" id="fakultasRequired">*</span>
                     </label>
                     <select name="fakultas" id="fakultas"
-                        class="block w-full rounded-lg border @error('fakultas') border-red-500 @else border-gray-300 @enderror px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-deep-sapphire-500 focus:border-transparent transition-all">
+                        class="block w-full rounded-xl border @error('fakultas') border-red-500 @else border-gray-300 @enderror px-4 py-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-deep-sapphire-500 focus:border-transparent transition-all shadow-sm">
                         <option value="">Pilih fakultas</option>
                         <option value="FKIP" @selected(old('fakultas', $profil['fakultas'] ?? '') === 'FKIP')>Fakultas Keguruan dan Ilmu Pendidikan</option>
                         <option value="FH" @selected(old('fakultas', $profil['fakultas'] ?? '') === 'FH')>Fakultas Hukum</option>
@@ -136,7 +143,7 @@
                     </label>
                     <div class="relative">
                         <input type="text" name="jurusan" id="jurusan" value="{{ old('jurusan', $profil['jurusan'] ?? '') }}"
-                            class="block w-full rounded-lg border @error('jurusan') border-red-500 @else border-gray-300 @enderror px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-deep-sapphire-500 focus:border-transparent transition-all"
+                            class="block w-full rounded-xl border @error('jurusan') border-red-500 @else border-gray-300 @enderror px-4 py-3 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-deep-sapphire-500 focus:border-transparent transition-all shadow-sm"
                             placeholder="Pilih fakultas terlebih dahulu" autocomplete="off" readonly>
                         <div id="jurusanDropdown" class="hidden absolute z-50 w-full mt-2 bg-white border border-gray-300 rounded-lg shadow-xl max-h-60 overflow-auto">
                             <div class="sticky top-0 bg-white border-b border-gray-200 p-3">
@@ -158,25 +165,28 @@
 
             <div class="mt-8 pt-6 border-t border-gray-200 flex flex-col sm:flex-row gap-3 sm:justify-between">
                 <a href="{{ url('/') }}"
-                    class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 rounded-lg text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all">
+                    class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 rounded-xl text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-all shadow-sm">
                     <i class="fas fa-arrow-left mr-2"></i>
                     Kembali
                 </a>
                 <button type="submit"
-                    class="inline-flex items-center justify-center px-6 py-3 border border-transparent rounded-lg text-sm font-semibold text-white bg-deep-sapphire-600 hover:bg-deep-sapphire-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-deep-sapphire-500 transition-all shadow-sm">
-                    Lanjut ke pertanyaan
-                    <i class="fas fa-arrow-right ml-2"></i>
+                    class="inline-flex items-center justify-center gap-2 rounded-xl bg-deep-sapphire-600 px-8 py-4 text-base font-semibold text-white shadow-lg hover:bg-deep-sapphire-500 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-deep-sapphire-600">
+                    <span>Lanjut ke pertanyaan</span>
+                    <i class="fas fa-arrow-right"></i>
                 </button>
             </div>
+
 
         </form>
                 </div>
             </div>
         </div>
+
+    
     </div>
     
     <!-- Footer -->
-    <div class="w-full">
+    <div class="w-full mt-12">
         @include('layouts.footer')
     </div>
 </div>
