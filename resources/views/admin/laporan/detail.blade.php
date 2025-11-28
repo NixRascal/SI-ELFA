@@ -4,7 +4,7 @@
     <div class="px-4 sm:px-6 lg:px-8">
         <!-- Header -->
         <div class="mb-6">
-            <div class="flex items-center justify-between">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div>
                     <a href="{{ route('dashboard.laporan.index') }}"
                         class="text-sm text-gray-600 hover:text-gray-900 mb-2 inline-flex items-center">
@@ -13,24 +13,24 @@
                     <h1 class="text-2xl font-bold text-gray-900 mt-2">Detail Laporan Kuesioner</h1>
                     <p class="mt-1 text-sm text-gray-600">{{ $kuesioner->judul }}</p>
                 </div>
-                <div class="flex items-center space-x-2">
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                     <a href="{{ route('dashboard.laporan.hasil', $kuesioner->id) }}"
-                        class="inline-flex items-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700">
-                        <i class="fas fa-chart-bar mr-2"></i> Lihat Hasil Analisis
+                        class="inline-flex items-center justify-center px-4 py-2 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700">
+                        <i class="fas fa-chart-bar mr-2"></i> Lihat Hasil
                     </a>
                     <a href="{{ route('dashboard.laporan.export', $kuesioner->id) }}"
-                        class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700">
+                        class="inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700">
                         <i class="fas fa-download mr-2"></i> Export CSV
                     </a>
                     <a href="{{ route('dashboard.laporan.print', $kuesioner->id) }}" target="_blank"
-                        class="inline-flex items-center px-4 py-2 bg-gray-600 text-white text-sm font-medium rounded-md hover:bg-gray-700">
+                        class="inline-flex items-center justify-center px-4 py-2 bg-gray-600 text-white text-sm font-medium rounded-md hover:bg-gray-700">
                         <i class="fas fa-print mr-2"></i> Print
                     </a>
                 </div>
             </div>
         </div>
 
-        <!-- Kuesioner Info Card -->
+        <!-- Info Kuesioner Card -->
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-6">
             <div class="px-6 py-4 border-b border-gray-200">
                 <h2 class="text-lg font-semibold text-gray-900">Informasi Kuesioner</h2>
@@ -46,7 +46,7 @@
                         <p class="mt-1">
                             <span
                                 class="inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-gray-800 capitalize">
-                                {{ implode(', ', array_map('ucfirst', (array)$kuesioner->target_responden)) }}
+                                {{ implode(', ', array_map('ucfirst', (array) $kuesioner->target_responden)) }}
                             </span>
                         </p>
                     </div>
@@ -83,7 +83,7 @@
             </div>
         </div>
 
-        <!-- Statistics Cards -->
+        <!-- Kartu Statistik -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
             <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                 <div class="flex items-center justify-between">
@@ -114,7 +114,8 @@
                     <div>
                         <p class="text-sm font-medium text-gray-600">Total Jawaban</p>
                         <p class="mt-2 text-3xl font-bold text-gray-900">
-                            {{ $totalResponden * $kuesioner->pertanyaan->count() }}</p>
+                            {{ $totalResponden * $kuesioner->pertanyaan->count() }}
+                        </p>
                     </div>
                     <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
                         <i class="fas fa-edit text-blue-600 text-xl"></i>
@@ -128,7 +129,9 @@
             <div class="px-6 py-4 border-b border-gray-200">
                 <h2 class="text-lg font-semibold text-gray-900">Daftar Responden Terbaru</h2>
             </div>
-            <div class="overflow-hidden">
+
+            <!-- Tampilan Tabel Desktop -->(hidden on mobile) -->
+            <div class="hidden md:block overflow-hidden">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
@@ -211,6 +214,72 @@
                 <!-- Pagination -->
                 @if($responden->count() > 0)
                     <div class="px-6 py-4 border-t border-gray-200">
+                        {{ $responden->links('pagination.custom') }}
+                    </div>
+                @endif
+            </div>
+
+            <!-- Tampilan Card Mobile -->
+            <div class="md:hidden p-4 space-y-4">
+                @forelse ($responden as $index => $item)
+                    <div class="bg-gray-50 rounded-lg border border-gray-200 p-4">
+                        <!-- Header -->
+                        <div class="flex items-start gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                                <span
+                                    class="text-blue-700 font-semibold text-sm">{{ strtoupper(substr($item->nama, 0, 2)) }}</span>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <h3 class="text-sm font-semibold text-gray-900">{{ $item->nama }}</h3>
+                                <p class="text-xs text-gray-500">#{{ $responden->firstItem() + $index }}</p>
+                            </div>
+                            <span
+                                class="inline-flex items-center rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-800 capitalize flex-shrink-0">
+                                {{ $item->jenis_responden }}
+                            </span>
+                        </div>
+
+                        <!-- Details -->
+                        <div class="space-y-2 text-sm">
+                            @if($item->npm)
+                                <div class="flex items-center gap-2">
+                                    <i class="fas fa-id-card text-gray-400 w-4 text-xs"></i>
+                                    <span class="text-gray-700">NPM: {{ $item->npm }}</span>
+                                </div>
+                            @endif
+
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-envelope text-gray-400 w-4 text-xs"></i>
+                                <span class="text-gray-600 break-all">{{ $item->email }}</span>
+                            </div>
+
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-university text-gray-400 w-4 text-xs"></i>
+                                <span class="text-gray-600">{{ $item->fakultas }}</span>
+                            </div>
+
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-graduation-cap text-gray-400 w-4 text-xs"></i>
+                                <span class="text-gray-600">{{ $item->jurusan }}</span>
+                            </div>
+
+                            <div class="flex items-center gap-2">
+                                <i class="far fa-clock text-gray-400 w-4 text-xs"></i>
+                                <span
+                                    class="text-gray-500">{{ \Carbon\Carbon::parse($item->waktu_isi)->format('d M Y H:i') }}</span>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <div class="py-12 text-center text-gray-500">
+                        <i class="fas fa-inbox text-4xl text-gray-300 mb-2"></i>
+                        <p class="text-sm font-medium">Belum ada responden</p>
+                    </div>
+                @endforelse
+
+                <!-- Pagination -->
+                @if($responden->count() > 0)
+                    <div class="bg-white rounded-lg border border-gray-200 px-4 py-3">
                         {{ $responden->links('pagination.custom') }}
                     </div>
                 @endif

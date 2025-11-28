@@ -14,11 +14,11 @@ use Illuminate\Http\RedirectResponse;
 class QuestionnaireController extends Controller
 {
     /**
-     * Display a listing of active questionnaires.
+     * Tampilkan daftar kuesioner aktif.
      */
     public function index(Request $request)
     {
-        // Sync active status based on dates
+        // Sinkronisasi status aktif berdasarkan tanggal
         Kuesioner::syncActiveStatus();
 
         $search = $request->query('cariSurvei', '');
@@ -44,11 +44,11 @@ class QuestionnaireController extends Controller
     }
 
     /**
-     * Display a listing of questionnaires for admin management.
+     * Tampilkan daftar kuesioner untuk manajemen admin.
      */
     public function manage(Request $request)
     {
-        // Sync active status based on dates
+        // Sinkronisasi status aktif berdasarkan tanggal
         Kuesioner::syncActiveStatus();
 
         $search = $request->query('cari', '');
@@ -96,7 +96,7 @@ class QuestionnaireController extends Controller
     }
 
     /**
-     * Show the form for creating a new questionnaire.
+     * Tampilkan formulir untuk membuat kuesioner baru.
      */
     public function create(): View
     {
@@ -104,7 +104,7 @@ class QuestionnaireController extends Controller
     }
 
     /**
-     * Store a newly created questionnaire in storage.
+     * Simpan kuesioner yang baru dibuat ke penyimpanan.
      */
     public function store(Request $request): RedirectResponse
     {
@@ -139,7 +139,7 @@ class QuestionnaireController extends Controller
 
         DB::beginTransaction();
         try {
-            // Create questionnaire
+            // Buat kuesioner
             $kuesioner = Kuesioner::create([
                 'judul' => $validated['judul'],
                 'deskripsi' => $validated['deskripsi'],
@@ -151,9 +151,9 @@ class QuestionnaireController extends Controller
                 'dibuat_oleh' => Auth::id(),
             ]);
 
-            // Create questions
+            // Buat pertanyaan
             foreach ($validated['pertanyaan'] as $index => $pertanyaanData) {
-                // Prepare opsi_jawaban based on jenis_pertanyaan
+                // Siapkan opsi_jawaban berdasarkan jenis_pertanyaan
                 $opsiJawaban = null;
                 if ($pertanyaanData['jenis_pertanyaan'] === 'pilihan_ganda') {
                     $opsiJawaban = isset($pertanyaanData['opsi']) ? array_values(array_filter($pertanyaanData['opsi'])) : null;
@@ -183,7 +183,7 @@ class QuestionnaireController extends Controller
     }
 
     /**
-     * Display the specified questionnaire.
+     * Tampilkan kuesioner yang ditentukan.
      */
     public function show(Request $request, Kuesioner $kuesioner): View
     {
@@ -227,7 +227,7 @@ class QuestionnaireController extends Controller
     }
 
     /**
-     * Show the form for editing the specified questionnaire.
+     * Tampilkan formulir untuk mengedit kuesioner yang ditentukan.
      */
     public function edit(Kuesioner $kuesioner): View
     {
@@ -243,7 +243,7 @@ class QuestionnaireController extends Controller
     }
 
     /**
-     * Update the specified questionnaire in storage.
+     * Perbarui kuesioner yang ditentukan di penyimpanan.
      */
     public function update(Request $request, Kuesioner $kuesioner): RedirectResponse
     {
@@ -268,7 +268,7 @@ class QuestionnaireController extends Controller
 
         DB::beginTransaction();
         try {
-            // Update questionnaire
+            // Perbarui kuesioner
             $kuesioner->update([
                 'judul' => $validated['judul'],
                 'deskripsi' => $validated['deskripsi'],
@@ -279,11 +279,11 @@ class QuestionnaireController extends Controller
                 'status_aktif' => $request->boolean('status_aktif', true),
             ]);
 
-            // Get existing question IDs
+            // Dapatkan ID pertanyaan yang ada
             $existingIds = $kuesioner->pertanyaan->pluck('id')->toArray();
             $submittedIds = [];
 
-            // Update or create questions
+            // Perbarui atau buat pertanyaan
             foreach ($validated['pertanyaan'] as $index => $pertanyaanData) {
                 $opsiJawaban = null;
                 if ($pertanyaanData['jenis_pertanyaan'] === 'pilihan_ganda') {
@@ -293,7 +293,7 @@ class QuestionnaireController extends Controller
                 $pertanyaanId = $pertanyaanData['id'] ?? null;
 
                 if ($pertanyaanId && in_array($pertanyaanId, $existingIds)) {
-                    // Update existing question
+                    // Perbarui pertanyaan yang ada
                     Pertanyaan::where('id', $pertanyaanId)->update([
                         'teks_pertanyaan' => $pertanyaanData['teks_pertanyaan'],
                         'jenis_pertanyaan' => $pertanyaanData['jenis_pertanyaan'],
@@ -304,7 +304,7 @@ class QuestionnaireController extends Controller
                     ]);
                     $submittedIds[] = $pertanyaanId;
                 } else {
-                    // Create new question
+                    // Buat pertanyaan baru
                     $newPertanyaan = Pertanyaan::create([
                         'kuesioner_id' => $kuesioner->id,
                         'teks_pertanyaan' => $pertanyaanData['teks_pertanyaan'],
@@ -318,7 +318,7 @@ class QuestionnaireController extends Controller
                 }
             }
 
-            // Delete questions that were removed
+            // Hapus pertanyaan yang dihapus
             $idsToDelete = array_diff($existingIds, $submittedIds);
             if (!empty($idsToDelete)) {
                 Pertanyaan::whereIn('id', $idsToDelete)->delete();
@@ -337,14 +337,14 @@ class QuestionnaireController extends Controller
     }
 
     /**
-     * Remove the specified questionnaire from storage.
-     * Force delete with cascade - removes all related data (responses, questions)
+     * Hapus kuesioner yang ditentukan dari penyimpanan.
+     * Hapus paksa dengan cascade - menghapus semua data terkait (tanggapan, pertanyaan)
      */
     public function destroy(Kuesioner $kuesioner): RedirectResponse
     {
         DB::beginTransaction();
         try {
-            // Count responses for logging
+            // Hitung tanggapan untuk logging
             $respondenCount = DB::table('jawaban')
                 ->where('kuesioner_id', $kuesioner->id)
                 ->distinct('responden_id')
@@ -356,21 +356,21 @@ class QuestionnaireController extends Controller
 
             $pertanyaanCount = $kuesioner->pertanyaan()->count();
 
-            // FORCE DELETE - Cascade deletion
-            // 1. Delete all answers (jawaban) related to this questionnaire
+            // HAPUS PAKSA - Penghapusan cascade
+            // 1. Hapus semua jawaban yang terkait dengan kuesioner ini
             DB::table('jawaban')
                 ->where('kuesioner_id', $kuesioner->id)
                 ->delete();
 
-            // 2. Delete all questions (pertanyaan)
+            // 2. Hapus semua pertanyaan
             $kuesioner->pertanyaan()->delete();
 
-            // 3. Delete the questionnaire itself
+            // 3. Hapus kuesioner itu sendiri
             $kuesioner->delete();
 
             DB::commit();
 
-            // Success message with details
+            // Pesan sukses dengan detail
             $message = "Kuesioner '{$kuesioner->judul}' berhasil dihapus";
             if ($respondenCount > 0) {
                 $message .= " beserta {$pertanyaanCount} pertanyaan dan {$jawabanCount} jawaban dari {$respondenCount} responden";
@@ -388,20 +388,20 @@ class QuestionnaireController extends Controller
     }
 
     /**
-     * Duplicate the specified questionnaire.
+     * Duplikasi kuesioner yang ditentukan.
      */
     public function duplicate(Kuesioner $kuesioner): RedirectResponse
     {
         DB::beginTransaction();
         try {
-            // Create duplicate questionnaire
+            // Buat duplikat kuesioner
             $newKuesioner = $kuesioner->replicate();
             $newKuesioner->judul = $kuesioner->judul . ' (Copy)';
             $newKuesioner->status_aktif = false;
             $newKuesioner->dibuat_oleh = Auth::id();
             $newKuesioner->save();
 
-            // Duplicate questions
+            // Duplikasi pertanyaan
             foreach ($kuesioner->pertanyaan as $pertanyaan) {
                 $newPertanyaan = $pertanyaan->replicate();
                 $newPertanyaan->kuesioner_id = $newKuesioner->id;
@@ -419,7 +419,7 @@ class QuestionnaireController extends Controller
     }
 
     /**
-     * Toggle the status of the specified questionnaire.
+     * Ubah status kuesioner yang ditentukan.
      */
     public function toggleStatus(Kuesioner $kuesioner): RedirectResponse
     {
@@ -452,7 +452,7 @@ class QuestionnaireController extends Controller
     }
 
     /**
-     * Export questionnaire to PDF or Excel.
+     * Ekspor kuesioner ke PDF atau Excel.
      */
     public function export(Request $request, Kuesioner $kuesioner)
     {

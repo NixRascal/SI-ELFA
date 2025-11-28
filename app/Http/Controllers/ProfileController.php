@@ -10,7 +10,7 @@ use Illuminate\Validation\Rules\Password;
 class ProfileController extends Controller
 {
     /**
-     * Show profile page
+     * Tampilkan halaman profil
      */
     public function index()
     {
@@ -19,7 +19,7 @@ class ProfileController extends Controller
     }
 
     /**
-     * Update profile information
+     * Perbarui informasi profil
      */
     public function update(Request $request)
     {
@@ -37,7 +37,7 @@ class ProfileController extends Controller
     }
 
     /**
-     * Update password
+     * Perbarui password
      */
     public function updatePassword(Request $request)
     {
@@ -48,14 +48,14 @@ class ProfileController extends Controller
             'password' => ['required', 'confirmed', Password::min(8)],
         ]);
 
-        // Check current password
+        // Cek password saat ini
         if (!Hash::check($request->current_password, $admin->password)) {
             return back()->withErrors([
                 'current_password' => 'Password saat ini tidak sesuai'
             ]);
         }
 
-        // Update password
+        // Perbarui password
         $admin->update([
             'password' => Hash::make($request->password)
         ]);

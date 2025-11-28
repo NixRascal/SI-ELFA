@@ -31,7 +31,7 @@ class Kuesioner extends Model
     ];
 
     /**
-     * Get the admin who created this questionnaire.
+     * Dapatkan admin yang membuat kuesioner ini.
      */
     public function admin(): BelongsTo
     {
@@ -39,7 +39,7 @@ class Kuesioner extends Model
     }
 
     /**
-     * Get the questions for this questionnaire.
+     * Dapatkan pertanyaan untuk kuesioner ini.
      */
     public function pertanyaan(): HasMany
     {
@@ -47,7 +47,7 @@ class Kuesioner extends Model
     }
 
     /**
-     * Get unique respondents who answered questions from this questionnaire.
+     * Dapatkan responden unik yang menjawab pertanyaan dari kuesioner ini.
      */
     public function responden()
     {
@@ -57,7 +57,7 @@ class Kuesioner extends Model
     }
 
     /**
-     * Get all answers for this questionnaire through questions.
+     * Dapatkan semua jawaban untuk kuesioner ini melalui pertanyaan.
      */
     public function jawaban(): HasManyThrough
     {
@@ -70,7 +70,7 @@ class Kuesioner extends Model
     }
 
     /**
-     * Get the active status based on date period and manual status.
+     * Dapatkan status aktif berdasarkan periode tanggal dan status manual.
      */
     public function getIsActiveAttribute(): bool
     {
@@ -82,7 +82,7 @@ class Kuesioner extends Model
     }
 
     /**
-     * Check if the current date is within the start and end dates.
+     * Cek apakah tanggal saat ini berada dalam tanggal mulai dan selesai.
      */
     public function getIsPeriodValidAttribute(): bool
     {
@@ -94,7 +94,7 @@ class Kuesioner extends Model
     }
 
     /**
-     * Scope a query to only include active questionnaires.
+     * Scope query untuk hanya menyertakan kuesioner aktif.
      */
     public function scopeActive(Builder $query): Builder
     {
@@ -105,7 +105,7 @@ class Kuesioner extends Model
     }
 
     /**
-     * Scope a query to only include questionnaires in current period.
+     * Scope query untuk hanya menyertakan kuesioner dalam periode saat ini.
      */
     public function scopeCurrentPeriod(Builder $query, string $date): Builder
     {
@@ -114,7 +114,7 @@ class Kuesioner extends Model
     }
 
     /**
-     * Scope a query to search questionnaires.
+     * Scope query untuk mencari kuesioner.
      */
     public function scopeSearch(Builder $query, string $search): Builder
     {
@@ -125,14 +125,14 @@ class Kuesioner extends Model
     }
 
     /**
-     * Sync the active status in the database based on the current date.
-     * This ensures the status_aktif column reflects the actual period validity.
+     * Sinkronisasi status aktif di database berdasarkan tanggal saat ini.
+     * Ini memastikan kolom status_aktif mencerminkan validitas periode yang sebenarnya.
      */
     public static function syncActiveStatus(): void
     {
         $now = now();
 
-        // Set status to false if outside of period (expired or not started)
+        // Set status ke false jika di luar periode (kadaluarsa atau belum dimulai)
         static::where('status_aktif', true)
             ->where(function ($query) use ($now) {
                 $query->whereDate('tanggal_selesai', '<', $now)
@@ -140,9 +140,9 @@ class Kuesioner extends Model
             })
             ->update(['status_aktif' => false]);
 
-        // Set status to true if inside period (and currently false)
-        // Note: This enforces "Date rules all". If manual off is desired, this overrides it.
-        // Based on user request: "otomatis aktif jika masa periodenya aktif"
+        // Set status ke true jika di dalam periode (dan saat ini false)
+        // Catatan: Ini memaksakan "Aturan tanggal segalanya". Jika ingin dimatikan manual, ini akan menimpanya.
+        // Berdasarkan permintaan pengguna: "otomatis aktif jika masa periodenya aktif"
         static::where('status_aktif', false)
             ->whereDate('tanggal_mulai', '<=', $now)
             ->whereDate('tanggal_selesai', '>=', $now)

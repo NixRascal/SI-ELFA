@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="px-4 sm:px-6 lg:px-8">
-    <!-- Header -->
+    <!-- Header Halaman -->
     <div class="sm:flex sm:items-center sm:justify-between mb-8">
         <div>
             <h1 class="text-2xl font-bold text-gray-900">Edit Kuesioner</h1>
@@ -16,7 +16,7 @@
         </div>
     </div>
 
-    <!-- Success/Error Messages -->
+    <!-- Pesan Sukses/Error -->
     @if(session('success'))
         <div class="mb-6 rounded-lg bg-green-50 border border-green-200 p-4">
             <div class="flex">
@@ -48,7 +48,7 @@
         @method('PUT')
         
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <!-- Left Column - Form -->
+            <!-- Kolom Kiri - Form -->
             <div class="lg:col-span-2 space-y-6">
                 <!-- Informasi Dasar -->
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -130,7 +130,7 @@
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                        <!-- Target Responden - Multiple Selection -->
+                        <!-- Target Responden - Pilihan Ganda -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
                                 Target Responden <span class="text-red-500">*</span>
@@ -211,7 +211,7 @@
                         </button>
                     </div>
 
-                    <div id="daftarPertanyaan" class="space-y-4">
+                    <div id="daftarPertanyaan" class="space-y-4" data-questions="{{ $kuesioner->pertanyaan->toJson() }}">
                         <!-- Pertanyaan akan ditambahkan di sini via JavaScript -->
                     </div>
 
@@ -223,7 +223,7 @@
                 </div>
             </div>
 
-            <!-- Right Column - Preview & Tips -->
+            <!-- Kolom Kanan - Preview & Tips -->
             <div class="lg:col-span-1 space-y-6">
                 <!-- Pratinjau Ikon -->
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -265,7 +265,7 @@
                     </ul>
                 </div>
 
-                <!-- Action Buttons -->
+                <!-- Tombol Aksi -->
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                     <div class="space-y-3">
                         <button type="submit" class="w-full inline-flex items-center justify-center rounded-md bg-blue-600 px-4 py-3 text-sm font-medium text-white hover:bg-blue-700 cursor-pointer">
@@ -283,326 +283,6 @@
     </form>
 </div>
 
-<script>
-let pertanyaanCount = 0;
-
-// Preview icon
-document.getElementById('icon').addEventListener('change', function() {
-    const iconClass = this.value;
-    const preview = document.getElementById('iconPreview');
-    if (iconClass) {
-        preview.innerHTML = `<i class="${iconClass} text-blue-600"></i>`;
-    } else {
-        preview.innerHTML = '<i class="fas fa-image"></i>';
-    }
-});
-
-function tambahPertanyaan() {
-    const container = document.getElementById('daftarPertanyaan');
-    
-    const pertanyaanHTML = `
-        <div id="pertanyaan_${pertanyaanCount}" class="pertanyaan-item bg-gray-50 rounded-lg border border-gray-200 p-5" data-index="${pertanyaanCount}">
-            <div class="flex items-start justify-between mb-4">
-                <h4 class="font-semibold text-gray-900">Pertanyaan ${pertanyaanCount + 1}</h4>
-                <button type="button" onclick="hapusPertanyaan(this)" class="text-red-600 hover:text-red-800 cursor-pointer">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="md:col-span-3">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Teks Pertanyaan <span class="text-red-500">*</span>
-                    </label>
-                    <textarea 
-                        id="teks_pertanyaan_${pertanyaanCount}"
-                        name="pertanyaan[${pertanyaanCount}][teks_pertanyaan]" 
-                        rows="2"
-                        class="w-full px-3.5 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        placeholder="Masukkan pertanyaan..."
-                        required
-                    ></textarea>
-                </div>
-                
-                <div class="md:col-span-1">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Jenis Pertanyaan <span class="text-red-500">*</span>
-                    </label>
-                    <select 
-                        id="jenis_pertanyaan_${pertanyaanCount}"
-                        name="pertanyaan[${pertanyaanCount}][jenis_pertanyaan]"
-                        class="jenis-pertanyaan-select w-full px-3.5 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        onchange="jenisPertanyaanChanged(${pertanyaanCount})"
-                        required
-                    >
-                        <option value="">Pilih Jenis</option>
-                        <option value="likert">Skala Likert (1-5)</option>
-                        <option value="pilihan_ganda">Pilihan Ganda</option>
-                        <option value="isian">Isian Teks</option>
-                    </select>
-                </div>
-                
-                <div class="md:col-span-2">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Kategori
-                    </label>
-                    <div class="flex items-center gap-3">
-                        <input 
-                            id="kategori_${pertanyaanCount}"
-                            type="text" 
-                            name="pertanyaan[${pertanyaanCount}][kategori]"
-                            class="flex-1 px-3.5 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                            placeholder="Contoh: Layanan, Fasilitas, dll"
-                        >
-                        
-                        <div class="flex items-center flex-shrink-0">
-                            <input 
-                                type="checkbox" 
-                                name="pertanyaan[${pertanyaanCount}][wajib_diisi]"
-                                value="1"
-                                checked
-                                class="rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
-                                id="wajib_${pertanyaanCount}"
-                            >
-                            <label for="wajib_${pertanyaanCount}" class="ml-2 text-sm text-gray-700">
-                                <i class="fas fa-asterisk text-red-500 text-xs mr-1"></i>
-                                Wajib diisi
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Opsi Jawaban untuk Pilihan Ganda -->
-                <div id="opsi_container_${pertanyaanCount}" class="md:col-span-3 opsi-jawaban-container" style="display: none;">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Opsi Jawaban <span class="text-red-500">*</span>
-                    </label>
-                    <div class="space-y-2 opsi-list" data-pertanyaan="${pertanyaanCount}">
-                        <div class="flex gap-2 opsi-item">
-                            <input 
-                                type="text" 
-                                name="pertanyaan[${pertanyaanCount}][opsi][]"
-                                class="flex-1 px-3.5 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                placeholder="Opsi 1"
-                            >
-                            <button type="button" onclick="hapusOpsi(this)" class="px-3 py-2 text-red-600 hover:text-red-800 cursor-pointer">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                        <div class="flex gap-2 opsi-item">
-                            <input 
-                                type="text" 
-                                name="pertanyaan[${pertanyaanCount}][opsi][]"
-                                class="flex-1 px-3.5 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                placeholder="Opsi 2"
-                            >
-                            <button type="button" onclick="hapusOpsi(this)" class="px-3 py-2 text-red-600 hover:text-red-800 cursor-pointer">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <button type="button" onclick="tambahOpsi(${pertanyaanCount})" class="mt-2 text-sm text-blue-600 hover:text-blue-800 cursor-pointer">
-                        <i class="fas fa-plus-circle mr-1"></i>
-                        Tambah Opsi
-                    </button>
-                </div>
-            </div>
-        </div>
-    `;
-    
-    container.insertAdjacentHTML('beforeend', pertanyaanHTML);
-    pertanyaanCount++;
-}
-
-function hapusPertanyaan(button) {
-    if (confirm('Yakin ingin menghapus pertanyaan ini?')) {
-        button.closest('.pertanyaan-item').remove();
-        updateNomorPertanyaan();
-    }
-}
-
-function updateNomorPertanyaan() {
-    const items = document.querySelectorAll('.pertanyaan-item');
-    items.forEach((item, index) => {
-        item.querySelector('h4').textContent = `Pertanyaan ${index + 1}`;
-    });
-}
-
-function jenisPertanyaanChanged(pertanyaanIndex) {
-    const selectElement = document.getElementById(`jenis_pertanyaan_${pertanyaanIndex}`);
-    const opsiContainer = document.getElementById(`opsi_container_${pertanyaanIndex}`);
-    const opsiInputs = opsiContainer.querySelectorAll('input');
-    
-    if (selectElement.value === 'pilihan_ganda') {
-        opsiContainer.style.display = 'block';
-        // Set required untuk opsi
-        opsiInputs.forEach(input => input.required = true);
-    } else {
-        opsiContainer.style.display = 'none';
-        // Hapus required untuk opsi
-        opsiInputs.forEach(input => input.required = false);
-    }
-}
-
-function toggleOpsiJawaban(selectElement) {
-    const pertanyaanItem = selectElement.closest('.pertanyaan-item');
-    const opsiContainer = pertanyaanItem.querySelector('.opsi-jawaban-container');
-    const opsiInputs = pertanyaanItem.querySelectorAll('.opsi-jawaban-container input');
-    
-    if (selectElement.value === 'pilihan_ganda') {
-        opsiContainer.style.display = 'block';
-        // Set required untuk opsi
-        opsiInputs.forEach(input => input.required = true);
-    } else {
-        opsiContainer.style.display = 'none';
-        // Hapus required untuk opsi
-        opsiInputs.forEach(input => input.required = false);
-    }
-}
-
-function tambahOpsi(pertanyaanIndex) {
-    const opsiList = document.querySelector(`.opsi-list[data-pertanyaan="${pertanyaanIndex}"]`);
-    const opsiCount = opsiList.querySelectorAll('.opsi-item').length + 1;
-    
-    const opsiHTML = `
-        <div class="flex gap-2 opsi-item">
-            <input 
-                type="text" 
-                name="pertanyaan[${pertanyaanIndex}][opsi][]"
-                class="flex-1 px-3.5 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                placeholder="Opsi ${opsiCount}"
-                required
-            >
-            <button type="button" onclick="hapusOpsi(this)" class="px-3 py-2 text-red-600 hover:text-red-800 cursor-pointer">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-    `;
-    
-    opsiList.insertAdjacentHTML('beforeend', opsiHTML);
-}
-
-function hapusOpsi(button) {
-    const opsiList = button.closest('.opsi-list');
-    const opsiItems = opsiList.querySelectorAll('.opsi-item');
-    
-    // Minimal harus ada 2 opsi
-    if (opsiItems.length > 2) {
-        button.closest('.opsi-item').remove();
-        updateOpsiPlaceholder(opsiList);
-    } else {
-        alert('Minimal harus ada 2 opsi jawaban');
-    }
-}
-
-function updateOpsiPlaceholder(opsiList) {
-    const opsiItems = opsiList.querySelectorAll('.opsi-item');
-    opsiItems.forEach((item, index) => {
-        const input = item.querySelector('input');
-        input.placeholder = `Opsi ${index + 1}`;
-    });
-}
-
-// Tambah pertanyaan pertama secara otomatis atau load existing
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM Loaded - Starting initialization');
-    
-    // Set icon preview
-    const iconSelect = document.getElementById('icon');
-    if (iconSelect && iconSelect.value) {
-        const preview = document.getElementById('iconPreview');
-        preview.innerHTML = `<i class="${iconSelect.value} text-blue-600"></i>`;
-    }
-    
-    @if($kuesioner->pertanyaan->count() > 0)
-        console.log('Found {{ $kuesioner->pertanyaan->count() }} existing questions');
-        
-        // Load existing pertanyaan
-        @foreach($kuesioner->pertanyaan as $index => $pertanyaan)
-            console.log('Processing question {{ $index + 1 }}: {{ addslashes($pertanyaan->teks_pertanyaan) }}');
-            
-            tambahPertanyaan();
-            
-            // Set values - gunakan index yang sama dengan pertanyaanCount saat ini
-            const currentIndex_{{ $index }} = pertanyaanCount - 1;
-            console.log('Question {{ $index + 1 }} assigned to index:', currentIndex_{{ $index }});
-            
-            setTimeout(() => {
-                const tekstPertanyaan = document.getElementById(`teks_pertanyaan_${currentIndex_{{ $index }}}`);
-                const jenisPertanyaan = document.getElementById(`jenis_pertanyaan_${currentIndex_{{ $index }}}`);
-                const kategori = document.getElementById(`kategori_${currentIndex_{{ $index }}}`);
-                const wajibDiisi = document.getElementById(`wajib_${currentIndex_{{ $index }}}`);
-                
-                console.log('Elements found for index', currentIndex_{{ $index }}, ':', {
-                    tekstPertanyaan: !!tekstPertanyaan,
-                    jenisPertanyaan: !!jenisPertanyaan,
-                    kategori: !!kategori,
-                    wajibDiisi: !!wajibDiisi
-                });
-                
-                if (tekstPertanyaan) tekstPertanyaan.value = `{!! str_replace(["\r\n", "\n", "\r", "'"], [' ', ' ', ' ', "\\'"], $pertanyaan->teks_pertanyaan) !!}`;
-                if (jenisPertanyaan) jenisPertanyaan.value = `{{ $pertanyaan->jenis_pertanyaan }}`;
-                if (kategori) kategori.value = `{{ $pertanyaan->kategori ?? '' }}`;
-                if (wajibDiisi) wajibDiisi.checked = {{ $pertanyaan->wajib_diisi ? 'true' : 'false' }};
-                
-                // Add hidden input for pertanyaan ID
-                const pertanyaanDiv = document.getElementById(`pertanyaan_${currentIndex_{{ $index }}}`);
-                if (pertanyaanDiv) {
-                    pertanyaanDiv.insertAdjacentHTML('afterbegin', `<input type="hidden" name="pertanyaan[${currentIndex_{{ $index }}}][id]" value="{{ $pertanyaan->id }}">`);
-                    console.log('Added hidden ID input for question ID {{ $pertanyaan->id }}');
-                }
-                
-                // Handle jenis pertanyaan
-                jenisPertanyaanChanged(currentIndex_{{ $index }});
-                
-                @if($pertanyaan->jenis_pertanyaan === 'pilihan_ganda' && $pertanyaan->opsi_jawaban)
-                    @php
-                        // Ensure opsi_jawaban is an array
-                        $opsiArray = is_array($pertanyaan->opsi_jawaban) 
-                            ? $pertanyaan->opsi_jawaban 
-                            : json_decode($pertanyaan->opsi_jawaban, true) ?? [];
-                    @endphp
-                    console.log('Loading {{ count($opsiArray) }} options for pilihan ganda');
-                    
-                    // Clear default opsi
-                    const opsiList = document.querySelector(`.opsi-list[data-pertanyaan="${currentIndex_{{ $index }}}"]`);
-                    if (opsiList) {
-                        opsiList.innerHTML = '';
-                        
-                        // Add existing opsi
-                        @foreach($opsiArray as $opsiIndex => $opsi)
-                            const opsiHTML_{{ $index }}_{{ $opsiIndex }} = `
-                                <div class="flex gap-2 opsi-item">
-                                    <input 
-                                        type="text" 
-                                        name="pertanyaan[${currentIndex_{{ $index }}}][opsi][]"
-                                        class="flex-1 px-3.5 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                        value="{!! str_replace("'", "\\'", $opsi) !!}"
-                                        placeholder="Opsi {{ $opsiIndex + 1 }}"
-                                        required
-                                    >
-                                    <button type="button" onclick="hapusOpsi(this)" class="px-3 py-2 text-red-600 hover:text-red-800">
-                                        <i class="fas fa-times"></i>
-                                    </button>
-                                </div>
-                            `;
-                            opsiList.insertAdjacentHTML('beforeend', opsiHTML_{{ $index }}_{{ $opsiIndex }});
-                        @endforeach
-                        
-                        console.log('Loaded options for question {{ $index + 1 }}');
-                    } else {
-                        console.error('Could not find opsi-list for index', currentIndex_{{ $index }});
-                    }
-                @endif
-            }, 50 * {{ $index + 1 }});
-        @endforeach
-        
-        console.log('All questions loaded successfully');
-    @else
-        console.log('No existing questions, adding first blank question');
-        // Tambah pertanyaan pertama secara otomatis
-        tambahPertanyaan();
-    @endif
-});
-</script>
+<!-- Load Assets -->
+@vite(['resources/js/admin/kuesioner-form.js'])
 @endsection

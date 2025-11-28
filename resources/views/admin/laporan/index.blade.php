@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="px-4 sm:px-6 lg:px-8">
-    <!-- Header -->
+    <!-- Header Halaman -->
     <div class="sm:flex sm:items-center sm:justify-between mb-8">
         <div>
             <h1 class="text-2xl font-bold text-gray-900">Laporan Survei</h1>
@@ -10,7 +10,7 @@
         </div>
     </div>
 
-    <!-- Statistics Cards -->
+    <!-- Kartu Statistik -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <!-- Total Kuesioner -->
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -65,41 +65,48 @@
         </div>
     </div>
 
-    <!-- Search and Filter -->
-    <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-6 p-4">
-        <form action="{{ route('dashboard.laporan.index') }}" method="GET" class="flex flex-col md:flex-row gap-4 items-end">
-            <div class="flex-1">
-                <label for="cariSurvei" class="block text-sm font-medium text-gray-700 mb-1">Cari Kuesioner</label>
-                <div class="relative">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <i class="fas fa-search text-gray-400"></i>
-                    </div>
+    <!-- Form Pencarian dan Filter -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-6 p-4 sm:p-6">
+        <form action="{{ route('dashboard.laporan.index') }}" method="GET">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Input Pencarian -->
+                <div class="lg:col-span-1">
+                    <label for="cariSurvei" class="block text-sm font-medium text-gray-700 mb-2">Cari Kuesioner</label>
                     <input type="text" id="cariSurvei" name="cariSurvei" value="{{ request('cariSurvei') }}" 
-                        class="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:ring-1 focus:ring-blue-500 focus:border-blue-500 sm:text-sm" 
-                        placeholder="Cari judul atau deskripsi kuesioner...">
+                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm py-2.5 px-3.5" 
+                        placeholder="Cari judul atau deskripsi...">
                 </div>
-            </div>
-            <div class="w-full md:w-48">
-                <label for="target" class="block text-sm font-medium text-gray-700 mb-1">Target Responden</label>
-                <select id="target" name="target" onchange="this.form.submit()" 
-                    class="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md">
-                    <option value="">Semua Target</option>
-                    <option value="mahasiswa" {{ request('target') == 'mahasiswa' ? 'selected' : '' }}>Mahasiswa</option>
-                    <option value="dosen" {{ request('target') == 'dosen' ? 'selected' : '' }}>Dosen</option>
-                    <option value="staff" {{ request('target') == 'staff' ? 'selected' : '' }}>Staff</option>
-                    <option value="alumni" {{ request('target') == 'alumni' ? 'selected' : '' }}>Alumni</option>
-                    <option value="stakeholder" {{ request('target') == 'stakeholder' ? 'selected' : '' }}>Stakeholder</option>
-                </select>
-            </div>
-            <div class="flex items-center gap-2">
-                <button type="submit" class="px-8 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 min-w-[100px]">
-                    Cari
-                </button>
-                @if(request('cariSurvei') || request('target'))
-                    <a href="{{ route('dashboard.laporan.index') }}" class="px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                        Reset
-                    </a>
-                @endif
+
+                <!-- Filter Target Responden -->
+                <div class="lg:col-span-1">
+                    <label for="target" class="block text-sm font-medium text-gray-700 mb-2">Target Responden</label>
+                    <select id="target" name="target" 
+                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm py-2.5 px-3.5">
+                        <option value="">Semua Target</option>
+                        <option value="mahasiswa" {{ request('target') == 'mahasiswa' ? 'selected' : '' }}>Mahasiswa</option>
+                        <option value="dosen" {{ request('target') == 'dosen' ? 'selected' : '' }}>Dosen</option>
+                        <option value="staff" {{ request('target') == 'staff' ? 'selected' : '' }}>Staff</option>
+                        <option value="alumni" {{ request('target') == 'alumni' ? 'selected' : '' }}>Alumni</option>
+                        <option value="stakeholder" {{ request('target') == 'stakeholder' ? 'selected' : '' }}>Stakeholder</option>
+                    </select>
+                </div>
+
+                <!-- Group Tombol -->
+                <div class="lg:col-span-1">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">&nbsp;</label>
+                    <div class="flex gap-2">
+                        <button type="submit" class="flex-1 rounded-md bg-blue-600 px-4 py-2.5 text-sm font-semibold text-white hover:bg-blue-700 shadow-sm cursor-pointer transition-colors">
+                            <i class="fas fa-search mr-2"></i>
+                            Cari
+                        </button>
+                        @if(request('cariSurvei') || request('target'))
+                            <a href="{{ route('dashboard.laporan.index') }}" class="px-4 py-2.5 rounded-md border border-gray-300 text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 transition-colors">
+                                <i class="fas fa-redo mr-2"></i>
+                                Reset
+                            </a>
+                        @endif
+                    </div>
+                </div>
             </div>
         </form>
     </div>
@@ -110,7 +117,9 @@
             <h2 class="text-lg font-semibold text-gray-900">Laporan Per Kuesioner</h2>
             <span class="text-sm text-gray-500">Total: {{ $laporanKuesioner->total() }}</span>
         </div>
-        <div class="overflow-hidden">
+        
+        <!-- Tampilan Tabel Desktop (hidden di mobile/tablet kecil) -->
+        <div class="hidden md:block overflow-hidden">
             <div class="align-middle">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
@@ -127,10 +136,10 @@
                             <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-700 tracking-wider">
                                 Responden
                             </th>
-                            <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-700 tracking-wider hidden sm:table-cell">
+                            <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-700 tracking-wider">
                                 Pertanyaan
                             </th>
-                            <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-700 tracking-wider hidden md:table-cell">
+                            <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-700 tracking-wider">
                                 Periode
                             </th>
                             <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-700 tracking-wider">
@@ -181,17 +190,17 @@
                                     <div class="flex items-center">
                                         <i class="fas fa-users text-gray-400 mr-2"></i>
                                         <span class="font-semibold">{{ $item->responden_count }}</span>
-                                        <span class="ml-1 text-gray-500 hidden sm:inline">Responden</span>
+                                        <span class="ml-1 text-gray-500">Responden</span>
                                     </div>
                                 </td>
-                                <td class="px-3 py-4 text-sm text-gray-900 hidden sm:table-cell">
+                                <td class="px-3 py-4 text-sm text-gray-900">
                                     <div class="flex items-center">
                                         <i class="fas fa-question-circle text-gray-400 mr-2"></i>
                                         <span class="font-semibold">{{ $item->pertanyaan_count }}</span>
                                         <span class="ml-1 text-gray-500">Pertanyaan</span>
                                     </div>
                                 </td>
-                                <td class="px-3 py-4 text-xs text-gray-500 hidden md:table-cell">
+                                <td class="px-3 py-4 text-xs text-gray-500">
                                     <div class="flex flex-col">
                                         <span>{{ \Carbon\Carbon::parse($item->tanggal_mulai)->format('d M Y') }}</span>
                                         <span class="text-gray-300 text-[10px]">-</span>
@@ -232,6 +241,111 @@
                 </table>
             </div>
         </div>
+
+        <!-- Tampilan Card Mobile (hanya di mobile/tablet kecil) -->
+        <div class="md:hidden p-4 space-y-4">
+            @forelse ($laporanKuesioner as $item)
+                <div class="bg-gray-50 rounded-lg border border-gray-200 p-4">
+                    <!-- Header with Icon and Title -->
+                    <div class="flex items-start space-x-3 mb-3">
+                        <div class="h-10 w-10 flex-shrink-0">
+                            <div class="h-10 w-10 rounded-lg bg-deep-sapphire-100 flex items-center justify-center">
+                                <i class="{{ $item->icon }} text-deep-sapphire-600"></i>
+                            </div>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <h3 class="text-sm font-semibold text-gray-900 break-words">{{ $item->judul }}</h3>
+                            <p class="text-xs text-gray-500 break-words mt-1">{{ Str::limit($item->deskripsi, 60) }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Info Grid -->
+                    <div class="space-y-2 mb-3">
+                        <!-- Target -->
+                        <div class="flex items-start">
+                            <span class="text-xs text-gray-500 w-28 flex-shrink-0">Target:</span>
+                            <div class="flex flex-wrap gap-1">
+                                @php
+                                    $targetArray = is_array($item->target_responden) ? $item->target_responden : [$item->target_responden];
+                                @endphp
+                                @foreach($targetArray as $target)
+                                    <span class="inline-flex items-center rounded-full bg-gray-100 px-2 py-0.5 text-xs font-medium text-gray-800 capitalize">
+                                        {{ ucfirst($target) }}
+                                    </span>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <!-- Status -->
+                        <div class="flex items-center">
+                            <span class="text-xs text-gray-500 w-28 flex-shrink-0">Status:</span>
+                            @if ($item->status_aktif)
+                                <span class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
+                                    Aktif
+                                </span>
+                            @else
+                                <span class="inline-flex items-center rounded-full bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800">
+                                    Nonaktif
+                                </span>
+                            @endif
+                        </div>
+
+                        <!-- Responden -->
+                        <div class="flex items-center">
+                            <span class="text-xs text-gray-500 w-28 flex-shrink-0">Responden:</span>
+                            <div class="flex items-center text-xs text-gray-900">
+                                <i class="fas fa-users text-gray-400 mr-1.5"></i>
+                                <span class="font-semibold">{{ $item->responden_count }} Responden</span>
+                            </div>
+                        </div>
+
+                        <!-- Pertanyaan -->
+                        <div class="flex items-center">
+                            <span class="text-xs text-gray-500 w-28 flex-shrink-0">Pertanyaan:</span>
+                            <div class="flex items-center text-xs text-gray-900">
+                                <i class="fas fa-question-circle text-gray-400 mr-1.5"></i>
+                                <span class="font-semibold">{{ $item->pertanyaan_count }} Pertanyaan</span>
+                            </div>
+                        </div>
+
+                        <!-- Periode -->
+                        <div class="flex items-start">
+                            <span class="text-xs text-gray-500 w-28 flex-shrink-0">Periode:</span>
+                            <div class="text-xs text-gray-900">
+                                {{ \Carbon\Carbon::parse($item->tanggal_mulai)->format('d M Y') }} - {{ \Carbon\Carbon::parse($item->tanggal_selesai)->format('d M Y') }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Actions -->
+                    <div class="flex items-center justify-end space-x-3 pt-3 border-t border-gray-200">
+                        <a href="{{ route('dashboard.laporan.show', $item->id) }}" 
+                            class="text-blue-600 hover:text-blue-800" title="Lihat Detail">
+                            <i class="fas fa-eye text-lg"></i>
+                        </a>
+                        <a href="{{ route('dashboard.laporan.hasil', $item->id) }}" 
+                            class="text-green-600 hover:text-green-800" title="Lihat Hasil">
+                            <i class="fas fa-chart-bar text-lg"></i>
+                        </a>
+                        <a href="{{ route('dashboard.laporan.export', $item->id) }}" 
+                            class="text-blue-600 hover:text-blue-800" title="Export CSV">
+                            <i class="fas fa-download text-lg"></i>
+                        </a>
+                        <a href="{{ route('dashboard.laporan.print', $item->id) }}" 
+                            target="_blank" class="text-gray-600 hover:text-gray-800" title="Print">
+                            <i class="fas fa-print text-lg"></i>
+                        </a>
+                    </div>
+                </div>
+            @empty
+                <div class="bg-white rounded-lg border border-gray-200 p-8 text-center">
+                    <i class="fas fa-inbox text-4xl text-gray-300 mb-2"></i>
+                    <p class="font-medium text-gray-900">Tidak ada data laporan</p>
+                    <p class="text-xs text-gray-500 mt-1">Coba ubah filter atau kata kunci pencarian</p>
+                </div>
+            @endforelse
+        </div>
+
         <!-- Pagination -->
         @if($laporanKuesioner->hasPages())
             <div class="px-6 py-4 border-t border-gray-200">

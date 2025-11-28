@@ -5,472 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laporan - {{ $kuesioner->judul }}</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Arial, sans-serif;
-            font-size: 11px;
-            line-height: 1.6;
-            color: #1f2937;
-            padding: 15px;
-        }
-
-        /* Cover Page */
-        .cover-page {
-            text-align: center;
-            padding: 80px 40px;
-            page-break-after: always;
-            background: #FFFFFF;
-            border: 3px solid #000000;
-            color: #000000;
-            margin-bottom: 30px;
-        }
-
-        .cover-page h1 {
-            font-size: 32px;
-            margin-bottom: 20px;
-            font-weight: 700;
-            color: #000000;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
-
-        .cover-page .subtitle {
-            font-size: 20px;
-            margin-bottom: 40px;
-            color: #374151;
-            font-weight: 500;
-        }
-
-        .cover-info {
-            background: #F9FAFB;
-            padding: 25px;
-            border: 2px solid #E5E7EB;
-            margin: 40px auto;
-            max-width: 500px;
-        }
-
-        .cover-info-item {
-            margin: 15px 0;
-            font-size: 14px;
-            color: #000000;
-        }
-
-        .cover-info-label {
-            font-weight: 700;
-            display: inline-block;
-            width: 150px;
-            color: #000000;
-        }
-
-        /* Header */
-        .page-header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding: 25px;
-            background: #000000;
-            color: #FFFFFF;
-        }
-
-        .page-header h1 {
-            font-size: 22px;
-            margin-bottom: 8px;
-            font-weight: 700;
-        }
-
-        .page-header .subtitle {
-            font-size: 15px;
-            margin-bottom: 5px;
-        }
-
-        .page-header .period {
-            font-size: 12px;
-            margin-top: 8px;
-            opacity: 0.9;
-        }
-
-        /* Executive Summary */
-        .executive-summary {
-            background: #F9FAFB;
-            border-left: 4px solid #000000;
-            padding: 20px;
-            margin-bottom: 30px;
-            page-break-inside: avoid;
-        }
-
-        .executive-summary h2 {
-            color: #000000;
-            font-size: 16px;
-            margin-bottom: 15px;
-            font-weight: 700;
-        }
-
-        .summary-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-top: 15px;
-        }
-
-        .summary-item {
-            background: white;
-            padding: 12px;
-            border: 1px solid #D1D5DB;
-        }
-
-        .summary-label {
-            font-size: 10px;
-            color: #6B7280;
-            text-transform: uppercase;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-
-        .summary-value {
-            font-size: 14px;
-            font-weight: 700;
-            color: #000000;
-            margin-top: 4px;
-        }
-
-        /* Info Section */
-        .info-section {
-            margin-bottom: 25px;
-            background: #F9FAFB;
-            padding: 18px;
-            border: 1px solid #E5E7EB;
-        }
-
-        .info-section h3 {
-            font-size: 14px;
-            color: #000000;
-            margin-bottom: 12px;
-            font-weight: 700;
-            border-bottom: 2px solid #000000;
-            padding-bottom: 6px;
-        }
-
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-        }
-
-        .info-item {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .info-label {
-            font-weight: 600;
-            color: #6B7280;
-            font-size: 10px;
-            text-transform: uppercase;
-            margin-bottom: 4px;
-        }
-
-        .info-value {
-            color: #1F2937;
-            font-size: 12px;
-            font-weight: 500;
-        }
-
-        /* Statistics Cards */
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-            margin-bottom: 25px;
-        }
-
-        .stat-card {
-            background: #F9FAFB;
-            color: #000000;
-            padding: 18px 12px;
-            border: 2px solid #E5E7EB;
-            text-align: center;
-        }
-
-        .stat-card.green,
-        .stat-card.blue,
-        .stat-card.orange {
-            background: #F3F4F6;
-            border-color: #D1D5DB;
-        }
-
-        .stat-label {
-            font-size: 9px;
-            text-transform: uppercase;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            color: #6B7280;
-        }
-
-        .stat-value {
-            font-size: 28px;
-            font-weight: 700;
-            margin-top: 6px;
-            color: #000000;
-        }
-
-        .stat-subtext {
-            font-size: 9px;
-            margin-top: 4px;
-            color: #6B7280;
-        }
-
-        /* Question Section */
-        .question-section {
-            margin-bottom: 25px;
-            page-break-inside: avoid;
-            border: 1px solid #E5E7EB;
-            overflow: hidden;
-        }
-
-        .question-header {
-            background: #F3F4F6;
-            padding: 12px 18px;
-            border-bottom: 2px solid #000000;
-        }
-
-        .question-title {
-            font-weight: 700;
-            font-size: 13px;
-            margin-bottom: 6px;
-            color: #000000;
-        }
-
-        .question-text {
-            color: #374151;
-            font-size: 12px;
-            line-height: 1.5;
-        }
-
-        .question-meta {
-            display: flex;
-            gap: 8px;
-            margin-top: 8px;
-            flex-wrap: wrap;
-        }
-
-        .question-type {
-            display: inline-flex;
-            align-items: center;
-            background: #000000;
-            color: white;
-            padding: 3px 10px;
-            font-size: 9px;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        .question-category {
-            display: inline-flex;
-            align-items: center;
-            background: #6B7280;
-            color: white;
-            padding: 3px 10px;
-            font-size: 9px;
-            font-weight: 600;
-        }
-
-        .question-required {
-            display: inline-flex;
-            align-items: center;
-            background: #1F2937;
-            color: white;
-            padding: 3px 10px;
-            font-size: 9px;
-            font-weight: 600;
-        }
-
-        .question-content {
-            padding: 18px;
-            background: white;
-        }
-
-        /* Score Display */
-        .score-display {
-            background: #000000;
-            color: white;
-            padding: 15px;
-            margin-bottom: 18px;
-            text-align: center;
-        }
-
-        .score-label {
-            font-size: 11px;
-            margin-bottom: 5px;
-        }
-
-        .score-value {
-            font-size: 32px;
-            font-weight: 700;
-        }
-
-        .score-interpretation {
-            font-size: 10px;
-            margin-top: 8px;
-            font-weight: 600;
-        }
-
-        /* Bar Chart */
-        .bar-chart {
-            margin-bottom: 15px;
-        }
-
-        .bar-item {
-            margin-bottom: 10px;
-        }
-
-        .bar-label {
-            display: inline-block;
-            width: 90px;
-            font-size: 11px;
-            font-weight: 600;
-            color: #374151;
-        }
-
-        .bar-container {
-            display: inline-block;
-            width: calc(100% - 200px);
-            height: 24px;
-            background: #F3F4F6;
-            vertical-align: middle;
-            position: relative;
-            overflow: hidden;
-            border: 1px solid #D1D5DB;
-        }
-
-        .bar-fill {
-            height: 100%;
-            background: #4B5563;
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            padding-right: 8px;
-        }
-
-        .bar-fill.green {
-            background: #1F2937;
-        }
-
-        .bar-fill.red {
-            background: #6B7280;
-        }
-
-        .bar-fill.yellow {
-            background: #9CA3AF;
-        }
-
-        .bar-percentage {
-            color: white;
-            font-size: 10px;
-            font-weight: 700;
-        }
-
-        .bar-count {
-            display: inline-block;
-            width: 100px;
-            text-align: right;
-            font-size: 11px;
-            margin-left: 10px;
-            font-weight: 600;
-            color: #374151;
-        }
-
-        /* Text Answers */
-        .text-answer {
-            background: #F9FAFB;
-            padding: 10px 14px;
-            margin-bottom: 6px;
-            font-size: 11px;
-            border-left: 3px solid #000000;
-            line-height: 1.6;
-        }
-
-        .answer-count {
-            margin-top: 12px;
-            padding: 12px;
-            background: #F3F4F6;
-            border-left: 3px solid #000000;
-        }
-
-        .answer-count strong {
-            color: #000000;
-            font-size: 12px;
-        }
-
-        /* Insights Box */
-        .insights-box {
-            background: #F9FAFB;
-            border-left: 4px solid #000000;
-            padding: 12px 15px;
-            margin-top: 15px;
-            font-size: 10px;
-        }
-
-        .insights-box strong {
-            color: #000000;
-            display: block;
-            margin-bottom: 5px;
-            font-size: 11px;
-        }
-
-        /* Footer */
-        .footer {
-            margin-top: 40px;
-            padding-top: 20px;
-            border-top: 2px solid #000000;
-            text-align: center;
-            font-size: 10px;
-            color: #6B7280;
-        }
-
-        .footer p {
-            margin: 5px 0;
-        }
-
-        .footer strong {
-            color: #000000;
-        }
-
-        /* Page Break */
-        .page-break {
-            page-break-after: always;
-        }
-
-        /* Print Styles */
-        @media print {
-            body {
-                padding: 0;
-            }
-
-            .question-section,
-            .executive-summary,
-            .info-section {
-                page-break-inside: avoid;
-            }
-
-            .cover-page {
-                page-break-after: always;
-            }
-
-            @page {
-                margin: 1.5cm;
-                size: A4;
-            }
-        }
-    </style>
+    @vite(['resources/css/admin/laporan-print.css'])
 </head>
 
 <body>
-    {{-- Cover Page --}}
+    {{-- Halaman Sampul --}}
     <div class="cover-page">
         <h1>📊 LAPORAN HASIL SURVEI</h1>
         <div class="subtitle">{{ $kuesioner->judul }}</div>
@@ -490,7 +29,9 @@
             <div class="cover-info-item">
                 <span class="cover-info-label">Target Responden:</span>
                 <div style="margin-top: 5px;">
-                    {{ is_array($kuesioner->target_responden) ? implode(', ', array_map('ucfirst', $kuesioner->target_responden)) : ucfirst($kuesioner->target_responden) }}
+                    @foreach((array) $kuesioner->target_responden as $target)
+                        {{ ucfirst($target) }}{{ !$loop->last ? ', ' : '' }}
+                    @endforeach
                 </div>
             </div>
             <div class="cover-info-item" style="margin-top: 30px; font-size: 12px;">
@@ -504,7 +45,7 @@
         </div>
     </div>
 
-    {{-- Page Header --}}
+    {{-- Header Halaman --}}
     <div class="page-header">
         <h1>{{ $kuesioner->judul }}</h1>
         <div class="subtitle">Analisis Komprehensif Hasil Survei</div>
@@ -515,14 +56,14 @@
     </div>
 
     @php
-        // Calculate statistics
+        // Hitung statistik
         $likertQuestions = collect($analisis)->filter(fn($item) => $item['pertanyaan']->jenis_pertanyaan === 'likert');
         $avgScore = $likertQuestions->avg('rata_rata');
         $responseRate = $totalResponden > 0 ? 100 : 0;
         $completionRate = $totalResponden > 0 ? round(($totalResponden * $kuesioner->pertanyaan->count()) / ($totalResponden * $kuesioner->pertanyaan->count()) * 100, 1) : 0;
     @endphp
 
-    {{-- Executive Summary --}}
+    {{-- Ringkasan Eksekutif --}}
     <div class="executive-summary">
         <h2>📋 Ringkasan Eksekutif</h2>
         <p style="color: #374151; margin-bottom: 10px;">
@@ -550,7 +91,9 @@
             <div class="summary-item">
                 <div class="summary-label">Target Responden</div>
                 <div class="summary-value">
-                    {{ is_array($kuesioner->target_responden) ? implode(', ', array_map('ucfirst', $kuesioner->target_responden)) : ucfirst($kuesioner->target_responden) }}
+                    @foreach((array) $kuesioner->target_responden as $target)
+                        {{ ucfirst($target) }}{{ !$loop->last ? ', ' : '' }}
+                    @endforeach
                 </div>
             </div>
             <div class="summary-item">
@@ -564,7 +107,7 @@
         </div>
     </div>
 
-    {{-- Information Section --}}
+    {{-- Bagian Informasi --}}
     <div class="info-section">
         <h3>ℹ️ Informasi Survei</h3>
         <div class="info-grid">
@@ -574,8 +117,11 @@
             </div>
             <div class="info-item">
                 <span class="info-label">Target Responden</span>
-                <span
-                    class="info-value">{{ is_array($kuesioner->target_responden) ? implode(', ', array_map('ucfirst', $kuesioner->target_responden)) : ucfirst($kuesioner->target_responden) }}</span>
+                <span class="info-value">
+                    @foreach((array) $kuesioner->target_responden as $target)
+                        {{ ucfirst($target) }}{{ !$loop->last ? ', ' : '' }}
+                    @endforeach
+                </span>
             </div>
             <div class="info-item">
                 <span class="info-label">Tanggal Mulai</span>
@@ -595,7 +141,7 @@
         </div>
     </div>
 
-    {{-- Statistics Cards --}}
+    {{-- Kartu Statistik --}}
     <div class="stats">
         <div class="stat-card">
             <div class="stat-label">👥 Total Responden</div>
@@ -621,7 +167,7 @@
 
     <div style="page-break-before: always;"></div>
 
-    {{-- Questions Analysis --}}
+    {{-- Analisis Pertanyaan --}}
     <h2
         style="margin-bottom: 20px; font-size: 18px; color: #111827; border-bottom: 3px solid #667eea; padding-bottom: 12px; font-weight: 700;">
         📊 Analisis Hasil Per Pertanyaan
@@ -655,7 +201,7 @@
 
             <div class="question-content">
                 @if($item['pertanyaan']->jenis_pertanyaan === 'likert')
-                    {{-- Likert Scale Analysis --}}
+                    {{-- Analisis Skala Likert --}}
                     @php
                         $score = $item['rata_rata'];
                         $interpretation = '';
@@ -736,7 +282,7 @@
                     </div>
 
                 @elseif($item['pertanyaan']->jenis_pertanyaan === 'pilihan_ganda')
-                    {{-- Multiple Choice Analysis --}}
+                    {{-- Analisis Pilihan Ganda --}}
                     @php
                         $distribusiPG = collect($item['distribusi'] ?? []);
                         $mostChosen = $distribusiPG->sortByDesc('count')->first();
@@ -780,7 +326,7 @@
                     @endif
 
                 @elseif($item['pertanyaan']->jenis_pertanyaan === 'isian')
-                    {{-- Text Answers --}}
+                    {{-- Jawaban Teks --}}
                     @php
                         $jawabanText = $item['jawaban_text'] ?? collect([]);
                         $jawabanCount = $jawabanText->count();

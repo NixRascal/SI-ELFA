@@ -25,7 +25,7 @@ class Responden extends Model
     ];
 
     /**
-     * Get the answers for this respondent.
+     * Dapatkan jawaban untuk responden ini.
      */
     public function jawaban(): HasMany
     {
@@ -46,7 +46,7 @@ class Responden extends Model
     }
 
     /**
-     * Get daftar ID kuesioner yang sudah diisi oleh responden
+     * Dapatkan daftar ID kuesioner yang sudah diisi oleh responden
      * 
      * @return array
      */

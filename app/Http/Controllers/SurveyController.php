@@ -14,7 +14,7 @@ use Illuminate\View\View;
 class SurveyController extends Controller
 {
     /**
-     * Display the respondent profile form.
+     * Tampilkan formulir profil responden.
      */
     public function showProfileForm(Kuesioner $questionnaire): View|RedirectResponse
     {
@@ -32,7 +32,7 @@ class SurveyController extends Controller
     }
 
     /**
-     * Store the respondent profile in session.
+     * Simpan profil responden dalam sesi.
      */
     public function storeProfile(
         StoreRespondentProfileRequest $request,
@@ -70,7 +70,7 @@ class SurveyController extends Controller
     }
 
     /**
-     * Display the survey questions form.
+     * Tampilkan formulir pertanyaan survei.
      */
     public function showQuestions(Kuesioner $questionnaire): View|RedirectResponse
     {
@@ -105,7 +105,7 @@ class SurveyController extends Controller
     }
 
     /**
-     * Store the survey answers.
+     * Simpan jawaban survei.
      */
     public function storeAnswers(
         StoreSurveyAnswerRequest $request,
@@ -138,7 +138,7 @@ class SurveyController extends Controller
                 ->with('error', 'Anda sudah mengisi kuesioner ini sebelumnya.');
         }
 
-        // Create or use existing respondent
+        // Buat atau gunakan responden yang ada
         $respondent = $existingResponden ?? Responden::create([
             'nama' => $profile['nama'],
             'npm' => $profile['npm'] ?? null,
@@ -150,7 +150,7 @@ class SurveyController extends Controller
             'waktu_pengisian' => now(),
         ]);
 
-        // Store answers with kuesioner_id
+        // Simpan jawaban dengan kuesioner_id
         $answers = $request->validated()['jawaban'] ?? [];
 
         foreach ($answers as $questionId => $answer) {
@@ -163,7 +163,7 @@ class SurveyController extends Controller
             ]);
         }
 
-        // Clear session
+        // Hapus sesi
         session()->forget("survey.{$questionnaire->id}.profile");
 
         return redirect()
@@ -172,7 +172,7 @@ class SurveyController extends Controller
     }
 
     /**
-     * Display the completion page.
+     * Tampilkan halaman penyelesaian.
      */
     public function complete(Kuesioner $questionnaire): View
     {

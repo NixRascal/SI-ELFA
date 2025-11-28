@@ -17,11 +17,11 @@ use Carbon\Carbon;
 class ReportController extends Controller
 {
     /**
-     * Display survey reports.
+     * Tampilkan laporan survei.
      */
     public function index(Request $request): View
     {
-        // Statistics
+        // Statistik
         $totalKuesioner = Kuesioner::count();
         $totalResponden = Responden::count();
 
@@ -34,16 +34,16 @@ class ReportController extends Controller
             ->whereDate('tanggal_selesai', '>=', now())
             ->count();
 
-        // Parameters
+        // Parameter
         $search = $request->query('cariSurvei', '');
         $targetFilter = $request->query('target', '');
 
-        // Subquery for respondent count
+        // Subquery untuk jumlah responden
         $respondenCountSubquery = DB::table('jawaban')
             ->select('kuesioner_id', DB::raw('count(distinct responden_id) as responden_count'))
             ->groupBy('kuesioner_id');
 
-        // Laporan per kuesioner with pagination and filtering
+        // Laporan per kuesioner dengan pagination dan filtering
         $laporanKuesioner = Kuesioner::with(['admin'])
             ->withCount('pertanyaan')
             ->leftJoinSub($respondenCountSubquery, 'responden_counts', function ($join) {
@@ -85,13 +85,13 @@ class ReportController extends Controller
     }
 
     /**
-     * Show detail report for specific questionnaire.
+     * Tampilkan laporan detail untuk kuesioner tertentu.
      */
     public function show(Request $request, $id): View
     {
         $kuesioner = Kuesioner::with(['admin', 'pertanyaan'])->findOrFail($id);
 
-        // Get all respondents for this questionnaire with pagination
+        // Dapatkan semua responden untuk kuesioner ini dengan pagination
         $responden = DB::table('jawaban')
             ->join('responden', 'jawaban.responden_id', '=', 'responden.id')
             ->where('jawaban.kuesioner_id', $id)
@@ -122,7 +122,7 @@ class ReportController extends Controller
             ->paginate(10)
             ->withQueryString();
 
-        // Get total count for statistics
+        // Dapatkan jumlah total untuk statistik
         $totalResponden = DB::table('jawaban')
             ->where('kuesioner_id', $id)
             ->distinct('responden_id')
@@ -132,19 +132,19 @@ class ReportController extends Controller
     }
 
     /**
-     * Show analysis/results for specific questionnaire.
+     * Tampilkan analisis/hasil untuk kuesioner tertentu.
      */
     public function hasil(Request $request, $id): View
     {
         $kuesioner = Kuesioner::with(['pertanyaan'])->findOrFail($id);
 
-        // Get total respondents
+        // Dapatkan total responden
         $totalResponden = DB::table('jawaban')
             ->where('kuesioner_id', $id)
             ->distinct('responden_id')
             ->count('responden_id');
 
-        // Analyze answers for each question
+        // Analisis jawaban untuk setiap pertanyaan
         $analisis = $kuesioner->pertanyaan->map(function ($pertanyaan) use ($totalResponden) {
             $jawaban = Jawaban::where('pertanyaan_id', $pertanyaan->id)->get();
 
@@ -154,11 +154,11 @@ class ReportController extends Controller
             ];
 
             if ($pertanyaan->jenis_pertanyaan === 'likert') {
-                // Calculate average for Likert scale
+                // Hitung rata-rata untuk skala Likert
                 $total = $jawaban->sum('nilai_likert');
                 $hasil['rata_rata'] = $jawaban->count() > 0 ? round($total / $jawaban->count(), 2) : 0;
 
-                // Distribution of Likert values
+                // Distribusi nilai Likert
                 $distribusi = $jawaban->groupBy('nilai_likert')->map(function ($group) use ($totalResponden) {
                     return [
                         'count' => $group->count(),
@@ -168,7 +168,7 @@ class ReportController extends Controller
                 $hasil['distribusi'] = $distribusi;
 
             } elseif ($pertanyaan->jenis_pertanyaan === 'pilihan_ganda') {
-                // Count for each option using isi_jawaban
+                // Hitung untuk setiap opsi menggunakan isi_jawaban
                 $distribusi = $jawaban->groupBy('isi_jawaban')->map(function ($group) use ($totalResponden) {
                     return [
                         'count' => $group->count(),
@@ -178,7 +178,7 @@ class ReportController extends Controller
                 $hasil['distribusi'] = $distribusi;
 
             } elseif ($pertanyaan->jenis_pertanyaan === 'isian') {
-                // Get all text answers using isi_jawaban
+                // Dapatkan semua jawaban teks menggunakan isi_jawaban
                 $hasil['jawaban_text'] = $jawaban->pluck('isi_jawaban')->filter()->values();
             }
 
@@ -208,7 +208,7 @@ class ReportController extends Controller
     }
 
     /**
-     * Export report to CSV.
+     * Ekspor laporan ke CSV.
      */
     public function export($id)
     {
@@ -218,7 +218,7 @@ class ReportController extends Controller
             }
         ])->findOrFail($id);
 
-        // Get all respondents for this questionnaire
+        // Dapatkan semua responden untuk kuesioner ini
         $responden = DB::table('jawaban')
             ->join('responden', 'jawaban.responden_id', '=', 'responden.id')
             ->where('jawaban.kuesioner_id', $id)
@@ -244,7 +244,7 @@ class ReportController extends Controller
             ->orderBy('responden.id')
             ->get();
 
-        // Get all answers grouped by respondent
+        // Dapatkan semua jawaban dikelompokkan berdasarkan responden
         $jawabanGrouped = DB::table('jawaban')
             ->join('pertanyaan', 'jawaban.pertanyaan_id', '=', 'pertanyaan.id')
             ->where('jawaban.kuesioner_id', $id)
@@ -269,10 +269,10 @@ class ReportController extends Controller
         $callback = function () use ($responden, $kuesioner, $jawabanGrouped) {
             $file = fopen('php://output', 'w');
 
-            // Add BOM for UTF-8
+            // Tambahkan BOM untuk UTF-8
             fprintf($file, chr(0xEF) . chr(0xBB) . chr(0xBF));
 
-            // Build header row
+            // Buat baris header
             $headerRow = [
                 'Nama',
                 'Email',
@@ -283,14 +283,14 @@ class ReportController extends Controller
                 'Waktu Isi'
             ];
 
-            // Add each question as a column
+            // Tambahkan setiap pertanyaan sebagai kolom
             foreach ($kuesioner->pertanyaan as $pertanyaan) {
                 $headerRow[] = 'P' . $pertanyaan->urutan . ': ' . $pertanyaan->teks_pertanyaan;
             }
 
             fputcsv($file, $headerRow);
 
-            // Data rows - each respondent is one row
+            // Baris data - setiap responden adalah satu baris
             foreach ($responden as $r) {
                 $row = [
                     $r->nama,
@@ -302,19 +302,19 @@ class ReportController extends Controller
                     Carbon::parse($r->waktu_isi)->format('Y-m-d H:i:s')
                 ];
 
-                // Get answers for this respondent
+                // Dapatkan jawaban untuk responden ini
                 $jawaban = $jawabanGrouped->get($r->id, collect());
 
-                // Add answer for each question
+                // Tambahkan jawaban untuk setiap pertanyaan
                 foreach ($kuesioner->pertanyaan as $pertanyaan) {
                     $answer = $jawaban->firstWhere('pertanyaan_id', $pertanyaan->id);
 
                     if ($answer) {
-                        // For Likert, show numeric value
+                        // Untuk Likert, tampilkan nilai numerik
                         if ($pertanyaan->jenis_pertanyaan === 'likert' && $answer->nilai_likert) {
                             $row[] = $answer->nilai_likert;
                         } else {
-                            // For other types, show text answer
+                            // Untuk tipe lain, tampilkan jawaban teks
                             $row[] = $answer->isi_jawaban ?: '-';
                         }
                     } else {
@@ -332,7 +332,7 @@ class ReportController extends Controller
     }
 
     /**
-     * Print report.
+     * Cetak laporan.
      */
     public function print($id): View
     {
@@ -366,7 +366,7 @@ class ReportController extends Controller
                 $hasil['distribusi'] = $distribusi;
 
             } elseif ($pertanyaan->jenis_pertanyaan === 'pilihan_ganda') {
-                // Use isi_jawaban for multiple choice
+                // Gunakan isi_jawaban untuk pilihan ganda
                 $distribusi = $jawaban->groupBy('isi_jawaban')->map(function ($group) use ($totalResponden) {
                     return [
                         'count' => $group->count(),
@@ -386,7 +386,7 @@ class ReportController extends Controller
     }
 
     /**
-     * Generate AI analysis for survey results
+     * Hasilkan analisis AI untuk hasil survei
      */
     public function aiAnalysis($id, GeminiService $gemini): JsonResponse
     {
@@ -443,7 +443,7 @@ class ReportController extends Controller
 
             \Log::info('Analysis data prepared, calling Gemini API...');
 
-            // Get AI analysis
+            // Dapatkan analisis AI
             $result = $gemini->analyzeSurveyResults($kuesioner, $analisis, $totalResponden);
 
             \Log::info('Gemini API response received', ['success' => $result['success']]);
@@ -456,7 +456,7 @@ class ReportController extends Controller
             } else {
                 \Log::error('Gemini API error: ' . $result['error']);
 
-                // Check if it's a rate limit error
+                // Cek apakah ini error rate limit
                 if (strpos($result['error'], 'Terlalu banyak permintaan') !== false) {
                     return response()->json([
                         'success' => false,

@@ -12,14 +12,14 @@ use Illuminate\View\View;
 class DashboardController extends Controller
 {
     /**
-     * Display the admin dashboard.
+     * Tampilkan dashboard admin.
      */
     public function index(): View
     {
-        // Sync active status based on dates
+        // Sinkronisasi status aktif berdasarkan tanggal
         Kuesioner::syncActiveStatus();
 
-        // Get statistics
+        // Dapatkan statistik
         $totalKuesioner = Kuesioner::count();
         $kuesionerAktif = Kuesioner::active()->count();
 
@@ -28,14 +28,14 @@ class DashboardController extends Controller
         // Hitung total jawaban (total butir pertanyaan yang dijawab)
         $totalJawaban = Jawaban::count();
 
-        // Get recent questionnaires (3 latest) with responden count
+        // Dapatkan kuesioner terbaru (3 terakhir) dengan jumlah responden
         $recentQuestionnaires = Kuesioner::with('admin')
             ->withCount('pertanyaan')
             ->latest()
             ->take(3)
             ->get()
             ->map(function ($kuesioner) {
-                // Count unique responden untuk kuesioner ini
+                // Hitung responden unik untuk kuesioner ini
                 $respondenCount = DB::table('jawaban')
                     ->join('pertanyaan', 'jawaban.pertanyaan_id', '=', 'pertanyaan.id')
                     ->where('pertanyaan.kuesioner_id', $kuesioner->id)
@@ -43,12 +43,12 @@ class DashboardController extends Controller
                     ->count('jawaban.responden_id');
 
                 $kuesioner->responden_count = $respondenCount;
-                // is_active is now handled by the model accessor
+                // is_active sekarang ditangani oleh accessor model
     
                 return $kuesioner;
             });
 
-        // Get respondent distribution
+        // Dapatkan distribusi responden
         $respondenDistribution = Responden::select('jenis_responden', DB::raw('count(*) as total'))
             ->groupBy('jenis_responden')
             ->get()
@@ -56,7 +56,7 @@ class DashboardController extends Controller
                 return [$item->jenis_responden => $item->total];
             });
 
-        // Calculate percentages
+        // Hitung persentase
         $totalRespondenForDistribution = $totalResponden > 0 ? $totalResponden : 1;
         $respondenStats = [
             'mahasiswa' => [
@@ -81,7 +81,7 @@ class DashboardController extends Controller
             ]
         ];
 
-        // Get recent respondents with their latest kuesioner
+        // Dapatkan responden terbaru dengan kuesioner terakhir mereka
         $recentRespondents = Responden::with([
             'jawaban' => function ($query) {
                 $query->with('pertanyaan.kuesioner')->latest()->limit(1);
@@ -91,7 +91,7 @@ class DashboardController extends Controller
             ->take(5)
             ->get()
             ->map(function ($responden) {
-                // Get kuesioner from first jawaban's pertanyaan
+                // Dapatkan kuesioner dari pertanyaan jawaban pertama
                 $latestAnswer = $responden->jawaban->first();
                 $responden->kuesioner_judul = $latestAnswer && $latestAnswer->pertanyaan && $latestAnswer->pertanyaan->kuesioner
                     ? $latestAnswer->pertanyaan->kuesioner->judul

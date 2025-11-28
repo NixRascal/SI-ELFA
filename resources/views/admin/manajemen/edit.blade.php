@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="px-4 sm:px-6 lg:px-8">
-    <!-- Header -->
+    <!-- Header Halaman -->
     <div class="mb-8">
         <div class="flex items-center mb-4">
             <a href="{{ route('dashboard.admin.index') }}" class="text-gray-600 hover:text-gray-900 mr-4">
@@ -65,7 +65,7 @@
                 @enderror
             </div>
 
-            <!-- Divider -->
+            <!-- Pembatas -->
             <div class="my-6 border-t border-gray-200 pt-6">
                 <p class="text-sm text-gray-600 mb-4">
                     <i class="fas fa-info-circle mr-1"></i>
@@ -92,7 +92,7 @@
                 @enderror
             </div>
 
-            <!-- Password Confirmation -->
+            <!-- Konfirmasi Password -->
             <div class="mb-6">
                 <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-2">
                     Konfirmasi Password Baru
@@ -106,7 +106,7 @@
                 >
             </div>
 
-            <!-- Buttons -->
+            <!-- Tombol Aksi -->
             <div class="flex items-center justify-end space-x-3 pt-4 border-t border-gray-200">
                 <a href="{{ route('dashboard.admin.index') }}" class="px-4 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50">
                     Batal

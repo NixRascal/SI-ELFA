@@ -11,17 +11,17 @@ use Illuminate\Http\RedirectResponse;
 class AdminManagementController extends Controller
 {
     /**
-     * Display a listing of admins.
+     * Tampilkan daftar admin.
      */
     public function index(): View
     {
         $admins = Admin::orderBy('created_at', 'desc')->paginate(10);
-        
+
         return view('admin.manajemen.index', compact('admins'));
     }
 
     /**
-     * Show the form for creating a new admin.
+     * Tampilkan formulir untuk membuat admin baru.
      */
     public function create(): View
     {
@@ -29,7 +29,7 @@ class AdminManagementController extends Controller
     }
 
     /**
-     * Store a newly created admin in storage.
+     * Simpan admin yang baru dibuat ke penyimpanan.
      */
     public function store(Request $request): RedirectResponse
     {
@@ -58,7 +58,7 @@ class AdminManagementController extends Controller
     }
 
     /**
-     * Show the form for editing the specified admin.
+     * Tampilkan formulir untuk mengedit admin yang ditentukan.
      */
     public function edit(Admin $admin): View
     {
@@ -66,7 +66,7 @@ class AdminManagementController extends Controller
     }
 
     /**
-     * Update the specified admin in storage.
+     * Perbarui admin yang ditentukan di penyimpanan.
      */
     public function update(Request $request, Admin $admin): RedirectResponse
     {
@@ -85,11 +85,11 @@ class AdminManagementController extends Controller
 
         $admin->nama = $validated['nama'];
         $admin->email = $validated['email'];
-        
+
         if ($request->filled('password')) {
             $admin->password = Hash::make($validated['password']);
         }
-        
+
         $admin->save();
 
         return redirect()->route('dashboard.admin.index')
@@ -97,11 +97,11 @@ class AdminManagementController extends Controller
     }
 
     /**
-     * Remove the specified admin from storage.
+     * Hapus admin yang ditentukan dari penyimpanan.
      */
     public function destroy(Admin $admin): RedirectResponse
     {
-        // Prevent deleting yourself
+        // Cegah penghapusan diri sendiri
         if ($admin->id === auth()->id()) {
             return redirect()->route('dashboard.admin.index')
                 ->with('error', 'Tidak dapat menghapus akun Anda sendiri');

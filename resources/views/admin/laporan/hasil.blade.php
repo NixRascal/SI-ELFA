@@ -2,9 +2,9 @@
 
 @section('content')
     <div class="px-4 sm:px-6 lg:px-8">
-        <!-- Header -->
+        <!-- Header Halaman -->
         <div class="mb-6">
-            <div class="flex items-center justify-between">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                 <div>
                     <a href="{{ route('dashboard.laporan.index') }}"
                         class="text-sm text-gray-600 hover:text-gray-900 mb-2 inline-flex items-center">
@@ -13,47 +13,49 @@
                     <h1 class="text-2xl font-bold text-gray-900 mt-2">Hasil Analisis Survei</h1>
                     <p class="mt-1 text-sm text-gray-600">{{ $kuesioner->judul }}</p>
                 </div>
-                <div class="flex items-center space-x-2">
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                     <a href="{{ route('dashboard.laporan.show', $kuesioner->id) }}"
-                        class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700">
+                        class="inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700">
                         <i class="fas fa-eye mr-2"></i> Lihat Detail
                     </a>
                     <a href="{{ route('dashboard.laporan.export', $kuesioner->id) }}"
-                        class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700">
+                        class="inline-flex items-center justify-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700">
                         <i class="fas fa-download mr-2"></i> Export CSV
                     </a>
                     <a href="{{ route('dashboard.laporan.print', $kuesioner->id) }}" target="_blank"
-                        class="inline-flex items-center px-4 py-2 bg-gray-600 text-white text-sm font-medium rounded-md hover:bg-gray-700">
+                        class="inline-flex items-center justify-center px-4 py-2 bg-gray-600 text-white text-sm font-medium rounded-md hover:bg-gray-700">
                         <i class="fas fa-print mr-2"></i> Print
                     </a>
                 </div>
             </div>
         </div>
 
-        <!-- Summary Card -->
+        <!-- Kartu Ringkasan -->
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-6 p-6">
-            <div class="flex items-center justify-between">
-                <div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                <div class="text-center sm:text-left">
                     <h3 class="text-sm font-medium text-gray-600">Total Responden</h3>
                     <p class="mt-1 text-3xl font-bold text-gray-900">{{ $totalResponden }}</p>
                 </div>
-                <div>
+                <div class="text-center sm:text-left">
                     <h3 class="text-sm font-medium text-gray-600">Total Pertanyaan</h3>
                     <p class="mt-1 text-3xl font-bold text-gray-900">{{ $kuesioner->pertanyaan->count() }}</p>
                 </div>
-                <div>
+                <div class="text-center sm:text-left">
                     <h3 class="text-sm font-medium text-gray-600">Target</h3>
                     <p class="mt-1">
                         <span
                             class="inline-flex items-center rounded-full bg-gray-100 px-3 py-1.5 text-sm font-medium text-gray-800 capitalize">
-                            {{ is_array($kuesioner->target_responden) ? implode(', ', array_map('ucfirst', $kuesioner->target_responden)) : ucfirst($kuesioner->target_responden) }}
+                            @foreach((array) $kuesioner->target_responden as $target)
+                                {{ ucfirst($target) }}{{ !$loop->last ? ', ' : '' }}
+                            @endforeach
                         </span>
                     </p>
                 </div>
             </div>
         </div>
 
-        <!-- AI Analysis Section -->
+        <!-- Bagian Analisis AI -->
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 mb-6" id="ai-analysis-card">
             <div class="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-purple-50 to-indigo-50">
                 <div class="flex items-center justify-between">
@@ -64,7 +66,8 @@
                             <p class="mt-0.5 text-sm text-gray-600">Insight otomatis menggunakan Google Gemini</p>
                         </div>
                     </div>
-                    <button id="generate-ai-btn"
+                    <button id="generate-ai-btn" data-route="{{ route('dashboard.laporan.ai-analysis', $kuesioner->id) }}"
+                        data-csrf="{{ csrf_token() }}"
                         class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors">
                         <i class="fas fa-magic mr-2"></i> Generate Analisis
                     </button>
@@ -133,7 +136,7 @@
 
                 <div class="p-6">
                     @if($item['pertanyaan']->jenis_pertanyaan === 'likert')
-                        <!-- Likert Scale Analysis -->
+                        <!-- Analisis Skala Likert -->
                         <div class="mb-4">
                             <div class="flex items-center justify-between mb-4">
                                 <span class="text-sm font-medium text-gray-600">Rata-rata:</span>
@@ -169,7 +172,7 @@
                         </div>
 
                     @elseif($item['pertanyaan']->jenis_pertanyaan === 'pilihan_ganda')
-                        <!-- Multiple Choice Analysis -->
+                        <!-- Analisis Pilihan Ganda -->
                         <div class="space-y-3">
                             @foreach($item['distribusi'] as $pilihan => $data)
                                 <div class="flex items-center">
@@ -195,7 +198,7 @@
                         </div>
 
                     @elseif($item['pertanyaan']->jenis_pertanyaan === 'isian')
-                        <!-- Text Answers -->
+                        <!-- Jawaban Teks -->
                         <div class="space-y-2 max-h-96 overflow-y-auto">
                             @foreach($item['jawaban_text'] as $jawaban)
                                 <div class="bg-gray-50 rounded-lg p-3 border border-gray-200">
@@ -234,7 +237,8 @@
                 </h3>
             </div>
 
-            <div class="overflow-x-auto">
+            <!-- Tampilan Tabel Desktop (hidden di mobile) -->
+            <div class="hidden md:block overflow-x-auto">
                 @if($responden->count() > 0)
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
@@ -315,146 +319,76 @@
                     </div>
                 @endif
             </div>
+
+            <!-- Tampilan Card Mobile (hanya di mobile) -->
+            <div class="md:hidden p-4 space-y-4">
+                @forelse($responden as $index => $r)
+                    <div class="bg-gray-50 rounded-lg border border-gray-200 p-4">
+                        <!-- Header -->
+                        <div class="flex items-start gap-3 mb-3">
+                            <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0">
+                                <span
+                                    class="text-blue-700 font-semibold text-sm">{{ strtoupper(substr($r->nama, 0, 2)) }}</span>
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <h3 class="text-sm font-semibold text-gray-900">{{ $r->nama }}</h3>
+                                <p class="text-xs text-gray-500">#{{ $responden->firstItem() + $index }}</p>
+                            </div>
+                            <span
+                                class="inline-flex items-center rounded-full bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-800 capitalize flex-shrink-0">
+                                {{ ucfirst($r->jenis_responden) }}
+                            </span>
+                        </div>
+
+                        <!-- Details -->
+                        <div class="space-y-2 text-sm">
+                            @if($r->npm)
+                                <div class="flex items-center gap-2">
+                                    <i class="fas fa-id-card text-gray-400 w-4 text-xs"></i>
+                                    <span class="text-gray-700">NPM: {{ $r->npm }}</span>
+                                </div>
+                            @endif
+
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-envelope text-gray-400 w-4 text-xs"></i>
+                                <span class="text-gray-600 break-all">{{ $r->email ?? '-' }}</span>
+                            </div>
+
+                            <div class="flex items-center gap-2">
+                                <i class="far fa-clock text-gray-400 w-4 text-xs"></i>
+                                <span
+                                    class="text-gray-600">{{ \Carbon\Carbon::parse($r->waktu_selesai)->format('d M Y H:i') }}</span>
+                            </div>
+
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-check-circle text-gray-400 w-4 text-xs"></i>
+                                <span
+                                    class="inline-flex items-center rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800">
+                                    {{ $r->jumlah_jawaban }} / {{ $kuesioner->pertanyaan->count() }} Jawaban
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                @empty
+                    <div class="py-12 text-center text-gray-500">
+                        <i class="fas fa-users text-4xl text-gray-300 mb-2"></i>
+                        <p class="text-sm">Belum ada responden yang mengisi kuesioner ini</p>
+                    </div>
+                @endforelse
+
+                <!-- Pagination -->
+                @if($responden->count() > 0)
+                    <div class="bg-white rounded-lg border border-gray-200 px-4 py-3">
+                        {{ $responden->links('pagination.custom') }}
+                    </div>
+                @endif
+            </div>
         </div>
     </div>
 
-    <style>
-        /* Custom scrollbar untuk AI content */
-        .ai-scroll-container {
-            scrollbar-width: thin;
-            scrollbar-color: #2563eb #f3f4f6;
-        }
+    <!-- Load Assets -->
+    @vite(['resources/css/admin/laporan-hasil.css', 'resources/js/admin/laporan-hasil.js'])
 
-        .ai-scroll-container::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .ai-scroll-container::-webkit-scrollbar-track {
-            background: #f3f4f6;
-            border-radius: 4px;
-        }
-
-        .ai-scroll-container::-webkit-scrollbar-thumb {
-            background: #2563eb;
-            border-radius: 4px;
-        }
-
-        .ai-scroll-container::-webkit-scrollbar-thumb:hover {
-            background: #1d4ed8;
-        }
-
-        /* Styling untuk markdown content */
-        #ai-result h2 {
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: #1f2937;
-            margin-top: 1.5rem;
-            margin-bottom: 0.75rem;
-        }
-
-        #ai-result h3 {
-            font-size: 1.125rem;
-            font-weight: 600;
-            color: #374151;
-            margin-top: 1.25rem;
-            margin-bottom: 0.5rem;
-        }
-
-        #ai-result ul {
-            list-style-type: disc;
-            list-style-position: inside;
-            margin-bottom: 1rem;
-            padding-left: 0.5rem;
-        }
-
-        #ai-result li {
-            margin-bottom: 0.5rem;
-            line-height: 1.6;
-        }
-
-        #ai-result p {
-            margin-bottom: 0.75rem;
-            line-height: 1.6;
-        }
-
-        #ai-result strong {
-            font-weight: 600;
-            color: #1f2937;
-        }
-    </style>
-
-    <!-- Marked.js for Markdown parsing -->
+    <!-- Marked.js untuk parsing Markdown -->
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const generateBtn = document.getElementById('generate-ai-btn');
-            const aiLoading = document.getElementById('ai-loading');
-            const aiContent = document.getElementById('ai-content');
-            const aiResult = document.getElementById('ai-result');
-            const aiError = document.getElementById('ai-error');
-            const aiErrorMessage = document.getElementById('ai-error-message');
-            const aiPlaceholder = document.getElementById('ai-placeholder');
-
-            generateBtn.addEventListener('click', async function () {
-                // Hide all sections
-                aiPlaceholder.classList.add('hidden');
-                aiContent.classList.add('hidden');
-                aiError.classList.add('hidden');
-
-                // Show loading
-                aiLoading.classList.remove('hidden');
-                generateBtn.disabled = true;
-                generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Menganalisis...';
-
-                try {
-                    const response = await fetch('{{ route("dashboard.laporan.ai-analysis", $kuesioner->id) }}', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        }
-                    });
-
-                    const data = await response.json();
-
-                    // Hide loading
-                    aiLoading.classList.add('hidden');
-
-                    if (data.success) {
-                        // Show result
-                        aiContent.classList.remove('hidden');
-
-                        // Parse markdown to HTML
-                        const htmlContent = marked.parse(data.analysis);
-
-                        // Display rendered HTML
-                        aiResult.innerHTML = htmlContent;
-
-                        // Update button
-                        generateBtn.innerHTML = '<i class="fas fa-sync mr-2"></i> Generate Ulang';
-                    } else {
-                        // Show error
-                        aiError.classList.remove('hidden');
-                        aiErrorMessage.textContent = data.error || 'Terjadi kesalahan saat menganalisis data';
-                    }
-
-                } catch (error) {
-                    // Hide loading
-                    aiLoading.classList.add('hidden');
-
-                    // Show error
-                    aiError.classList.remove('hidden');
-                    aiErrorMessage.textContent = 'Gagal terhubung ke server: ' + error.message;
-                } finally {
-                    generateBtn.disabled = false;
-                    if (!aiContent.classList.contains('hidden')) {
-                        generateBtn.innerHTML = '<i class="fas fa-sync mr-2"></i> Generate Ulang';
-                    } else {
-                        generateBtn.innerHTML = '<i class="fas fa-magic mr-2"></i> Generate Analisis';
-                    }
-                }
-            });
-        });
-    </script>
 @endsection

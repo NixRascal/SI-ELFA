@@ -27,8 +27,8 @@ class Pertanyaan extends Model
     ];
 
     /**
-     * Get the opsi_jawaban attribute.
-     * Handle both correctly formatted JSON and double-encoded JSON.
+     * Dapatkan atribut opsi_jawaban.
+     * Tangani JSON yang diformat dengan benar dan JSON yang di-encode ganda.
      */
     public function getOpsiJawabanAttribute($value)
     {
@@ -36,15 +36,15 @@ class Pertanyaan extends Model
             return null;
         }
 
-        // If it's already an array (from cache or after mutator), return it
+        // Jika sudah berupa array (dari cache atau setelah mutator), kembalikan
         if (is_array($value)) {
             return $value;
         }
 
-        // Try to decode once
+        // Coba decode sekali
         $decoded = json_decode($value, true);
 
-        // If decode failed or result is a string, try double-decode (for legacy data)
+        // Jika decode gagal atau hasilnya string, coba double-decode (untuk data lama)
         if (is_string($decoded)) {
             $decoded = json_decode($decoded, true);
         }
@@ -53,8 +53,8 @@ class Pertanyaan extends Model
     }
 
     /**
-     * Set the opsi_jawaban attribute.
-     * Ensure we always store properly formatted JSON.
+     * Set atribut opsi_jawaban.
+     * Pastikan kita selalu menyimpan JSON yang diformat dengan benar.
      */
     public function setOpsiJawabanAttribute($value)
     {
@@ -63,17 +63,17 @@ class Pertanyaan extends Model
             return;
         }
 
-        // If it's already a JSON string, decode it first to avoid double encoding
+        // Jika sudah berupa string JSON, decode dulu untuk menghindari double encoding
         if (is_string($value)) {
             $value = json_decode($value, true) ?? $value;
         }
 
-        // Now encode it properly
+        // Sekarang encode dengan benar
         $this->attributes['opsi_jawaban'] = json_encode($value);
     }
 
     /**
-     * Get the questionnaire that owns this question.
+     * Dapatkan kuesioner yang memiliki pertanyaan ini.
      */
     public function kuesioner(): BelongsTo
     {
@@ -81,7 +81,7 @@ class Pertanyaan extends Model
     }
 
     /**
-     * Get the answers for this question.
+     * Dapatkan jawaban untuk pertanyaan ini.
      */
     public function jawaban(): HasMany
     {

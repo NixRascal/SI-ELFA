@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="px-4 sm:px-6 lg:px-8">
-    <!-- Header -->
+    <!-- Header Halaman -->
     <div class="sm:flex sm:items-center sm:justify-between mb-8">
         <div>
             <h1 class="text-2xl font-bold text-gray-900">Buat Kuesioner Baru</h1>
@@ -16,7 +16,7 @@
         </div>
     </div>
 
-    <!-- Success/Error Messages -->
+    <!-- Pesan Sukses/Error -->
     @if(session('success'))
         <div class="mb-6 rounded-lg bg-green-50 border border-green-200 p-4">
             <div class="flex">
@@ -47,7 +47,7 @@
         @csrf
         
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <!-- Left Column - Form -->
+            <!-- Kolom Kiri - Form -->
             <div class="lg:col-span-2 space-y-6">
                 <!-- Informasi Dasar -->
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -129,7 +129,7 @@
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                        <!-- Target Responden - Multiple Selection -->
+                        <!-- Target Responden - Pilihan Ganda -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
                                 Target Responden <span class="text-red-500">*</span>
@@ -227,7 +227,7 @@
                 </div>
             </div>
 
-            <!-- Right Column - Preview & Tips -->
+            <!-- Kolom Kanan - Preview & Tips -->
             <div class="lg:col-span-1 space-y-6">
                 <!-- Pratinjau Ikon -->
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -269,7 +269,7 @@
                     </ul>
                 </div>
 
-                <!-- Action Buttons -->
+                <!-- Tombol Aksi -->
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                     <div class="space-y-3">
                         <button type="submit" class="w-full inline-flex items-center justify-center rounded-md bg-blue-600 px-4 py-3 text-sm font-medium text-white hover:bg-blue-700 cursor-pointer">
@@ -287,211 +287,6 @@
     </form>
 </div>
 
-<script>
-let pertanyaanCount = 0;
-
-// Preview icon
-document.getElementById('icon').addEventListener('change', function() {
-    const iconClass = this.value;
-    const preview = document.getElementById('iconPreview');
-    if (iconClass) {
-        preview.innerHTML = `<i class="${iconClass} text-blue-600"></i>`;
-    } else {
-        preview.innerHTML = '<i class="fas fa-image"></i>';
-    }
-});
-
-function tambahPertanyaan() {
-    const container = document.getElementById('daftarPertanyaan');
-    const currentCount = container.querySelectorAll('.pertanyaan-item').length + 1;
-    pertanyaanCount++;
-    
-    const pertanyaanHTML = `
-        <div class="pertanyaan-item bg-gray-50 rounded-lg border border-gray-200 p-5" data-index="${pertanyaanCount}">
-            <div class="flex items-start justify-between mb-4">
-                <h4 class="font-semibold text-gray-900">Pertanyaan ${currentCount}</h4>
-                <button type="button" onclick="hapusPertanyaan(this)" class="text-red-600 hover:text-red-800 cursor-pointer">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div class="md:col-span-3">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Teks Pertanyaan <span class="text-red-500">*</span>
-                    </label>
-                    <textarea 
-                        name="pertanyaan[${pertanyaanCount}][teks_pertanyaan]" 
-                        rows="2"
-                        class="w-full px-3.5 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        placeholder="Masukkan pertanyaan..."
-                        required
-                    ></textarea>
-                </div>
-                
-                <div class="md:col-span-1">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Jenis Pertanyaan <span class="text-red-500">*</span>
-                    </label>
-                    <select 
-                        name="pertanyaan[${pertanyaanCount}][jenis_pertanyaan]"
-                        class="jenis-pertanyaan-select w-full px-3.5 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                        onchange="toggleOpsiJawaban(this)"
-                        required
-                    >
-                        <option value="">Pilih Jenis</option>
-                        <option value="likert">Skala Likert (1-5)</option>
-                        <option value="pilihan_ganda">Pilihan Ganda</option>
-                        <option value="isian">Isian Teks</option>
-                    </select>
-                </div>
-                
-                <div class="md:col-span-2">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Kategori
-                    </label>
-                    <div class="flex items-center gap-3">
-                        <input 
-                            type="text" 
-                            name="pertanyaan[${pertanyaanCount}][kategori]"
-                            class="flex-1 px-3.5 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                            placeholder="Contoh: Layanan, Fasilitas, dll"
-                        >
-                        
-                        <div class="flex items-center flex-shrink-0">
-                            <input 
-                                type="checkbox" 
-                                name="pertanyaan[${pertanyaanCount}][wajib_diisi]"
-                                value="1"
-                                checked
-                                class="rounded border-gray-300 text-blue-600 focus:ring-2 focus:ring-blue-500"
-                                id="wajib_${pertanyaanCount}"
-                            >
-                            <label for="wajib_${pertanyaanCount}" class="ml-2 text-sm text-gray-700">
-                                <i class="fas fa-asterisk text-red-500 text-xs mr-1"></i>
-                                Wajib diisi
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Opsi Jawaban untuk Pilihan Ganda -->
-                <div class="md:col-span-3 opsi-jawaban-container" style="display: none;">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">
-                        Opsi Jawaban <span class="text-red-500">*</span>
-                    </label>
-                    <div class="space-y-2 opsi-list" data-pertanyaan="${pertanyaanCount}">
-                        <div class="flex gap-2 opsi-item">
-                            <input 
-                                type="text" 
-                                name="pertanyaan[${pertanyaanCount}][opsi][]"
-                                class="flex-1 px-3.5 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                placeholder="Opsi 1"
-                            >
-                            <button type="button" onclick="hapusOpsi(this)" class="px-3 py-2 text-red-600 hover:text-red-800 cursor-pointer">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                        <div class="flex gap-2 opsi-item">
-                            <input 
-                                type="text" 
-                                name="pertanyaan[${pertanyaanCount}][opsi][]"
-                                class="flex-1 px-3.5 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                                placeholder="Opsi 2"
-                            >
-                            <button type="button" onclick="hapusOpsi(this)" class="px-3 py-2 text-red-600 hover:text-red-800 cursor-pointer">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <button type="button" onclick="tambahOpsi(${pertanyaanCount})" class="mt-2 text-sm text-blue-600 hover:text-blue-800 cursor-pointer">
-                        <i class="fas fa-plus-circle mr-1"></i>
-                        Tambah Opsi
-                    </button>
-                </div>
-            </div>
-        </div>
-    `;
-    
-    container.insertAdjacentHTML('beforeend', pertanyaanHTML);
-}
-
-function hapusPertanyaan(button) {
-    if (confirm('Yakin ingin menghapus pertanyaan ini?')) {
-        button.closest('.pertanyaan-item').remove();
-        updateNomorPertanyaan();
-    }
-}
-
-function updateNomorPertanyaan() {
-    const items = document.querySelectorAll('.pertanyaan-item');
-    items.forEach((item, index) => {
-        item.querySelector('h4').textContent = `Pertanyaan ${index + 1}`;
-    });
-}
-
-function toggleOpsiJawaban(selectElement) {
-    const pertanyaanItem = selectElement.closest('.pertanyaan-item');
-    const opsiContainer = pertanyaanItem.querySelector('.opsi-jawaban-container');
-    const opsiInputs = pertanyaanItem.querySelectorAll('.opsi-jawaban-container input');
-    
-    if (selectElement.value === 'pilihan_ganda') {
-        opsiContainer.style.display = 'block';
-        // Set required untuk opsi
-        opsiInputs.forEach(input => input.required = true);
-    } else {
-        opsiContainer.style.display = 'none';
-        // Hapus required untuk opsi
-        opsiInputs.forEach(input => input.required = false);
-    }
-}
-
-function tambahOpsi(pertanyaanIndex) {
-    const opsiList = document.querySelector(`.opsi-list[data-pertanyaan="${pertanyaanIndex}"]`);
-    const opsiCount = opsiList.querySelectorAll('.opsi-item').length + 1;
-    
-    const opsiHTML = `
-        <div class="flex gap-2 opsi-item">
-            <input 
-                type="text" 
-                name="pertanyaan[${pertanyaanIndex}][opsi][]"
-                class="flex-1 px-3.5 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                placeholder="Opsi ${opsiCount}"
-                required
-            >
-            <button type="button" onclick="hapusOpsi(this)" class="px-3 py-2 text-red-600 hover:text-red-800 cursor-pointer">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-    `;
-    
-    opsiList.insertAdjacentHTML('beforeend', opsiHTML);
-}
-
-function hapusOpsi(button) {
-    const opsiList = button.closest('.opsi-list');
-    const opsiItems = opsiList.querySelectorAll('.opsi-item');
-    
-    // Minimal harus ada 2 opsi
-    if (opsiItems.length > 2) {
-        button.closest('.opsi-item').remove();
-        updateOpsiPlaceholder(opsiList);
-    } else {
-        alert('Minimal harus ada 2 opsi jawaban');
-    }
-}
-
-function updateOpsiPlaceholder(opsiList) {
-    const opsiItems = opsiList.querySelectorAll('.opsi-item');
-    opsiItems.forEach((item, index) => {
-        const input = item.querySelector('input');
-        input.placeholder = `Opsi ${index + 1}`;
-    });
-}
-
-// Tambah pertanyaan pertama secara otomatis
-document.addEventListener('DOMContentLoaded', function() {
-    tambahPertanyaan();
-});
-</script>
+<!-- Load Assets -->
+@vite(['resources/js/admin/kuesioner-form.js'])
 @endsection

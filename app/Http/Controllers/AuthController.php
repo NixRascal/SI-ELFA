@@ -10,7 +10,7 @@ use Illuminate\View\View;
 class AuthController extends Controller
 {
     /**
-     * Display the login form.
+     * Tampilkan formulir login.
      */
     public function showLoginForm(): View
     {
@@ -18,7 +18,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Handle login attempt.
+     * Tangani percobaan login.
      */
     public function login(Request $request): RedirectResponse
     {
@@ -29,7 +29,7 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
             $request->session()->regenerate();
-            
+
             return redirect()->intended(route('dashboard.index'));
         }
 
@@ -39,12 +39,12 @@ class AuthController extends Controller
     }
 
     /**
-     * Handle logout.
+     * Tangani logout.
      */
     public function logout(Request $request): RedirectResponse
     {
         Auth::logout();
-        
+
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 

@@ -22,7 +22,7 @@ class Jawaban extends Model
     ];
 
     /**
-     * Get the question that owns this answer.
+     * Dapatkan pertanyaan yang memiliki jawaban ini.
      */
     public function pertanyaan(): BelongsTo
     {
@@ -30,7 +30,7 @@ class Jawaban extends Model
     }
 
     /**
-     * Get the respondent that owns this answer.
+     * Dapatkan responden yang memiliki jawaban ini.
      */
     public function responden(): BelongsTo
     {
@@ -38,7 +38,7 @@ class Jawaban extends Model
     }
 
     /**
-     * Get the questionnaire that owns this answer.
+     * Dapatkan kuesioner yang memiliki jawaban ini.
      */
     public function kuesioner(): BelongsTo
     {

@@ -283,7 +283,7 @@
         </p>
     </div>
 
-    <!-- Info Section -->
+    <!-- Bagian Info -->
     <div class="info-section">
         <div class="info-grid">
             <div class="info-item">
@@ -315,14 +315,14 @@
         </div>
     </div>
 
-    <!-- Description -->
+    <!-- Deskripsi -->
     @if($kuesioner->deskripsi)
         <div class="description">
             <strong>Deskripsi:</strong> {{ $kuesioner->deskripsi }}
         </div>
     @endif
 
-    <!-- Questions -->
+    <!-- Pertanyaan -->
     <div class="questions-section">
         <h2>Daftar Pertanyaan</h2>
 

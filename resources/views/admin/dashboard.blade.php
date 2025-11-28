@@ -1,23 +1,23 @@
 @extends('layouts.admin')
 
 @section('content')
-<!-- Page Header -->
+<!-- Header Halaman -->
 <div class="mb-8">
-    <div class="flex items-center justify-between">
-        <div>
-            <h1 class="text-3xl font-bold text-gray-800 flex items-center gap-3">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div class="min-w-0">
+            <h1 class="text-2xl sm:text-3xl font-bold text-gray-800 break-words">
                 Selamat Datang, {{ Auth::user()->nama }}!
             </h1>
-            <p class="text-gray-600 mt-2">Berikut ringkasan aktivitas sistem evaluasi fakultas Anda</p>
+            <p class="text-gray-600 mt-2 text-sm sm:text-base">Berikut ringkasan aktivitas sistem evaluasi fakultas Anda</p>
         </div>
-        <a href="{{ route('dashboard.kuesioner.create') }}" class="hidden md:flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all shadow-sm">
+        <a href="{{ route('dashboard.kuesioner.create') }}" class="hidden sm:flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all shadow-sm whitespace-nowrap">
             <i class="fas fa-plus"></i>
             <span class="font-semibold">Buat Kuesioner</span>
         </a>
     </div>
 </div>
 
-                <!-- Statistics Cards -->
+                <!-- Kartu Statistik -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
                     <!-- Total Kuesioner -->
                     <div class="bg-white rounded-lg p-6 shadow-sm border border-gray-200 hover:shadow-md transition-all">
@@ -70,7 +70,7 @@
                     </div>
                 </div>
 
-                <!-- Content Grid -->
+                <!-- Grid Konten -->
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
                     <!-- Kuesioner Terbaru -->
                     <div class="lg:col-span-2 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
@@ -89,33 +89,33 @@
                             @forelse($recentQuestionnaires as $index => $kuesioner)
                             <!-- Kuesioner Item {{ $index + 1 }} -->
                             <a href="{{ route('dashboard.kuesioner.show', $kuesioner->id) }}" class="block bg-gray-50 p-4 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50/50 transition-all">
-                                <div class="flex items-start justify-between">
-                                    <div class="flex-1">
+                                <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+                                    <div class="flex-1 min-w-0">
                                         <div class="flex items-center gap-2 mb-2">
-                                            <h3 class="font-semibold text-gray-800">{{ $kuesioner->judul }}</h3>
+                                            <h3 class="font-semibold text-gray-800 break-words">{{ $kuesioner->judul }}</h3>
                                         </div>
-                                        <p class="text-sm text-gray-600 mb-3">{{ \Str::limit($kuesioner->deskripsi, 100) }}</p>
-                                        <div class="flex items-center gap-4 text-xs text-gray-500">
-                                            <span class="flex items-center gap-1">
+                                        <p class="text-sm text-gray-600 mb-3 break-words">{{ \Str::limit($kuesioner->deskripsi, 100) }}</p>
+                                        <div class="flex flex-wrap items-center gap-3 text-xs text-gray-500">
+                                            <span class="flex items-center gap-1 whitespace-nowrap">
                                                 <i class="fas fa-user text-gray-400"></i>
                                                 <span>{{ $kuesioner->responden_count }} Responden</span>
                                             </span>
-                                            <span class="flex items-center gap-1">
+                                            <span class="flex items-center gap-1 whitespace-nowrap">
                                                 <i class="fas fa-question-circle text-gray-400"></i>
                                                 <span>{{ $kuesioner->pertanyaan_count }} Pertanyaan</span>
                                             </span>
                                             <span class="flex items-center gap-1">
                                                 <i class="fas fa-clock text-gray-400"></i>
-                                                <span>@if($kuesioner->is_active) Aktif hingga @else Selesai @endif {{ $kuesioner->tanggal_selesai->format('d M Y') }}</span>
+                                                <span class="break-words">@if($kuesioner->is_active) Aktif hingga @else Selesai @endif {{ $kuesioner->tanggal_selesai->format('d M Y') }}</span>
                                             </span>
                                         </div>
                                     </div>
                                     @if($kuesioner->is_active)
-                                    <span class="ml-4 px-3 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-md whitespace-nowrap">
+                                    <span class="px-3 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-md whitespace-nowrap flex-shrink-0 self-start">
                                         Aktif
                                     </span>
                                     @else
-                                    <span class="ml-4 px-3 py-1 bg-gray-200 text-gray-600 text-xs font-medium rounded-md whitespace-nowrap">
+                                    <span class="px-3 py-1 bg-gray-200 text-gray-600 text-xs font-medium rounded-md whitespace-nowrap flex-shrink-0 self-start">
                                         Selesai
                                     </span>
                                     @endif
@@ -220,7 +220,8 @@
                         </h2>
                     </div>
                     
-                    <div class="overflow-x-auto">
+                    <!-- Desktop Table View (hidden on mobile) -->
+                    <div class="hidden md:block overflow-x-auto">
                         <table class="w-full">
                             <thead>
                                 <tr class="border-b border-gray-200">
@@ -295,6 +296,65 @@
                                 @endforelse
                             </tbody>
                         </table>
+                    </div>
+
+                    <!-- Mobile Card View (visible only on mobile) -->
+                    <div class="md:hidden space-y-3">
+                        @forelse($recentRespondents as $responden)
+                        <div class="bg-gray-50 rounded-lg border border-gray-200 p-4">
+                            <!-- Header -->
+                            <div class="flex items-start gap-3 mb-3">
+                                <div class="w-10 h-10 flex-shrink-0
+                                    @if($responden->jenis_responden == 'mahasiswa') bg-blue-100 text-blue-700
+                                    @elseif($responden->jenis_responden == 'dosen') bg-green-100 text-green-700
+                                    @elseif($responden->jenis_responden == 'staff') bg-deep-sapphire-100 text-deep-sapphire-700
+                                    @elseif($responden->jenis_responden == 'alumni') bg-orange-100 text-orange-700
+                                    @elseif($responden->jenis_responden == 'stakeholder') bg-gray-200 text-gray-700
+                                    @else bg-gray-100 text-gray-700
+                                    @endif
+                                    rounded-full flex items-center justify-center font-semibold text-sm">
+                                    {{ strtoupper(substr($responden->nama, 0, 2)) }}
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <h3 class="font-semibold text-gray-900 text-sm">{{ $responden->nama }}</h3>
+                                    @if($responden->npm)
+                                    <p class="text-xs text-gray-500">{{ $responden->npm }}</p>
+                                    @endif
+                                </div>
+                                <span class="px-2 py-1 text-xs font-medium rounded flex-shrink-0
+                                    @if($responden->jenis_responden == 'mahasiswa') bg-blue-100 text-blue-700
+                                    @elseif($responden->jenis_responden == 'dosen') bg-green-100 text-green-700
+                                    @elseif($responden->jenis_responden == 'staff') bg-deep-sapphire-100 text-deep-sapphire-700
+                                    @elseif($responden->jenis_responden == 'alumni') bg-orange-100 text-orange-700
+                                    @elseif($responden->jenis_responden == 'stakeholder') bg-gray-200 text-gray-700
+                                    @else bg-gray-100 text-gray-700
+                                    @endif">
+                                    {{ ucfirst($responden->jenis_responden) }}
+                                </span>
+                            </div>
+
+                            <!-- Details -->
+                            <div class="space-y-2 text-sm">
+                                <div class="flex items-center gap-2">
+                                    <i class="fas fa-envelope text-gray-400 w-4"></i>
+                                    <span class="text-gray-600">{{ $responden->email ?? '-' }}</span>
+                                </div>
+                                <div class="flex items-start gap-2">
+                                    <i class="fas fa-clipboard-list text-gray-400 w-4 mt-0.5"></i>
+                                    <span class="text-gray-700 flex-1">{{ $responden->kuesioner_judul }}</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-gray-500">
+                                    <i class="far fa-clock text-gray-400 w-4"></i>
+                                    <span>{{ $responden->waktu_pengisian ? $responden->waktu_pengisian->diffForHumans() : '-' }}</span>
+                                </div>
+                            </div>
+                        </div>
+                        @empty
+                        <div class="py-12 text-center text-gray-500">
+                            <i class="fas fa-inbox text-3xl block mb-2 text-gray-400"></i>
+                            <p class="text-sm">Belum ada aktivitas responden</p>
+                        </div>
+                        @endforelse
                     </div>
                 </div>
 @endsection
