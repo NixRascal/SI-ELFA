@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Admin Dashboard') - SI-ELFA</title>
 
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('favicon/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('favicon/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('favicon/favicon-16x16.png') }}">
+    <link rel="shortcut icon" href="{{ asset('favicon/favicon.ico') }}" type="image/x-icon">
+
     <!-- Font Awesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -34,7 +39,10 @@
                     <button @click="sidebarOpen = true" class="text-gray-500 hover:text-gray-700 focus:outline-none">
                         <i class="fas fa-bars text-xl"></i>
                     </button>
-                    <span class="text-lg font-bold text-gray-900">SI-ELFA</span>
+                    <div class="flex items-center gap-2">
+                        <img src="{{ asset('images/unib-logo.webp') }}" alt="SI-ELFA Logo" class="w-8 h-8">
+                        <span class="text-lg font-bold text-gray-900">SI-ELFA</span>
+                    </div>
                 </div>
                 <div class="flex items-center gap-3">
                     <div
