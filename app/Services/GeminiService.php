@@ -249,23 +249,23 @@ Pola atau tren menarik yang terlihat dari data
 5. Rekomendasi
 Saran konkret untuk perbaikan berdasarkan hasil survei
 
-ATURAN FORMATTING KETAT:
-1. Untuk judul bagian: gunakan format angka saja \"1. Judul\" (TANPA bullet/asterisk)
-2. Untuk sub-poin di dalam bagian: gunakan HANYA tanda minus \"-\" atau asterisk \"*\" (TANPA angka)
-3. DILARANG KERAS menggunakan kombinasi seperti: \"1. *\", \"1. -\", \"• *\", \"* *\", \"- -\"
-4. JANGAN gunakan bullet unicode (•) sama sekali
-5. Setiap baris sub-poin harus dimulai dengan HANYA SATU tanda: \"-\" atau \"*\"
+ATURAN FORMATTING (MARKDOWN):
+1. Gunakan format MARKDOWN standar.
+2. Gunakan `##` untuk judul bagian (contoh: `## 1. Ringkasan Utama`).
+3. Gunakan bullet points `-` atau `*` untuk daftar item.
+4. Gunakan `**teks tebal**` untuk penekanan pada poin penting.
+5. JANGAN gunakan blockquote (>) untuk seluruh teks.
+6. Pastikan hierarki visual jelas dan mudah dibaca.
+7. REFERENSI PERTANYAAN: JANGAN gunakan singkatan seperti \"Q1\", \"Q2\". SELALU gunakan \"Pertanyaan 1\", \"Pertanyaan 2\", dst.
 
-CONTOH FORMAT YANG BENAR:
-1. Judul Bagian
-- Sub poin pertama
-- Sub poin kedua
+CONTOH FORMAT YANG DIINGINKAN:
+## 1. Ringkasan Utama
+- Poin pertama analisis
+- Poin kedua analisis
 
-CONTOH FORMAT YANG SALAH (JANGAN GUNAKAN):
-1. • Judul (SALAH - ada bullet setelah angka)
-• • Item (SALAH - double bullet)
-1. - Item (SALAH - ada dash setelah angka)
-* * Item (SALAH - double asterisk)";
+## 2. Temuan Positif
+- **Aspek A**: Penjelasan singkat...
+- **Aspek B**: Penjelasan singkat...";
     }
 
     /**

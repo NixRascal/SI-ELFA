@@ -383,6 +383,9 @@
         }
     </style>
 
+    <!-- Marked.js for Markdown parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const generateBtn = document.getElementById('generate-ai-btn');
@@ -422,14 +425,11 @@
                         // Show result
                         aiContent.classList.remove('hidden');
 
-                        // Remove ** (bold markdown) but keep * (bullets/lists)
-                        let cleanText = data.analysis.replace(/\*\*([^\*]+)\*\*/g, '$1');
+                        // Parse markdown to HTML
+                        const htmlContent = marked.parse(data.analysis);
 
-                        // Convert * at start of line to bullet point •
-                        cleanText = cleanText.replace(/^\* /gm, '• ');
-
-                        // Display cleaned text
-                        aiResult.innerHTML = `<pre class="whitespace-pre-wrap font-mono text-sm bg-gray-50 p-4 rounded-lg border border-gray-300">${cleanText}</pre>`;
+                        // Display rendered HTML
+                        aiResult.innerHTML = htmlContent;
 
                         // Update button
                         generateBtn.innerHTML = '<i class="fas fa-sync mr-2"></i> Generate Ulang';
