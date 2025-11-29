@@ -70,14 +70,24 @@ class Kuesioner extends Model
     }
 
     /**
-     * Accessor: Cek apakah kuesioner aktif berdasarkan periode tanggal.
-     * Status ditentukan secara dinamis tanpa perlu kolom is_manual.
+     * Accessor: Cek apakah kuesioner aktif.
+     * Kombinasi antara flag manual (status_aktif) dan validasi periode.
+     * 
+     * Logic:
+     * - Jika status_aktif = false (admin nonaktifkan) → false
+     * - Jika status_aktif = true, cek periode:
+     *   - Dalam periode → true
+     *   - Luar periode → false (tidak bisa aktif di luar periode)
      */
     public function getIsActiveAttribute(): bool
     {
-        $today = today();
+        // Jika admin sudah nonaktifkan, langsung return false
+        if (!$this->status_aktif) {
+            return false;
+        }
 
-        // Aktif jika hari ini berada di antara tanggal_mulai dan tanggal_selesai
+        // Jika status_aktif = true, validasi periode
+        $today = today();
         return $this->tanggal_mulai <= $today && $this->tanggal_selesai >= $today;
     }
 
@@ -88,13 +98,28 @@ class Kuesioner extends Model
     {
         $today = today();
 
+        // Cek periode dulu
         if ($today < $this->tanggal_mulai) {
             return 'Belum Dimulai';
         } elseif ($today > $this->tanggal_selesai) {
             return 'Sudah Berakhir';
-        } else {
-            return 'Aktif';
         }
+
+        // Dalam periode, cek manual flag
+        if (!$this->status_aktif) {
+            return 'Dinonaktifkan Manual';
+        }
+
+        return 'Aktif';
+    }
+
+    /**
+     * Accessor: Cek apakah tanggal saat ini berada dalam rentang periode.
+     */
+    public function getIsPeriodValidAttribute(): bool
+    {
+        $today = today();
+        return $this->tanggal_mulai <= $today && $this->tanggal_selesai >= $today;
     }
 
     /**

@@ -210,33 +210,31 @@
                                                 <i class="fas fa-edit"></i>
                                             </a>
 
-                                            <!-- Toggle Status -->
+                                            {{-- Toggle Status --}}
                                             <form action="{{ route('dashboard.kuesioner.toggle-status', $item) }}" method="POST"
                                                 class="inline">
                                                 @csrf
-                                                @if($item->is_period_valid)
+                                                @if($item->status_aktif)
+                                                    {{-- Jika aktif, selalu bisa dinonaktifkan --}}
                                                     <button type="submit"
-                                                        class="{{ $item->status_aktif ? 'text-yellow-400 hover:text-yellow-600' : 'text-green-400 hover:text-green-600' }} cursor-pointer"
-                                                        title="{{ $item->status_aktif ? 'Nonaktifkan' : 'Aktifkan' }}">
-                                                        <i
-                                                            class="fas fa-{{ $item->status_aktif ? 'toggle-on' : 'toggle-off' }}"></i>
+                                                        class="text-yellow-400 hover:text-yellow-600 cursor-pointer"
+                                                        title="Nonaktifkan">
+                                                        <i class="fas fa-toggle-on"></i>
                                                     </button>
                                                 @else
-                                                    @php
-                                                        $now = now();
-                                                        $start = \Carbon\Carbon::parse($item->tanggal_mulai)->startOfDay();
-                                                        $end = \Carbon\Carbon::parse($item->tanggal_selesai)->endOfDay();
-                                                        $reason = '';
-                                                        if ($now->lessThan($start)) {
-                                                            $reason = 'Periode belum dimulai (Mulai: ' . $start->format('d M Y') . ')';
-                                                        } elseif ($now->greaterThan($end)) {
-                                                            $reason = 'Periode sudah berakhir (Selesai: ' . $end->format('d M Y') . ')';
-                                                        }
-                                                    @endphp
-                                                    <button type="button" class="text-gray-300 cursor-not-allowed"
-                                                        title="Tidak dapat diaktifkan: {{ $reason }}">
-                                                        <i class="fas fa-toggle-off"></i>
-                                                    </button>
+                                                    {{-- Jika nonaktif, cek periode --}}
+                                                    @if($item->is_period_valid)
+                                                        <button type="submit" class="text-green-400 hover:text-green-600 cursor-pointer"
+                                                            title="Aktifkan">
+                                                            <i class="fas fa-toggle-off"></i>
+                                                        </button>
+                                                    @else
+                                                        {{-- Disabled state --}}
+                                                        <button type="button" class="text-gray-300 cursor-not-allowed"
+                                                            title="Tidak dapat diaktifkan: {{ $item->status_reason }}">
+                                                            <i class="fas fa-toggle-off"></i>
+                                                        </button>
+                                                    @endif
                                                 @endif
                                             </form>
 

@@ -262,6 +262,17 @@ class QuestionnaireController extends Controller
 
         DB::beginTransaction();
         try {
+            // Validasi status aktif berdasarkan periode
+            $statusAktif = $request->boolean('status_aktif', false); // Default false for checkbox
+            $today = today();
+            $startDate = \Carbon\Carbon::parse($validated['tanggal_mulai']);
+            $endDate = \Carbon\Carbon::parse($validated['tanggal_selesai']);
+
+            // Jika periode tidak valid (belum mulai atau sudah berakhir), paksa status_aktif jadi false
+            if ($today < $startDate || $today > $endDate) {
+                $statusAktif = false;
+            }
+
             // Perbarui kuesioner
             $kuesioner->update([
                 'judul' => $validated['judul'],
@@ -270,7 +281,7 @@ class QuestionnaireController extends Controller
                 'target_responden' => $validated['target_responden'],
                 'tanggal_mulai' => $validated['tanggal_mulai'],
                 'tanggal_selesai' => $validated['tanggal_selesai'],
-                'status_aktif' => $request->boolean('status_aktif', true),
+                'status_aktif' => $statusAktif,
             ]);
 
             // Dapatkan ID pertanyaan yang ada
@@ -413,59 +424,33 @@ class QuestionnaireController extends Controller
     }
 
     /**
-     * Ubah status kuesioner yang ditentukan.
+     * Toggle status kuesioner dengan validasi periode.
      */
     public function toggleStatus(Kuesioner $kuesioner): RedirectResponse
     {
         try {
-            $willActivate = !$kuesioner->status_aktif;
+            $newStatus = !$kuesioner->status_aktif;
 
-            if ($willActivate) {
-                $now = now();
-                $start = \Carbon\Carbon::parse($kuesioner->tanggal_mulai)->startOfDay();
-                $end = \Carbon\Carbon::parse($kuesioner->tanggal_selesai)->endOfDay();
+            // Jika ingin mengaktifkan, validasi periode
+            if ($newStatus) {
+                $today = today();
+                $inPeriod = $kuesioner->tanggal_mulai <= $today && $kuesioner->tanggal_selesai >= $today;
 
-                if ($now->lessThan($start)) {
-                    return back()->with('error', 'Gagal mengaktifkan: Periode kuesioner belum dimulai (Mulai: ' . $start->format('d M Y') . ').');
-                }
-
-                if ($now->greaterThan($end)) {
-                    return back()->with('error', 'Gagal mengaktifkan: Periode kuesioner sudah berakhir (Selesai: ' . $end->format('d M Y') . ').');
+                if (!$inPeriod) {
+                    if ($today < $kuesioner->tanggal_mulai) {
+                        return back()->with('error', 'Tidak dapat mengaktifkan kuesioner. Periode belum dimulai.');
+                    } else {
+                        return back()->with('error', 'Tidak dapat mengaktifkan kuesioner. Periode sudah berakhir.');
+                    }
                 }
             }
 
-            // Set is_manual = true ketika admin mengubah status secara manual
-            // Ini mencegah scheduler mengubah status yang sudah diset manual oleh admin
-            $kuesioner->update([
-                'status_aktif' => $willActivate,
-                'is_manual' => true
-            ]);
+            // Update status
+            $kuesioner->update(['status_aktif' => $newStatus]);
 
-            $status = $kuesioner->status_aktif ? 'diaktifkan' : 'dinonaktifkan';
-            return back()->with('success', "Kuesioner berhasil {$status}.");
-        } catch (\Exception $e) {
-            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
-        }
-    }
-
-    /**
-     * Toggle mode manual untuk kuesioner.
-     * Jika diset manual, scheduler tidak akan mengubah status_aktif.
-     */
-    public function toggleManualMode(Kuesioner $kuesioner): RedirectResponse
-    {
-        try {
-            $newManualMode = !$kuesioner->is_manual;
-
-            $kuesioner->update([
-                'is_manual' => $newManualMode
-            ]);
-
-            if ($newManualMode) {
-                $message = 'Kuesioner diset ke mode MANUAL. Status tidak akan diubah otomatis oleh scheduler.';
-            } else {
-                $message = 'Kuesioner dikembalikan ke mode OTOMATIS. Status akan mengikuti periode tanggal.';
-            }
+            $message = $newStatus
+                ? 'Kuesioner berhasil diaktifkan.'
+                : 'Kuesioner berhasil dinonaktifkan.';
 
             return back()->with('success', $message);
         } catch (\Exception $e) {

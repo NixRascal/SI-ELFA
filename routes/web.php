@@ -74,7 +74,6 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
     Route::delete('/kuesioner/{kuesioner}', [QuestionnaireController::class, 'destroy'])->name('kuesioner.destroy');
     Route::post('/kuesioner/{kuesioner}/duplicate', [QuestionnaireController::class, 'duplicate'])->name('kuesioner.duplicate');
     Route::post('/kuesioner/{kuesioner}/toggle-status', [QuestionnaireController::class, 'toggleStatus'])->name('kuesioner.toggle-status');
-    Route::post('/kuesioner/{kuesioner}/toggle-manual', [QuestionnaireController::class, 'toggleManualMode'])->name('kuesioner.toggle-manual');
     Route::get('/kuesioner/{kuesioner}/export', [QuestionnaireController::class, 'export'])->name('kuesioner.export');
 
     // Laporan
