@@ -18,7 +18,6 @@ class Kuesioner extends Model
         'icon',
         'target_responden',
         'status_aktif',
-        'is_manual',
         'tanggal_mulai',
         'tanggal_selesai',
         'dibuat_oleh',
@@ -27,7 +26,6 @@ class Kuesioner extends Model
     protected $casts = [
         'target_responden' => 'array',
         'status_aktif' => 'boolean',
-        'is_manual' => 'boolean',
         'tanggal_mulai' => 'date',
         'tanggal_selesai' => 'date',
     ];
@@ -72,38 +70,42 @@ class Kuesioner extends Model
     }
 
     /**
-     * Dapatkan status aktif berdasarkan periode tanggal dan status manual.
+     * Accessor: Cek apakah kuesioner aktif berdasarkan periode tanggal.
+     * Status ditentukan secara dinamis tanpa perlu kolom is_manual.
      */
     public function getIsActiveAttribute(): bool
     {
-        if (!$this->status_aktif) {
-            return false;
-        }
+        $today = today();
 
-        return $this->is_period_valid;
+        // Aktif jika hari ini berada di antara tanggal_mulai dan tanggal_selesai
+        return $this->tanggal_mulai <= $today && $this->tanggal_selesai >= $today;
     }
 
     /**
-     * Cek apakah tanggal saat ini berada dalam tanggal mulai dan selesai.
+     * Accessor: Dapatkan alasan status kuesioner.
      */
-    public function getIsPeriodValidAttribute(): bool
+    public function getStatusReasonAttribute(): string
     {
-        $now = now();
-        $start = \Carbon\Carbon::parse($this->tanggal_mulai)->startOfDay();
-        $end = \Carbon\Carbon::parse($this->tanggal_selesai)->endOfDay();
+        $today = today();
 
-        return $now->greaterThanOrEqualTo($start) && $now->lessThanOrEqualTo($end);
+        if ($today < $this->tanggal_mulai) {
+            return 'Belum Dimulai';
+        } elseif ($today > $this->tanggal_selesai) {
+            return 'Sudah Berakhir';
+        } else {
+            return 'Aktif';
+        }
     }
 
     /**
-     * Scope query untuk hanya menyertakan kuesioner aktif.
+     * Scope: Filter kuesioner yang aktif berdasarkan periode tanggal.
      */
     public function scopeActive(Builder $query): Builder
     {
-        $now = now();
-        return $query->where('status_aktif', true)
-            ->whereDate('tanggal_mulai', '<=', $now)
-            ->whereDate('tanggal_selesai', '>=', $now);
+        $today = today();
+
+        return $query->whereDate('tanggal_mulai', '<=', $today)
+            ->whereDate('tanggal_selesai', '>=', $today);
     }
 
     /**

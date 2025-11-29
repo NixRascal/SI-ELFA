@@ -17,7 +17,6 @@ return new class extends Migration {
             $table->string('icon')->nullable();
             $table->json('target_responden');
             $table->boolean('status_aktif')->default(true);
-            $table->boolean('is_manual')->default(false);
             $table->date('tanggal_mulai');
             $table->date('tanggal_selesai');
             $table->foreignId('dibuat_oleh')->constrained('admin')->onDelete('cascade');
