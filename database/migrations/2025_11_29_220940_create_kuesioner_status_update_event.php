@@ -9,11 +9,9 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        // Enable Event Scheduler (jika belum aktif)
-        DB::statement('SET GLOBAL event_scheduler = ON');
-
         // Drop event jika sudah ada
-        DB::statement('DROP EVENT IF EXISTS update_kuesioner_status_event');
+        DB::statement('DROP EVENT IF EXISTS update_kuesioner_status_deactivate');
+        DB::statement('DROP EVENT IF EXISTS update_kuesioner_status_activate');
 
         // Buat event untuk matikan kuesioner yang expired
         DB::unprepared("
