@@ -123,13 +123,14 @@ class Kuesioner extends Model
     }
 
     /**
-     * Scope: Filter kuesioner yang aktif berdasarkan periode tanggal.
+     * Scope: Filter kuesioner yang aktif berdasarkan periode tanggal DAN status manual.
      */
     public function scopeActive(Builder $query): Builder
     {
         $today = today();
 
-        return $query->whereDate('tanggal_mulai', '<=', $today)
+        return $query->where('status_aktif', true)
+            ->whereDate('tanggal_mulai', '<=', $today)
             ->whereDate('tanggal_selesai', '>=', $today);
     }
 
