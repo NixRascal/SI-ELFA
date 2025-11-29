@@ -159,4 +159,35 @@
         @include('layouts.footer')
     </div>
 </div>
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const radios = document.querySelectorAll('input[type="radio"]');
+        
+        radios.forEach(radio => {
+            // Initialize state based on current checked status
+            radio.dataset.wasChecked = radio.checked ? 'true' : 'false';
+
+            radio.addEventListener('click', function(e) {
+                // If the radio was already checked before this click
+                if (this.dataset.wasChecked === 'true') {
+                    this.checked = false;
+                    this.dataset.wasChecked = 'false';
+                } else {
+                    // Update the state for this group
+                    const groupName = this.name;
+                    // Reset 'wasChecked' for all radios in this group
+                    document.querySelectorAll(`input[name="${groupName}"]`).forEach(r => {
+                        r.dataset.wasChecked = 'false';
+                    });
+                    
+                    // Mark this one as checked
+                    this.dataset.wasChecked = 'true';
+                }
+            });
+        });
+    });
+</script>
+@endpush
 @endsection

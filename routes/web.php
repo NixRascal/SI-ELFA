@@ -26,16 +26,16 @@ Route::get('/', [QuestionnaireController::class, 'index'])->name('beranda');
 Route::prefix('survei')->name('survei.')->group(function () {
     Route::get('{questionnaire}', [SurveyController::class, 'showProfileForm'])
         ->name('profil');
-    
+
     Route::post('{questionnaire}/profil', [SurveyController::class, 'storeProfile'])
         ->name('profil.simpan');
-    
+
     Route::get('{questionnaire}/pertanyaan', [SurveyController::class, 'showQuestions'])
         ->name('pertanyaan');
-    
+
     Route::post('{questionnaire}/jawaban', [SurveyController::class, 'storeAnswers'])
         ->name('jawaban.simpan');
-    
+
     Route::get('{questionnaire}/selesai', [SurveyController::class, 'complete'])
         ->name('selesai');
 });
@@ -63,7 +63,7 @@ Route::post('/logout', [AuthController::class, 'logout'])
 
 Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('index');
-    
+
     // Kuesioner Management
     Route::get('/kuesioner', [QuestionnaireController::class, 'manage'])->name('kuesioner.index');
     Route::get('/kuesioner/buat', [QuestionnaireController::class, 'create'])->name('kuesioner.create');
@@ -74,8 +74,9 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
     Route::delete('/kuesioner/{kuesioner}', [QuestionnaireController::class, 'destroy'])->name('kuesioner.destroy');
     Route::post('/kuesioner/{kuesioner}/duplicate', [QuestionnaireController::class, 'duplicate'])->name('kuesioner.duplicate');
     Route::post('/kuesioner/{kuesioner}/toggle-status', [QuestionnaireController::class, 'toggleStatus'])->name('kuesioner.toggle-status');
+    Route::post('/kuesioner/{kuesioner}/toggle-manual', [QuestionnaireController::class, 'toggleManualMode'])->name('kuesioner.toggle-manual');
     Route::get('/kuesioner/{kuesioner}/export', [QuestionnaireController::class, 'export'])->name('kuesioner.export');
-    
+
     // Laporan
     Route::get('/laporan', [ReportController::class, 'index'])->name('laporan.index');
     Route::get('/laporan/{id}', [ReportController::class, 'show'])->name('laporan.show');
@@ -83,12 +84,12 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
     Route::get('/laporan/{id}/export', [ReportController::class, 'export'])->name('laporan.export');
     Route::get('/laporan/{id}/print', [ReportController::class, 'print'])->name('laporan.print');
     Route::post('/laporan/{id}/ai-analysis', [ReportController::class, 'aiAnalysis'])->name('laporan.ai-analysis');
-    
+
     // Profile
     Route::get('/profil', [ProfileController::class, 'index'])->name('profile.index');
     Route::put('/profil', [ProfileController::class, 'update'])->name('profile.update');
     Route::put('/profil/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
-    
+
     // Admin Management
     Route::resource('admin', AdminManagementController::class)->except(['show']);
 });

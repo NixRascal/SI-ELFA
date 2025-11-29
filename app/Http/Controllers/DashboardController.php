@@ -16,9 +16,6 @@ class DashboardController extends Controller
      */
     public function index(): View
     {
-        // Sinkronisasi status aktif berdasarkan tanggal
-        Kuesioner::syncActiveStatus();
-
         // Dapatkan statistik
         $totalKuesioner = Kuesioner::count();
         $kuesionerAktif = Kuesioner::active()->count();

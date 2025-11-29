@@ -73,7 +73,7 @@
                 <div class="lg:col-span-1">
                     <label for="cariSurvei" class="block text-sm font-medium text-gray-700 mb-2">Cari Kuesioner</label>
                     <input type="text" id="cariSurvei" name="cariSurvei" value="{{ request('cariSurvei') }}" 
-                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm py-2.5 px-3.5" 
+                        class="block w-full rounded-md border-2 border-gray-200 focus:border-blue-500 focus:ring-blue-500 text-sm py-2.5 px-3.5" 
                         placeholder="Cari judul atau deskripsi...">
                 </div>
 

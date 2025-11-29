@@ -18,6 +18,7 @@ class Kuesioner extends Model
         'icon',
         'target_responden',
         'status_aktif',
+        'is_manual',
         'tanggal_mulai',
         'tanggal_selesai',
         'dibuat_oleh',
@@ -26,6 +27,7 @@ class Kuesioner extends Model
     protected $casts = [
         'target_responden' => 'array',
         'status_aktif' => 'boolean',
+        'is_manual' => 'boolean',
         'tanggal_mulai' => 'date',
         'tanggal_selesai' => 'date',
     ];
@@ -122,30 +124,5 @@ class Kuesioner extends Model
             $query->where('judul', 'like', "%{$search}%")
                 ->orWhere('deskripsi', 'like', "%{$search}%");
         });
-    }
-
-    /**
-     * Sinkronisasi status aktif di database berdasarkan tanggal saat ini.
-     * Ini memastikan kolom status_aktif mencerminkan validitas periode yang sebenarnya.
-     */
-    public static function syncActiveStatus(): void
-    {
-        $now = now();
-
-        // Set status ke false jika di luar periode (kadaluarsa atau belum dimulai)
-        static::where('status_aktif', true)
-            ->where(function ($query) use ($now) {
-                $query->whereDate('tanggal_selesai', '<', $now)
-                    ->orWhereDate('tanggal_mulai', '>', $now);
-            })
-            ->update(['status_aktif' => false]);
-
-        // Set status ke true jika di dalam periode (dan saat ini false)
-        // Catatan: Ini memaksakan "Aturan tanggal segalanya". Jika ingin dimatikan manual, ini akan menimpanya.
-        // Berdasarkan permintaan pengguna: "otomatis aktif jika masa periodenya aktif"
-        static::where('status_aktif', false)
-            ->whereDate('tanggal_mulai', '<=', $now)
-            ->whereDate('tanggal_selesai', '>=', $now)
-            ->update(['status_aktif' => true]);
     }
 }

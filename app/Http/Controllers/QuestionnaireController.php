@@ -18,9 +18,6 @@ class QuestionnaireController extends Controller
      */
     public function index(Request $request)
     {
-        // Sinkronisasi status aktif berdasarkan tanggal
-        Kuesioner::syncActiveStatus();
-
         $search = $request->query('cariSurvei', '');
         $targetFilter = $request->query('target', '');
         $today = Carbon::today()->toDateString();
@@ -48,9 +45,6 @@ class QuestionnaireController extends Controller
      */
     public function manage(Request $request)
     {
-        // Sinkronisasi status aktif berdasarkan tanggal
-        Kuesioner::syncActiveStatus();
-
         $search = $request->query('cari', '');
         $statusFilter = $request->query('status', '');
         $targetFilter = $request->query('target', '');
@@ -440,12 +434,40 @@ class QuestionnaireController extends Controller
                 }
             }
 
+            // Set is_manual = true ketika admin mengubah status secara manual
+            // Ini mencegah scheduler mengubah status yang sudah diset manual oleh admin
             $kuesioner->update([
-                'status_aktif' => $willActivate
+                'status_aktif' => $willActivate,
+                'is_manual' => true
             ]);
 
             $status = $kuesioner->status_aktif ? 'diaktifkan' : 'dinonaktifkan';
-            return back()->with('success', "Kuesioner berhasil {$status}");
+            return back()->with('success', "Kuesioner berhasil {$status}.");
+        } catch (\Exception $e) {
+            return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
+        }
+    }
+
+    /**
+     * Toggle mode manual untuk kuesioner.
+     * Jika diset manual, scheduler tidak akan mengubah status_aktif.
+     */
+    public function toggleManualMode(Kuesioner $kuesioner): RedirectResponse
+    {
+        try {
+            $newManualMode = !$kuesioner->is_manual;
+
+            $kuesioner->update([
+                'is_manual' => $newManualMode
+            ]);
+
+            if ($newManualMode) {
+                $message = 'Kuesioner diset ke mode MANUAL. Status tidak akan diubah otomatis oleh scheduler.';
+            } else {
+                $message = 'Kuesioner dikembalikan ke mode OTOMATIS. Status akan mengikuti periode tanggal.';
+            }
+
+            return back()->with('success', $message);
         } catch (\Exception $e) {
             return back()->with('error', 'Terjadi kesalahan: ' . $e->getMessage());
         }

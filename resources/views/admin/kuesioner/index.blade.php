@@ -57,7 +57,7 @@
         </div>
 
         <!-- Form Filter Pencarian -->
-        <div class="mt-6 bg-gray-100 rounded-lg p-4">
+        <div class="mt-6 bg-white rounded-lg border border-gray-200 shadow-sm p-4">
             <form method="GET" action="{{ route('dashboard.kuesioner.index') }}"
                 class="grid grid-cols-1 gap-4 sm:grid-cols-4">
                 <!-- Input Pencarian -->
@@ -65,14 +65,14 @@
                     <label for="cari" class="block text-sm font-medium text-gray-700 mb-2">Cari Kuesioner</label>
                     <input type="text" name="cari" id="cari" value="{{ $search }}"
                         placeholder="Cari judul atau deskripsi..."
-                        class="block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm py-2.5 px-3.5">
+                        class="block w-full rounded-md border-2 border-gray-200 focus:border-blue-500 focus:ring-blue-500 text-sm py-2.5 px-3.5">
                 </div>
 
                 <!-- Filter Status -->
                 <div class="sm:col-span-1">
-                    <label for="status" class="block text-xs font-medium text-gray-700 mb-1">Status</label>
+                    <label for="status" class="block text-sm font-medium text-gray-700 mb-2">Status</label>
                     <select name="status" id="status"
-                        class="block w-full rounded-md border-gray-300 bg-white shadow-sm focus:border-gray-500 focus:ring-gray-500 text-sm py-2.5 px-3.5">
+                        class="block w-full rounded-md border-gray-300 bg-white shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm py-2.5 px-3.5">
                         <option value="">Semua Status</option>
                         <option value="aktif" {{ $statusFilter === 'aktif' ? 'selected' : '' }}>Aktif</option>
                         <option value="nonaktif" {{ $statusFilter === 'nonaktif' ? 'selected' : '' }}>Nonaktif</option>
@@ -81,9 +81,9 @@
 
                 <!-- Filter Target Responden -->
                 <div class="sm:col-span-1">
-                    <label for="target" class="block text-xs font-medium text-gray-700 mb-1">Target Responden</label>
+                    <label for="target" class="block text-sm font-medium text-gray-700 mb-2">Target Responden</label>
                     <select name="target" id="target"
-                        class="block w-full rounded-md border-gray-300 bg-white shadow-sm focus:border-gray-500 focus:ring-gray-500 text-sm py-2.5 px-3.5">
+                        class="block w-full rounded-md border-gray-300 bg-white shadow-sm focus:border-blue-500 focus:ring-blue-500 text-sm py-2.5 px-3.5">
                         <option value="">Semua Target</option>
                         <option value="mahasiswa" {{ $targetFilter === 'mahasiswa' ? 'selected' : '' }}>Mahasiswa</option>
                         <option value="dosen" {{ $targetFilter === 'dosen' ? 'selected' : '' }}>Dosen</option>

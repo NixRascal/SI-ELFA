@@ -63,7 +63,6 @@
                         <div class="mt-10 sm:mt-12 animate-zoom-in animation-delay-500 opacity-0">
                             <a href="#survei-aktif" id="scrollToSurvey"
                                 class="group inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white bg-gradient-to-r from-blue-600 to-blue-500 rounded-2xl hover:scale-105 hover:shadow-lg hover:shadow-blue-500/30 transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
-                                <i data-lucide="home" class="me-2 w-6 h-6 group-hover:-translate-y-1 transition-transform duration-300"></i>
                                 Klik Disini Untuk Memulai
                             </a>
                         </div>
@@ -209,11 +208,13 @@
 
             // Auto-scroll if filter params exist
             const urlParams = new URLSearchParams(window.location.search);
-            if (urlParams.has('cariSurvei') || urlParams.has('target')) {
-                const element = document.getElementById('survei-aktif');
-                if (element) {
+            const element = document.getElementById('survei-aktif');
+
+            if (element) {
+                if (urlParams.has('page') || urlParams.has('cariSurvei') || urlParams.has('target')) {
+                    // Immediate jump for pagination and filters
                     element.scrollIntoView({
-                        behavior: 'smooth'
+                        behavior: 'auto'
                     });
                 }
             }
