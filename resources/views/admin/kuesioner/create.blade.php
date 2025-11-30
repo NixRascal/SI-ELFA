@@ -312,24 +312,7 @@
                 </div>
                 <!-- Body -->
                 <div class="bg-white px-6 py-5">
-                    <div class="mt-4 bg-red-50 border-l-4 border-red-500 rounded-lg p-4">
-                        <div class="flex items-start">
-                            <div class="flex-shrink-0">
-                                <i class="fas fa-exclamation-triangle text-red-500 text-lg"></i>
-                            </div>
-                            <div class="ml-3">
-                                <h4 class="text-sm font-semibold text-red-800">Peringatan Penting!</h4>
-                                <div class="mt-2 text-sm text-red-700">
-                                    <p>Tindakan ini akan menghapus:</p>
-                                    <ul class="list-disc list-inside mt-1">
-                                        <li>Pertanyaan ini dari kuesioner</li>
-                                        <li>Semua jawaban responden pada pertanyaan ini</li>
-                                        <li>Data analisis terkait pertanyaan ini</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+
                     <div class="mt-5 text-center">
                         <p class="text-base font-medium text-gray-900">Apakah Anda yakin ingin melanjutkan?</p>
                     </div>
