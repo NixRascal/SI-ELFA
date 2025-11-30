@@ -421,7 +421,7 @@
                     <div class="relative bg-gradient-to-r from-red-500 to-red-600 px-6 py-5">
                         <!-- Close Button -->
                         <button type="button" onclick="closeDeleteModal()"
-                            class="absolute top-4 right-4 text-white hover:text-red-100 transition-colors">
+                            class="absolute top-4 right-4 text-white hover:text-red-100 transition-colors cursor-pointer">
                             <i class="fas fa-times text-lg"></i>
                         </button>
 
@@ -504,14 +504,14 @@
                             @csrf
                             @method('DELETE')
                             <button type="submit" id="deleteButton" disabled
-                                class="w-full sm:w-auto inline-flex justify-center items-center rounded-lg bg-red-600 px-6 py-3 text-sm font-semibold text-white shadow-lg hover:bg-red-700 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed">
+                                class="w-full sm:w-auto inline-flex justify-center items-center rounded-lg bg-red-600 px-6 py-3 text-sm font-semibold text-white shadow-lg hover:bg-red-700 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
                                 <i class="fas fa-trash-alt mr-2" id="deleteIcon"></i>
                                 <span id="deleteButtonText">Ya, Hapus Kuesioner</span>
                                 <i class="fas fa-spinner fa-spin ml-2" id="deleteSpinner" style="display: none;"></i>
                             </button>
                         </form>
                         <button type="button" onclick="closeDeleteModal()"
-                            class="w-full sm:w-auto inline-flex justify-center items-center rounded-lg bg-white px-6 py-3 text-sm font-semibold text-gray-700 shadow-md hover:bg-gray-50 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all duration-200 border border-gray-300">
+                            class="w-full sm:w-auto inline-flex justify-center items-center rounded-lg bg-white px-6 py-3 text-sm font-semibold text-gray-700 shadow-md hover:bg-gray-50 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all duration-200 border border-gray-300 cursor-pointer">
                             <i class="fas fa-times mr-2"></i>
                             Batal
                         </button>

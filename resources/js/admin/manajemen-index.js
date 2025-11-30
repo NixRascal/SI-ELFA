@@ -20,11 +20,21 @@ function confirmDelete(id, name) {
     const buttonText = document.getElementById('deleteButtonText');
     const spinner = document.getElementById('deleteSpinner');
     const icon = document.getElementById('deleteIcon');
+    const input = document.getElementById('deleteConfirmationInput');
 
     if (buttonText) buttonText.textContent = 'Ya, Hapus Admin';
     if (spinner) spinner.style.display = 'none';
     if (icon) icon.style.display = 'inline-block';
-    if (button) button.disabled = false;
+
+    // Disable button initially and clear input
+    if (button) {
+        button.disabled = true;
+        button.classList.add('opacity-50', 'cursor-not-allowed');
+    }
+    if (input) {
+        input.value = '';
+        setTimeout(() => input.focus(), 100);
+    }
 }
 
 function closeDeleteModal() {
@@ -79,6 +89,23 @@ document.addEventListener('DOMContentLoaded', function () {
             // Hanya tutup jika klik backdrop, bukan konten modal
             if (e.target === deleteModal) {
                 closeDeleteModal();
+            }
+        });
+    }
+
+    // Input validation
+    const deleteInput = document.getElementById('deleteConfirmationInput');
+    if (deleteInput) {
+        deleteInput.addEventListener('input', function (e) {
+            const deleteBtn = document.getElementById('deleteButton');
+            const expectedText = 'hapus akun';
+
+            if (e.target.value.toLowerCase() === expectedText) {
+                deleteBtn.disabled = false;
+                deleteBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+            } else {
+                deleteBtn.disabled = true;
+                deleteBtn.classList.add('opacity-50', 'cursor-not-allowed');
             }
         });
     }

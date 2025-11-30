@@ -63,4 +63,21 @@ class ProfileController extends Controller
         return redirect()->route('dashboard.profile.index')
             ->with('success', 'Password berhasil diubah');
     }
+    /**
+     * Hapus akun
+     */
+    public function destroy(Request $request)
+    {
+        $admin = Auth::user();
+
+        Auth::logout();
+
+        $admin->delete();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('login')
+            ->with('success', 'Akun Anda telah berhasil dihapus.');
+    }
 }

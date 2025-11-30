@@ -187,9 +187,9 @@
                                         <p class="text-sm font-medium text-gray-900">Hapus Akun</p>
                                         <p class="text-xs text-gray-500">Menghapus akun secara permanen</p>
                                     </div>
-                                    <button disabled
-                                        class="px-4 py-2 bg-gray-300 text-gray-500 text-sm font-medium rounded-lg cursor-not-allowed">
-                                        Nonaktif
+                                    <button type="button" onclick="openDeleteModal()"
+                                        class="px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 focus:ring-4 focus:ring-red-300 transition-colors">
+                                        Hapus Akun
                                     </button>
                                 </div>
                             </div>
@@ -199,4 +199,169 @@
             </div>
         </div>
     </div>
+
+    <!-- Enhanced Delete Confirmation Modal -->
+    <div id="deleteModal" class="hidden fixed inset-0 z-50" style="background-color: rgba(0, 0, 0, 0.4);">
+        <div class="fixed inset-0 overflow-y-auto">
+            <div class="flex min-h-full items-center justify-center p-4">
+                <!-- Modal Content -->
+                <div id="modalContent"
+                    class="relative transform rounded-2xl bg-white text-left shadow-2xl transition-all w-full max-w-lg animate-modal-in">
+
+                    <!-- Header with Gradient -->
+                    <div class="relative bg-gradient-to-r from-red-500 to-red-600 px-6 py-5">
+                        <!-- Close Button -->
+                        <button type="button" onclick="closeDeleteModal()"
+                            class="absolute top-4 right-4 text-white hover:text-red-100 transition-colors cursor-pointer">
+                            <i class="fas fa-times text-lg"></i>
+                        </button>
+
+                        <!-- Icon and Title -->
+                        <div class="flex items-center">
+                            <div
+                                class="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-white bg-opacity-20 backdrop-blur-sm">
+                                <i class="fas fa-trash-alt text-white text-2xl"></i>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="text-xl font-bold text-white">Hapus Akun</h3>
+                                <p class="text-red-100 text-sm mt-0.5">Konfirmasi tindakan penghapusan</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Body -->
+                    <div class="bg-white px-6 py-5">
+                        <!-- Warning Message -->
+                        <div class="bg-red-50 border-l-4 border-red-500 rounded-lg p-4">
+                            <div class="flex items-start">
+                                <div class="flex-shrink-0">
+                                    <i class="fas fa-exclamation-triangle text-red-500 text-lg"></i>
+                                </div>
+                                <div class="ml-3">
+                                    <h4 class="text-sm font-semibold text-red-800">Peringatan Penting!</h4>
+                                    <div class="mt-2 text-sm text-red-700">
+                                        <p class="leading-relaxed">Tindakan ini akan menghapus akun Anda secara permanen.
+                                        </p>
+                                        <p class="mt-2 font-semibold">
+                                            <i class="fas fa-ban mr-1"></i>
+                                            Data yang dihapus tidak dapat dipulihkan kembali.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Confirmation Question -->
+                        <div class="mt-5 text-center">
+                            <p class="text-base font-medium text-gray-900">Apakah Anda yakin ingin melanjutkan?</p>
+                            <p class="mt-2 text-sm text-gray-500">Ketik <span class="font-bold text-red-600">hapus
+                                    akun</span> di bawah ini untuk konfirmasi:</p>
+                            <input type="text" id="deleteConfirmationInput"
+                                class="mt-4 block w-full rounded-lg border-gray-300 shadow-sm focus:border-red-500 focus:ring-red-500 text-lg p-3 text-center"
+                                placeholder="Ketik di sini...">
+                        </div>
+                    </div>
+
+                    <!-- Footer with Action Buttons -->
+                    <div class="bg-gray-50 px-6 py-4 flex flex-col-reverse sm:flex-row-reverse gap-3">
+                        <form action="{{ route('dashboard.profile.destroy') }}" method="POST" class="w-full sm:w-auto">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" id="deleteButton" disabled
+                                class="w-full sm:w-auto inline-flex justify-center items-center rounded-lg bg-red-600 px-6 py-3 text-sm font-semibold text-white shadow-lg hover:bg-red-700 hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer">
+                                <i class="fas fa-trash-alt mr-2"></i>
+                                Ya, Hapus Akun
+                            </button>
+                        </form>
+                        <button type="button" onclick="closeDeleteModal()"
+                            class="w-full sm:w-auto inline-flex justify-center items-center rounded-lg bg-white px-6 py-3 text-sm font-semibold text-gray-700 shadow-md hover:bg-gray-50 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 transition-all duration-200 border border-gray-300 cursor-pointer">
+                            <i class="fas fa-times mr-2"></i>
+                            Batal
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        @keyframes modalIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .animate-modal-in {
+            animation: modalIn 0.3s ease-out;
+        }
+
+        #deleteModal:not(.hidden) {
+            animation: fadeIn 0.2s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        body.modal-open {
+            overflow: hidden;
+        }
+    </style>
+
+    <script>
+        function openDeleteModal() {
+            const modal = document.getElementById('deleteModal');
+            document.body.classList.add('modal-open');
+            modal.classList.remove('hidden');
+            document.getElementById('deleteConfirmationInput').value = '';
+            document.getElementById('deleteButton').disabled = true;
+            document.getElementById('deleteConfirmationInput').focus();
+        }
+
+        function closeDeleteModal() {
+            const modal = document.getElementById('deleteModal');
+            document.body.classList.remove('modal-open');
+            modal.classList.add('hidden');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('deleteModal').addEventListener('click', function (e) {
+            if (e.target === this) {
+                closeDeleteModal();
+            }
+        });
+
+        // Close modal on Escape key
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape' && !document.getElementById('deleteModal').classList.contains('hidden')) {
+                closeDeleteModal();
+            }
+        });
+
+        // Validation logic
+        document.getElementById('deleteConfirmationInput').addEventListener('input', function (e) {
+            const deleteButton = document.getElementById('deleteButton');
+            const expectedText = 'hapus akun';
+
+            if (e.target.value.toLowerCase() === expectedText) {
+                deleteButton.disabled = false;
+                deleteButton.classList.remove('opacity-50', 'cursor-not-allowed');
+            } else {
+                deleteButton.disabled = true;
+                deleteButton.classList.add('opacity-50', 'cursor-not-allowed');
+            }
+        });
+    </script>
 @endsection

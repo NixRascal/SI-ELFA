@@ -88,6 +88,7 @@ Route::middleware('auth')->prefix('dashboard')->name('dashboard.')->group(functi
     Route::get('/profil', [ProfileController::class, 'index'])->name('profile.index');
     Route::put('/profil', [ProfileController::class, 'update'])->name('profile.update');
     Route::put('/profil/password', [ProfileController::class, 'updatePassword'])->name('profile.password');
+    Route::delete('/profil', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Admin Management
     Route::resource('admin', AdminManagementController::class)->except(['show']);
