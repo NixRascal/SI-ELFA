@@ -94,7 +94,7 @@ function tambahPertanyaan(data = null) {
             ${idInput}
             <div class="flex items-start justify-between mb-4">
                 <h4 class="font-semibold text-gray-900">Pertanyaan ${currentNumber}</h4>
-                <button type="button" onclick="hapusPertanyaan(this)" class="text-red-600 hover:text-red-800 cursor-pointer" title="Hapus Pertanyaan">
+                <button type="button" onclick="konfirmasiHapusPertanyaan(this)" class="text-red-600 hover:text-red-800 cursor-pointer" title="Hapus Pertanyaan">
                     <i class="fas fa-trash"></i>
                 </button>
             </div>
@@ -198,12 +198,74 @@ function createOpsiHtml(pertanyaanIndex, opsiIndex, value = '') {
     `;
 }
 
-function hapusPertanyaan(button) {
-    if (confirm('Yakin ingin menghapus pertanyaan ini?')) {
-        button.closest('.pertanyaan-item').remove();
-        updateNomorPertanyaan();
+let targetQuestionToDelete = null;
+
+function konfirmasiHapusPertanyaan(button) {
+    targetQuestionToDelete = button.closest('.pertanyaan-item');
+    openDeleteQuestionModal();
+}
+
+function openDeleteQuestionModal() {
+    const modal = document.getElementById('deleteQuestionModal');
+    // const input = document.getElementById('deleteQuestionInput'); // Removed
+    const btn = document.getElementById('confirmDeleteQuestionBtn');
+
+    if (modal) {
+        modal.classList.remove('hidden');
+        document.body.classList.add('modal-open');
+
+        // Reset state - Button is always enabled now
+        if (btn) {
+            btn.disabled = false;
+            btn.classList.remove('opacity-50', 'cursor-not-allowed');
+            btn.focus();
+        }
     }
 }
+
+function closeDeleteQuestionModal() {
+    const modal = document.getElementById('deleteQuestionModal');
+    if (modal) {
+        modal.classList.add('hidden');
+        document.body.classList.remove('modal-open');
+    }
+    targetQuestionToDelete = null;
+}
+
+// Initialize modal listeners
+document.addEventListener('DOMContentLoaded', function () {
+    // const input = document.getElementById('deleteQuestionInput'); // Removed
+    const confirmBtn = document.getElementById('confirmDeleteQuestionBtn');
+    const modal = document.getElementById('deleteQuestionModal');
+
+    if (confirmBtn) {
+        // Removed input event listener
+
+        confirmBtn.addEventListener('click', function () {
+            if (targetQuestionToDelete) {
+                targetQuestionToDelete.remove();
+                updateNomorPertanyaan();
+                closeDeleteQuestionModal();
+            }
+        });
+    }
+
+    // Close on backdrop click
+    if (modal) {
+        modal.addEventListener('click', function (e) {
+            if (e.target === modal) {
+                closeDeleteQuestionModal();
+            }
+        });
+    }
+
+    // Close on Escape
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+            closeDeleteQuestionModal();
+        }
+    });
+});
 
 function updateNomorPertanyaan() {
     const items = document.querySelectorAll('.pertanyaan-item');
@@ -266,7 +328,8 @@ function updateOpsiPlaceholder(opsiList) {
 
 // Expose functions to global scope
 window.tambahPertanyaan = tambahPertanyaan;
-window.hapusPertanyaan = hapusPertanyaan;
+window.konfirmasiHapusPertanyaan = konfirmasiHapusPertanyaan;
 window.toggleOpsiJawaban = toggleOpsiJawaban;
 window.tambahOpsi = tambahOpsi;
 window.hapusOpsi = hapusOpsi;
+window.closeDeleteQuestionModal = closeDeleteQuestionModal;

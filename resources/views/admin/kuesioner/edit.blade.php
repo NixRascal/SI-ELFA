@@ -205,14 +205,17 @@
                 <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                     <div class="flex items-center justify-between mb-6">
                         <h2 class="text-lg font-semibold text-gray-900">Pertanyaan Survei</h2>
-                        <button type="button" onclick="tambahPertanyaan()" class="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 cursor-pointer">
-                            <i class="fas fa-plus mr-2"></i>
-                            Tambah Pertanyaan
-                        </button>
                     </div>
 
                     <div id="daftarPertanyaan" class="space-y-4" data-questions="{{ $kuesioner->pertanyaan->toJson() }}">
                         <!-- Pertanyaan akan ditambahkan di sini via JavaScript -->
+                    </div>
+
+                    <div class="mt-4 flex justify-center border-t border-gray-100 pt-4">
+                        <button type="button" onclick="tambahPertanyaan()" class="inline-flex items-center rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 cursor-pointer shadow-sm transition-all duration-200 hover:shadow-md">
+                            <i class="fas fa-plus mr-2"></i>
+                            Tambah Pertanyaan
+                        </button>
                     </div>
 
                     @error('pertanyaan')
@@ -282,6 +285,74 @@
         </div>
     </form>
 </div>
+
+<!-- Modal Konfirmasi Hapus Pertanyaan -->
+<div id="deleteQuestionModal" class="hidden fixed inset-0 z-50" style="background-color: rgba(0, 0, 0, 0.4);">
+    <div class="fixed inset-0 overflow-y-auto">
+        <div class="flex min-h-full items-center justify-center p-4">
+            <div class="relative transform rounded-2xl bg-white text-left shadow-2xl transition-all w-full max-w-lg animate-modal-in">
+                <!-- Header -->
+                <div class="relative bg-gradient-to-r from-red-500 to-red-600 px-6 py-5">
+                    <button type="button" onclick="closeDeleteQuestionModal()" class="absolute top-4 right-4 text-white hover:text-red-100 transition-colors cursor-pointer">
+                        <i class="fas fa-times text-lg"></i>
+                    </button>
+                    <div class="flex items-center">
+                        <div class="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-white bg-opacity-20 backdrop-blur-sm">
+                            <i class="fas fa-trash-alt text-white text-2xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <h3 class="text-xl font-bold text-white">Hapus Pertanyaan</h3>
+                            <p class="text-red-100 text-sm mt-0.5">Konfirmasi penghapusan pertanyaan</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Body -->
+                <div class="bg-white px-6 py-5">
+                    <div class="mt-4 bg-red-50 border-l-4 border-red-500 rounded-lg p-4">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-exclamation-triangle text-red-500 text-lg"></i>
+                            </div>
+                            <div class="ml-3">
+                                <h4 class="text-sm font-semibold text-red-800">Peringatan Penting!</h4>
+                                <div class="mt-2 text-sm text-red-700">
+                                    <p>Tindakan ini akan menghapus:</p>
+                                    <ul class="list-disc list-inside mt-1">
+                                        <li>Pertanyaan ini dari kuesioner</li>
+                                        <li>Semua jawaban responden pada pertanyaan ini</li>
+                                        <li>Data analisis terkait pertanyaan ini</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-5 text-center">
+                        <p class="text-base font-medium text-gray-900">Apakah Anda yakin ingin melanjutkan?</p>
+                    </div>
+                </div>
+                <!-- Footer -->
+                <div class="bg-gray-50 px-6 py-4 flex flex-col-reverse sm:flex-row-reverse gap-3">
+                    <button type="button" id="confirmDeleteQuestionBtn" class="w-full sm:w-auto inline-flex justify-center items-center rounded-lg bg-red-600 px-6 py-3 text-sm font-semibold text-white shadow-lg hover:bg-red-700 transition-all duration-200 cursor-pointer">
+                        <i class="fas fa-trash-alt mr-2"></i>
+                        Ya, Hapus Pertanyaan
+                    </button>
+                    <button type="button" onclick="closeDeleteQuestionModal()" class="w-full sm:w-auto inline-flex justify-center items-center rounded-lg bg-white px-6 py-3 text-sm font-semibold text-gray-700 shadow-md hover:bg-gray-50 border border-gray-300 cursor-pointer">
+                        Batal
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    @keyframes modalIn {
+        from { opacity: 0; transform: scale(0.95) translateY(-20px); }
+        to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .animate-modal-in { animation: modalIn 0.3s ease-out forwards; }
+    body.modal-open { overflow: hidden; }
+</style>
 
 <!-- Load Assets -->
 @vite(['resources/js/admin/kuesioner-form.js'])
